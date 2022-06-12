@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fond"
+    tools:context=".InscriptionActivity">
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="301dp"
+        android:layout_height="460dp"
+        android:padding="5dp"
+        android:scrollbarStyle="outsideInset"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.208"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/editTextnFiche"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="19dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:fontFamily="@font/courgette"
+                android:hint="Laharan'ny takelaka"
+                android:textColorHint="#7A7A7A"
+                android:textColor="#7A7A7A"
+                android:maxLength="12"
+                android:inputType="number"
+                android:minHeight="40dp"
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/courgette"
+                android:gravity="center"
+                android:text="Ny momban'ny mpifidy:"
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+
+
+            <EditText
+                android:id="@+id/editTextNom"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="19dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:fontFamily="@font/courgette"
+                android:hint="Anarana"
+                android:textColorHint="#7A7A7A"
+                android:textColor="#7A7A7A"
+                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
+                android:inputType="text"
+                android:maxLength="30"
+                android:minHeight="40dp"
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <EditText
+                android:id="@+id/editTextPrenom"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_weight="1"
+                android:maxLength="25"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:fontFamily="@font/courgette"
+                android:hint="Fanampin'anarana"
+                android:textColorHint="#7A7A7A"
+                android:textColor="#7A7A7A"
+                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
+                android:inputType="text"
+                android:minHeight="40dp"
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/sexeHomme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:checked="true"
+                android:text="Lahy"
+                tools:layout_editor_absoluteX="45dp"
+                tools:layout_editor_absoluteY="14dp" />
+
+            <CheckBox
+                android:id="@+id/sexeFemme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vavy"
+                tools:layout_editor_absoluteX="45dp"
+                tools:layout_editor_absoluteY="14dp" />
+        </LinearLayout>
+
+            <TextView
+                android:id="@+id/selected_Date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/courgette"
+                android:text="Daty nahaterahana:"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/pick_date_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/bangers"
+                android:text="Safidio"
+                android:textSize="18sp"
+                tools:ignore="MissingConstraints" />
+
+            <EditText
+                android:id="@+id/editTextLieuNaissance"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:fontFamily="@font/courgette"
+                android:hint="Toherana nahaterahana"
+                android:textColorHint="#7A7A7A"
+                android:textColor="#7A7A7A"
+                android:maxLength="25"
+                android:inputType="text"
+                android:minHeight="40dp"
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <EditText
+                android:id="@+id/editTextProfession"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="17dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:fontFamily="@font/courgette"
+                android:hint="Asa"
+                android:textColorHint="#7A7A7A"
+                android:textColor="#7A7A7A"
+                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
+                android:maxLength="15"
+                android:inputType="text"
+                android:minHeight="40dp"
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <EditText
+                android:id="@+id/editTextAdresse"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="17dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:fontFamily="@font/courgette"
+                android:hint="Adiresy"
+                android:textColorHint="#7A7A7A"
+                android:textColor="#7A7A7A"
+                android:maxLength="25"
+                android:inputType="text"
+                android:minHeight="40dp"
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+            <EditText
+                android:id="@+id/editTextNomPere"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="17dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:fontFamily="@font/courgette"
+                android:hint="Anaran'ny ray"
+                android:textColorHint="#7A7A7A"
+                android:textColor="#7A7A7A"
+                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
+                android:maxLength="35"
+                android:inputType="text"
+                android:minHeight="40dp"
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+            <EditText
+                android:id="@+id/editNomMere"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="17dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:fontFamily="@font/courgette"
+                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
+                android:hint="Anaran'ny reny"
+                android:textColorHint="#7A7A7A"
+                android:textColor="#7A7A7A"
+                android:maxLength="35"
+                android:inputType="text"
+                android:minHeight="40dp"
+                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:fontFamily="@font/courgette"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#FFFFFF"
+                android:textSize="25sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/imageViewNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.881"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.94"
+        app:srcCompat="@drawable/buton_next"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/imageViewPrevious"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.148"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.94"
+        app:srcCompat="@drawable/buton_back" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
