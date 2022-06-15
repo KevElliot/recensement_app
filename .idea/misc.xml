@@ -10,14 +10,17 @@
         <entry key="..\:/ceni/Recensement/app/src/main/res/drawable/ic_launcher_background.xml" value="0.194" />
         <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_check_connection.xml" value="0.13360507246376813" />
         <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_detailelecteur.xml" value="0.25" />
-        <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_imagecin.xml" value="0.13360507246376813" />
+        <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_imagecin.xml" value="0.22" />
         <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_imageelect.xml" value="0.13360507246376813" />
+        <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_imagefiche.xml" value="0.11548913043478261" />
         <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_info_user.xml" value="0.2" />
         <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_inscription.xml" value="0.2" />
         <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_inscription2.xml" value="0.22" />
-        <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_login.xml" value="0.17119565217391305" />
-        <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_main.xml" value="0.13360507246376813" />
-        <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_menu.xml" value="0.13360507246376813" />
+        <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_liste_electeur.xml" value="0.25" />
+        <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_localisation.xml" value="0.17119565217391305" />
+        <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_login.xml" value="0.2" />
+        <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_main.xml" value="0.18" />
+        <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_menu.xml" value="0.25" />
         <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_register_user.xml" value="0.20416666666666666" />
         <entry key="..\:/stage/M2/Android/Recensement/app/src/main/res/drawable-mdpi/input_field.xml" value="0.2203125" />
         <entry key="..\:/stage/M2/Android/Recensement/app/src/main/res/drawable-v24/button_custom.xml" value="0.16944444444444445" />

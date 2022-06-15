@@ -14,7 +14,7 @@
         android:fontFamily="@font/courgette"
         android:gravity="center"
         android:text="Register"
-        android:textColor="#FFFFFF"
+        android:textColor="#000000"
         android:textSize="50sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -113,7 +113,7 @@
                 android:fontFamily="@font/courgette"
                 android:gravity="center|left"
                 android:text="Region:"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="20sp" />
 
             <Spinner
@@ -132,7 +132,7 @@
                 android:fontFamily="@font/courgette"
                 android:gravity="center|left"
                 android:text="District:"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="20sp" />
 
             <Spinner
@@ -151,7 +151,7 @@
                 android:fontFamily="@font/courgette"
                 android:gravity="center|left"
                 android:text="Commune:"
-                android:textColor="#FFFFFF"
+                android:textColor="#000000"
                 android:textSize="20sp" />
 
             <Spinner
