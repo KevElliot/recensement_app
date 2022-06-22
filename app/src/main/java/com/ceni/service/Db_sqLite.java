@@ -30,11 +30,12 @@ import java.util.List;
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-    private static final int DB_VERSION = 7;
+    private static final int DB_VERSION = 10;
     /*---------------------------------------------------------------------------------------
                                            TABLE ELECTEUR
     ----------------------------------------------------------------------------------------*/
     private static final String COLUMN_ID = "_id";
+    private static final String COLUMN_CODE_BV = "code_bv";
     private static final String COLUMN_NFICHE = "nfiche";
     private static final String COLUMN_NSERIECIN = "nserieCin";
     private static final String COLUMN_NOM = "nom";
@@ -47,11 +48,13 @@ public class Db_sqLite extends SQLiteOpenHelper {
     private static final String COLUMN_NOMPERE = "nomPere";
     private static final String COLUMN_NOMMERE = "nomMere";
     private static final String COLUMN_CINELECT = "cinElect";
+    private static final String COLUMN_ORIGINCIN = "originCin";
     private static final String COLUMN_DATEDELIV = "dateDeliv";
     private static final String COLUMN_LIEUDELIV = "lieuDeliv";
     private static final String COLUMN_IMAGEELECT = "imageElect";
     private static final String COLUMN_CINRECTO = "cinRecto";
     private static final String COLUMN_CINVERSO = "cinVerso";
+    private static final String COLUMN_DATEINSCRIPTION = "dateInscription";
 
     public static final String TABLE_ELECTEUR = "Electeur";
     /*---------------------------------------------------------------------------------------
@@ -90,6 +93,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
     private static final String NBSAISI = "nbSaisi";
 
     public static final String TABLE_User = "User";
+    public static final String TABLE_Compte = "Compte";
 
     public Db_sqLite(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -98,11 +102,11 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query1 = "CREATE TABLE " + TABLE_ELECTEUR + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_NFICHE + " TEXT,"+
+        String query1 = "CREATE TABLE " + TABLE_ELECTEUR + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_CODE_BV+" TEXT, "+COLUMN_NFICHE + " TEXT,"+
                 COLUMN_NOM + " TEXT," + COLUMN_PRENOM + " TEXT," + COLUMN_SEXE + " TEXT," + COLUMN_PROFESSION + " TEXT," + COLUMN_ADRESSE + " TEXT," +
                 COLUMN_DATENAISS + " TEXT," + COLUMN_LIEUNAISS + " TEXT," + COLUMN_NOMPERE + " TEXT," + COLUMN_NOMMERE + " TEXT," +
-                COLUMN_CINELECT + " TEXT," + COLUMN_NSERIECIN + " TEXT,"+ COLUMN_DATEDELIV + " TEXT," + COLUMN_LIEUDELIV + " TEXT," +
-                COLUMN_IMAGEELECT + " TEXT," + COLUMN_CINRECTO + " TEXT," + COLUMN_CINVERSO + " TEXT)";
+                COLUMN_CINELECT + " TEXT," + COLUMN_NSERIECIN +" TEXT,"+ COLUMN_ORIGINCIN +" TEXT,"+ COLUMN_DATEDELIV + " TEXT," + COLUMN_LIEUDELIV + " TEXT," +
+                COLUMN_IMAGEELECT + " TEXT," + COLUMN_CINRECTO + " TEXT," + COLUMN_CINVERSO + " TEXT,"+COLUMN_DATEINSCRIPTION+" TEXT)";
 
         String query2 = "CREATE TABLE " + TABLE_LOCALISATION + "(" + region_label + " TEXT, " + code_region + " TEXT, " +
                 district_label + " TEXT, " + code_district + " TEXT, " + commune_label + " TEXT, " + code_commune + " TEXT, " +
@@ -113,9 +117,15 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 PRENOMUSER + " TEXT, " + ROLE + " TEXT, " + PSEUDO + " TEXT, " + MOTDEPASSE + " TEXT, " + REGIONUSER + " TEXT, "+
                 USER_CODEREGION +" TEXT, "+ DISTRICTUSER+" TEXT, "+ USER_CODEDISTRICT+" TEXT, "+ COMMUNEUSER+" TEXT, "+ USER_CODECOMMUNE+" TEXT, "+ NBSAISI +" INT)";
 
+        String query4 = "CREATE TABLE " + TABLE_Compte + " ( " + IDUSER + " INTEGER, " + NOMUSER + " TEXT, " +
+                PRENOMUSER + " TEXT, " + ROLE + " TEXT, " + PSEUDO + " TEXT, " + MOTDEPASSE + " TEXT, " + REGIONUSER + " TEXT, "+
+                USER_CODEREGION +" TEXT, "+ DISTRICTUSER+" TEXT, "+ USER_CODEDISTRICT+" TEXT, "+ COMMUNEUSER+" TEXT, "+ USER_CODECOMMUNE+" TEXT, "+ NBSAISI +" INT)";
+
+
         db.execSQL(query1);
         db.execSQL(query2);
         db.execSQL(query3);
+        db.execSQL(query4);
     }
 
     @Override
@@ -124,24 +134,31 @@ public class Db_sqLite extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ELECTEUR);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCALISATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_User);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Compte);
         onCreate(db);
     }
     public Boolean isMemeFiche(String nfiche){
         boolean result = false;
-        long nbElect = this.countElecteur();
-        if(nbElect!=0){
-            SQLiteDatabase MyDB = this.getWritableDatabase();
-            Cursor cursor = MyDB.rawQuery("Select " + COLUMN_NFICHE + " from Electeur where " + COLUMN_NFICHE + " =?", new String[]{nfiche});
-            if(cursor != null){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select " + COLUMN_NFICHE + " from Electeur where " + COLUMN_NFICHE + " =?", new String[]{nfiche});
+        try {
+            long nbElect = this.countElecteur();
+            if(nbElect!=0 && cursor.getCount() != 0){
                 result= true;
             }
+        }catch (Exception e) {
+            Log.e("ERROR isMemeFiche", " "+e);
+        } finally {
+            cursor.close();
+            MyDB.close();
         }
         return result;
     }
 
-    public Boolean insertElecteurData(String nfiche,String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String imageElect, String cinRecto, String cinVerso) {
+    public Boolean insertElecteurData(String code_bv,String nfiche,String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String originCin, String dateDeliv, String lieuDeliv, String imageElect, String cinRecto, String cinVerso, String dateinscription) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_CODE_BV, code_bv);
         contentValues.put(COLUMN_NFICHE, nfiche);
         contentValues.put(COLUMN_NOM, nom);
         contentValues.put(COLUMN_PRENOM, prenom);
@@ -153,12 +170,14 @@ public class Db_sqLite extends SQLiteOpenHelper {
         contentValues.put(COLUMN_NOMPERE, nomPere);
         contentValues.put(COLUMN_NOMMERE, nomMere);
         contentValues.put(COLUMN_CINELECT, cinElect);
+        contentValues.put(COLUMN_ORIGINCIN, originCin);
         contentValues.put(COLUMN_NSERIECIN, nserieCin);
         contentValues.put(COLUMN_DATEDELIV, dateDeliv);
         contentValues.put(COLUMN_LIEUDELIV, lieuDeliv);
         contentValues.put(COLUMN_IMAGEELECT, imageElect);
         contentValues.put(COLUMN_CINRECTO, cinRecto);
         contentValues.put(COLUMN_CINVERSO, cinVerso);
+        contentValues.put(COLUMN_DATEINSCRIPTION, dateinscription);
         long result = MyDB.insert(TABLE_ELECTEUR, null, contentValues);
         if (result == -1) {
             return false;
@@ -169,30 +188,32 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public List<Electeur> selectElecteur() {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        ;
         Cursor cursor = MyDB.rawQuery("Select * from Electeur", null);
         List<Electeur> listElect = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
                 Electeur e = new Electeur();
                 e.setIdElect(cursor.getInt(0));
-                e.setnFiche(cursor.getString(1));
-                e.setNom(cursor.getString(2));
-                e.setPrenom(cursor.getString(3));
-                e.setSexe(cursor.getString(4));
-                e.setProfession(cursor.getString(5));
-                e.setAdresse(cursor.getString(6));
-                e.setDateNaiss(cursor.getString(7));
-                e.setLieuNaiss(cursor.getString(8));
-                e.setNomPere(cursor.getString(9));
-                e.setNomMere(cursor.getString(10));
-                e.setCinElect(cursor.getString(11));
-                e.setNserieCin(cursor.getString(12));
-                e.setDateDeliv(cursor.getString(13));
-                e.setLieuDeliv(cursor.getString(14));
-                e.setFicheElect(cursor.getString(15));
-                e.setCinRecto(cursor.getString(16));
-                e.setCinVerso(cursor.getString(17));
+                e.setCode_bv(cursor.getString(1));
+                e.setnFiche(cursor.getString(2));
+                e.setNom(cursor.getString(3));
+                e.setPrenom(cursor.getString(4));
+                e.setSexe(cursor.getString(5));
+                e.setProfession(cursor.getString(6));
+                e.setAdresse(cursor.getString(7));
+                e.setDateNaiss(cursor.getString(8));
+                e.setLieuNaiss(cursor.getString(9));
+                e.setNomPere(cursor.getString(10));
+                e.setNomMere(cursor.getString(11));
+                e.setCinElect(cursor.getString(12));
+                e.setNserieCin(cursor.getString(13));
+                e.setOriginCin(cursor.getString(14));
+                e.setDateDeliv(cursor.getString(15));
+                e.setLieuDeliv(cursor.getString(16));
+                e.setFicheElect(cursor.getString(17));
+                e.setCinRecto(cursor.getString(18));
+                e.setCinVerso(cursor.getString(19));
+                e.setDateinscription(cursor.getString(20));
                 listElect.add(e);
             }
         } catch (Exception e) {
@@ -452,6 +473,21 @@ public class Db_sqLite extends SQLiteOpenHelper {
             return true;
         }
     }
+    public void insertCompte(){
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        try{
+            String sql = "INSERT INTO Compte (idUser,nomUser,prenomUser,role,pseudo,motdepasse," +
+                    "regionUser,code_region,districtUser,code_district,communeUser,code_commune,nbSaisi) VALUES " +
+                    "('idUser','nomUser','prenomUser','role','pseudo','motdepasse','regionUser','code_region','districtUser','code_district','communeUser','code_commune',0)," +
+                    "('idUser2','nomUser2','prenomUser2','role','koto','koto','regionUser2','code_region2','districtUser2','code_district2','communeUser2','code_commune2',0);";
+            MyDB.execSQL(sql);
+            Log.d("INSERTION USER", "COMPTE INSERTED");
+        }catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            MyDB.close();
+        }
+    }
 
     public User selectUser(String pseudo, String mdp) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
@@ -475,6 +511,34 @@ public class Db_sqLite extends SQLiteOpenHelper {
             }
         } catch (Exception ex) {
             Log.e("error Select SQLITE", "ERROR SELECT User");
+        } finally {
+            cursor.close();
+            MyDB.close();
+        }
+        return e;
+    }
+    public User selectCompte(String pseudo, String mdp) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        User e = new User();
+        Cursor cursor = MyDB.rawQuery("Select * from Compte where pseudo='"+pseudo.trim()+"' and motdepasse='"+mdp.trim()+"'", null);
+        try {
+            while (cursor.moveToNext()) {
+                e.setIdUser(cursor.getInt(0));
+                e.setNomUser(cursor.getString(1));
+                e.setPrenomUser(cursor.getString(2));
+                e.setRole(cursor.getString(3));
+                e.setPseudo(cursor.getString(4));
+                e.setMotdepasse(cursor.getString(5));
+                e.setRegionUser(cursor.getString(6));
+                e.setCode_region(cursor.getString(7));
+                e.setDistrictUser(cursor.getString(8));
+                e.setCode_district(cursor.getString(9));
+                e.setCommuneUser(cursor.getString(10));
+                e.setCode_commune(cursor.getString(11));
+                e.setNbSaisi(cursor.getInt(12));
+            }
+        } catch (Exception ex) {
+            Log.e("error Select SQLITE", "ERROR SELECT COMPTE");
         } finally {
             cursor.close();
             MyDB.close();

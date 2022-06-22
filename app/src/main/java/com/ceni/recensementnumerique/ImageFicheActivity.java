@@ -55,7 +55,6 @@ public class ImageFicheActivity extends AppCompatActivity {
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
                 if(dataFicheElect!=null) {
                     electeur.setFicheElect(dataFicheElect);
-                    Log.i("image de l'electeur", dataFicheElect);
                     String myjson = gson.toJson(electeur);
                     Log.i("Electeur", myjson);
                     Intent i = new Intent(getApplicationContext(), ImageCinActivity.class);

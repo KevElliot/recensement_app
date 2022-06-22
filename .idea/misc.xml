@@ -3,11 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-<<<<<<< Updated upstream
-        <entry key="..\:/Projet/recensement_app/app/src/main/res/layout/activity_login.xml" value="0.182518115942029" />
-=======
+        <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_detailelecteur.xml" value="0.25" />
+        <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_imagefiche.xml" value="0.17074275362318841" />
+        <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_inscription.xml" value="0.33" />
+        <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_inscription2.xml" value="0.33" />
+        <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_liste_electeur.xml" value="0.2" />
+        <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_localisation.xml" value="0.20416666666666666" />
         <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_login.xml" value="0.15760869565217392" />
->>>>>>> Stashed changes
+        <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_main.xml" value="0.15760869565217392" />
+        <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_search.xml" value="0.20416666666666666" />
+        <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/list_item_electeur.xml" value="0.20416666666666666" />
         <entry key="..\:/ceni/Recensement/app/src/main/res/drawable-v24/button_custom.xml" value="0.194" />
         <entry key="..\:/ceni/Recensement/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.194" />
         <entry key="..\:/ceni/Recensement/app/src/main/res/drawable/ic_baseline_fingerprint_24.xml" value="0.194" />
@@ -27,6 +33,7 @@
         <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_main.xml" value="0.18" />
         <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_menu.xml" value="0.25" />
         <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_register_user.xml" value="0.20416666666666666" />
+        <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_liste_electeur.xml" value="0.20416666666666666" />
         <entry key="..\:/stage/M2/Android/Recensement/app/src/main/res/drawable-mdpi/input_field.xml" value="0.2203125" />
         <entry key="..\:/stage/M2/Android/Recensement/app/src/main/res/drawable-v24/button_custom.xml" value="0.16944444444444445" />
         <entry key="..\:/stage/M2/Android/Recensement/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.194" />

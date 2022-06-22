@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 public class DetailElecteurActivity extends AppCompatActivity {
     private ImageView ficheElect,cinRecto,cinVerso;
-    private TextView nfiche,nom,prenom,sexe,profession,adresse,dateNaiss,lieuNaiss,nomPere,nomMere,cinElect,nserie,dateDeliv,lieuDeliv;
+    private TextView nfiche,dateInscr,nom,prenom,sexe,profession,adresse,dateNaiss,lieuNaiss,nomPere,nomMere,cinElect,nserie,originalite,dateDeliv,lieuDeliv;
     private Button retour,suppression;
 
     @Override
@@ -29,6 +29,7 @@ public class DetailElecteurActivity extends AppCompatActivity {
         retour = findViewById(R.id.valider);
         suppression = findViewById(R.id.delete);
         ficheElect = findViewById(R.id.ficheElect);
+        dateInscr = findViewById(R.id.dateInscr);
         cinRecto = findViewById(R.id.cin_recto);
         cinVerso = findViewById(R.id.cin_verso);
         nfiche = findViewById(R.id.nFiche);
@@ -43,11 +44,13 @@ public class DetailElecteurActivity extends AppCompatActivity {
         nomMere = findViewById(R.id.nomMereElect);
         cinElect = findViewById(R.id.cinElect);
         nserie = findViewById(R.id.nSerie);
+        originalite = findViewById(R.id.originCin);
         dateDeliv = findViewById(R.id.dateCinElect);
         lieuDeliv = findViewById(R.id.lieuCinElect);
         Gson gson = new Gson();
         Electeur electeur = gson.fromJson(getIntent().getStringExtra("electeur"), Electeur.class);
         nfiche.setText(electeur.getnFiche());
+        dateInscr.setText(electeur.getDateinscription());
         nom.setText(electeur.getNom());
         prenom.setText(electeur.getPrenom());
         sexe.setText(electeur.getSexe());
@@ -59,6 +62,7 @@ public class DetailElecteurActivity extends AppCompatActivity {
         nomMere.setText(electeur.getNomMere());
         cinElect.setText(electeur.getCinElect());
         nserie.setText(electeur.getNserieCin());
+        originalite.setText(electeur.getOriginCin());
         dateDeliv.setText(electeur.getDateDeliv());
         lieuDeliv.setText(electeur.getLieuDeliv());
         Bitmap imgFiche = this.decodeImage(electeur.getFicheElect());

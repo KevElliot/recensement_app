@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,10 +31,10 @@ public class Inscription2Activity extends AppCompatActivity {
     static Inscription2Activity inscription2Activity;
     private Button mPickDateButton;
     private TextView mShowSelectedDateText,infoCin;
-    private ImageView next;
-    private ImageView previous;
-    private EditText cin,nserie,lieuCin;
-    private String dateCin;
+    private ImageView next,previous;
+    private EditText cin,nserie,nserie2,lieuCin;
+    private CheckBox original, duplicata;
+    private String dateCin,origin;
     int countFormValide;
 
     @Override
@@ -41,16 +42,47 @@ public class Inscription2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         inscription2Activity = this;
         setContentView(R.layout.activity_inscription2);
-
-        //date picker
         mPickDateButton = findViewById(R.id.pick_date_button2);
         mShowSelectedDateText = findViewById(R.id.date_CIN);
         next = findViewById(R.id.imageViewNext);
         previous = findViewById(R.id.imageViewPrevious);
         cin = findViewById(R.id.editTextCin);
         nserie = findViewById(R.id.editTextNserie);
+        nserie2 = findViewById(R.id.editTextNserie2);
         lieuCin = findViewById(R.id.editTextLieuCIN);
         infoCin = findViewById(R.id.infoCin);
+        original = findViewById(R.id.original);
+        duplicata = findViewById(R.id.duplicata);
+        origin = "original";
+
+        original.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (original.isChecked()) {
+                    origin = "original";
+                    original.setChecked(true);
+                    duplicata.setChecked(false);
+                } else {
+                    origin = "duplicata";
+                    original.setChecked(false);
+                    duplicata.setChecked(true);
+                }
+            }
+        });
+        duplicata.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (duplicata.isChecked()) {
+                    origin = "duplicata";
+                    duplicata.setChecked(true);
+                    original.setChecked(false);
+                } else {
+                    origin = "original";
+                    duplicata.setChecked(false);
+                    original.setChecked(true);
+                }
+            }
+        });
 
         cin.addTextChangedListener(new TextWatcher() {
             @Override
@@ -140,11 +172,16 @@ public class Inscription2Activity extends AppCompatActivity {
                 }else{
                     cin.setError("Diso");
                 }
-                if(nserie.getText().toString().length()==9) {
-                    electeur.setNserieCin(nserie.getText().toString());
+                if(nserie.getText().toString().length()==7 && nserie2.getText().toString().length()==1) {
+                    String serial = nserie.getText().toString()+"/"+nserie2.getText().toString();
+                    electeur.setNserieCin(serial);
                     countFormValide+=1;
                 }else{
                     nserie.setError("Diso");
+                }
+                if(origin=="original" || origin =="duplicata"){
+                    electeur.setOriginCin(origin);
+                    countFormValide+=1;
                 }
                 if(lieuCin.getText().toString().length()!=0) {
                     electeur.setLieuDeliv(lieuCin.getText().toString());
@@ -159,7 +196,7 @@ public class Inscription2Activity extends AppCompatActivity {
                     mShowSelectedDateText.setTextColor(Color.RED);
                     mShowSelectedDateText.setText("Mila apetraka ny daty nahazahona ny karatra");
                 }
-                if(countFormValide!=4){
+                if(countFormValide!=5){
                     new AlertDialog.Builder(Inscription2Activity.this)
                             .setTitle("Fahadisoana?")
                             .setMessage("Iangaviana enao mba ameno ireo banga na ny diso azafady.")

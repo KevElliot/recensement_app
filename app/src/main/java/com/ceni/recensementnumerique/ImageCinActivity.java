@@ -73,8 +73,8 @@ public class ImageCinActivity extends AppCompatActivity {
                     electeur.setCinVerso(imageVerso);
                     //Log.i("image verso", imageVerso);
                     //String myjson = gson.toJson(electeur);
-                    Log.i("Electeur*******-----!!!", electeur.getnFiche());
-                    boolean result = DB.insertElecteurData(electeur.getnFiche(),electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso());
+                    electeur.setDateinscription("12-10-2022");
+                    boolean result = DB.insertElecteurData(electeur.getCode_bv(),electeur.getnFiche(),electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(),electeur.getOriginCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(),electeur.getDateinscription());
                     if (result) {
                         Toast toast = Toast.makeText(ImageCinActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);
                         toast.show();

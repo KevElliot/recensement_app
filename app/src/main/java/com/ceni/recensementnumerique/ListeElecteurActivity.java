@@ -45,6 +45,7 @@ public class ListeElecteurActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Electeur electeur = new Electeur();
+                electeur.setCode_bv(listElect.get(position).getCode_bv());
                 electeur.setIdElect(listElect.get(position).getIdElect());
                 electeur.setnFiche(listElect.get(position).getnFiche());
                 electeur.setNom(listElect.get(position).getNom());
@@ -58,15 +59,17 @@ public class ListeElecteurActivity extends AppCompatActivity {
                 electeur.setNomMere (listElect.get(position).getNomMere());
                 electeur.setCinElect (listElect.get(position).getCinElect());
                 electeur.setNserieCin (listElect.get(position).getNserieCin());
+                electeur.setOriginCin (listElect.get(position).getOriginCin());
                 electeur.setDateDeliv (listElect.get(position).getDateDeliv());
                 electeur.setLieuDeliv (listElect.get(position).getLieuDeliv());
                 electeur.setFicheElect (listElect.get(position).getFicheElect());
                 electeur.setCinRecto (listElect.get(position).getCinRecto());
                 electeur.setCinVerso (listElect.get(position).getCinVerso());
+                electeur.setDateinscription (listElect.get(position).getDateinscription());
 
                 Gson gson = new Gson();
                 String myjson = gson.toJson(electeur);
-                Log.i("Electeur", myjson);
+                Log.i("Liste electeur activity", myjson);
                 Intent i = new Intent(getApplicationContext(), DetailElecteurActivity.class);
                 i.putExtra("electeur", myjson);
                 startActivity(i);

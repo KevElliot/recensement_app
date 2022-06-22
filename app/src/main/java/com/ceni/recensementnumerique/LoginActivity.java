@@ -21,6 +21,8 @@ import java.util.List;
 public class LoginActivity extends AppCompatActivity {
     Button connecter;
     Db_sqLite DB;
+    int nbUser;
+    User user;
     private EditText txtpseudo, txtmdp;
 
     @Override
@@ -37,9 +39,15 @@ public class LoginActivity extends AppCompatActivity {
                 DB = new Db_sqLite(LoginActivity.this);
                 String pseudo = txtpseudo.getText().toString();
                 String motdepass=txtmdp.getText().toString();
-                User user = DB.selectUser(pseudo,motdepass);
+                Gson gson = new Gson();
+                nbUser = Integer.parseInt(getIntent().getStringExtra("nbuser").toString());
+                if(nbUser>0){
+                    user = DB.selectUser(pseudo,motdepass);
+                }else{
+                    user = DB.selectCompte(pseudo,motdepass);
+                    DB.insertUser(user);
+                }
                 if(user.getCode_district()!=null){
-                    Gson gson = new Gson();
                     String myjson = gson.toJson(user);
                     Intent i = new Intent(getApplicationContext(),MenuActivity.class);
                     i.putExtra("user", myjson);
@@ -47,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                     finish();
                 }
                 else{
-                    Toast toast = Toast.makeText(LoginActivity.this, "Verifier que vous etes inscrit", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(LoginActivity.this, "Identification incorrect", Toast.LENGTH_LONG);
                     toast.show();
                 }
             }

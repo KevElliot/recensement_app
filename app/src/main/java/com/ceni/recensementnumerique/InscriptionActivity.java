@@ -108,7 +108,7 @@ public class InscriptionActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
                 if (nFiche.getText().toString().length() != 0) {
-                    isMemeFiche = DB.isMemeFiche(nFiche.getText().toString());
+                     isMemeFiche = DB.isMemeFiche(nFiche.getText().toString());
                     if (isMemeFiche) {
                         msg = "Takelaka efa voasoratra!";
                     } else {

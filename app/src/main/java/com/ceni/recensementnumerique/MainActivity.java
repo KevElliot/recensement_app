@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import com.ceni.service.Db_sqLite;
+import com.google.gson.Gson;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -33,21 +34,26 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     Toast.makeText(MainActivity.this, "Utilisateur trouver - LOGIN", Toast.LENGTH_LONG).show();
+                    Gson gson = new Gson();
+                    String myjson = gson.toJson(nbuser);
                     Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                    i.putExtra("nbuser", myjson);
                     startActivity(i);
                     finish();
                 }
             }, 5000);
         } else {
-            //getLocalisation = find all Localisation any aminy WS dia insert to sqLite
-            //Api_service.getLocalisation(DB,this);
             DB.insertLocalisation();
-
+            DB.insertCompte();
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(MainActivity.this, "REGISTER", Toast.LENGTH_LONG).show();
-                    Intent i = new Intent(MainActivity.this, RegisterUserActivity.class);
+                    nbuser = 0;
+                    Toast.makeText(MainActivity.this, "First load", Toast.LENGTH_LONG).show();
+                    Gson gson = new Gson();
+                    String myjson = gson.toJson(nbuser);
+                    Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                    i.putExtra("nbuser", myjson);
                     startActivity(i);
                     finish();
                 }
