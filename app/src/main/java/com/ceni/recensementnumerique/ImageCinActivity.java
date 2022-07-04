@@ -22,6 +22,10 @@ import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 public class ImageCinActivity extends AppCompatActivity {
     private Button buttonRecto, buttonVerso, next;
@@ -73,8 +77,13 @@ public class ImageCinActivity extends AppCompatActivity {
                     electeur.setCinVerso(imageVerso);
                     //Log.i("image verso", imageVerso);
                     //String myjson = gson.toJson(electeur);
-                    electeur.setDateinscription("12-10-2022");
-                    boolean result = DB.insertElecteurData(electeur.getCode_bv(),electeur.getnFiche(),electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(),electeur.getOriginCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(),electeur.getDateinscription());
+                    Date daty = Calendar.getInstance().getTime();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    String dat = sdf.format(daty.getTime());
+                    electeur.setDateinscription("" + dat);
+                    Log.d("DATTYYYYY", "" + dat);
+
+                    boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getOriginCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getDateinscription());
                     if (result) {
                         Toast toast = Toast.makeText(ImageCinActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);
                         toast.show();
@@ -82,7 +91,7 @@ public class ImageCinActivity extends AppCompatActivity {
                         ImageFicheActivity.getInstance().finish();
                         Inscription2Activity.getInstance().finish();
                         InscriptionActivity.getInstance().finish();
-                        Intent i = new Intent(getApplicationContext(),ListeElecteurActivity.class);
+                        Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
                         startActivity(i);
                         finish();
                     } else {

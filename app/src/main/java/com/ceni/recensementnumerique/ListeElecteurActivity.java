@@ -24,6 +24,7 @@ public class ListeElecteurActivity extends AppCompatActivity {
     Button enregistrer;
     Api_service API;
     Db_sqLite DB;
+    boolean delete = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class ListeElecteurActivity extends AppCompatActivity {
         this.DB = new Db_sqLite(ListeElecteurActivity.this);
         API = new Api_service();
         List<Electeur> listElect = DB.selectElecteur();
-        if(listElect.size()<=0){
+        if (listElect.size() <= 0) {
             Toast toast = Toast.makeText(ListeElecteurActivity.this, "Tsy misy pifidy voasoratra!", Toast.LENGTH_LONG);
             toast.show();
         }
@@ -50,22 +51,22 @@ public class ListeElecteurActivity extends AppCompatActivity {
                 electeur.setnFiche(listElect.get(position).getnFiche());
                 electeur.setNom(listElect.get(position).getNom());
                 electeur.setPrenom(listElect.get(position).getPrenom());
-                electeur.setSexe (listElect.get(position).getSexe());
-                electeur.setProfession (listElect.get(position).getProfession());
-                electeur.setAdresse (listElect.get(position).getAdresse());
-                electeur.setDateNaiss (listElect.get(position).getDateNaiss());
-                electeur.setLieuNaiss (listElect.get(position).getLieuNaiss());
-                electeur.setNomPere (listElect.get(position).getNomPere());
-                electeur.setNomMere (listElect.get(position).getNomMere());
-                electeur.setCinElect (listElect.get(position).getCinElect());
-                electeur.setNserieCin (listElect.get(position).getNserieCin());
-                electeur.setOriginCin (listElect.get(position).getOriginCin());
-                electeur.setDateDeliv (listElect.get(position).getDateDeliv());
-                electeur.setLieuDeliv (listElect.get(position).getLieuDeliv());
-                electeur.setFicheElect (listElect.get(position).getFicheElect());
-                electeur.setCinRecto (listElect.get(position).getCinRecto());
-                electeur.setCinVerso (listElect.get(position).getCinVerso());
-                electeur.setDateinscription (listElect.get(position).getDateinscription());
+                electeur.setSexe(listElect.get(position).getSexe());
+                electeur.setProfession(listElect.get(position).getProfession());
+                electeur.setAdresse(listElect.get(position).getAdresse());
+                electeur.setDateNaiss(listElect.get(position).getDateNaiss());
+                electeur.setLieuNaiss(listElect.get(position).getLieuNaiss());
+                electeur.setNomPere(listElect.get(position).getNomPere());
+                electeur.setNomMere(listElect.get(position).getNomMere());
+                electeur.setCinElect(listElect.get(position).getCinElect());
+                electeur.setNserieCin(listElect.get(position).getNserieCin());
+                electeur.setOriginCin(listElect.get(position).getOriginCin());
+                electeur.setDateDeliv(listElect.get(position).getDateDeliv());
+                electeur.setLieuDeliv(listElect.get(position).getLieuDeliv());
+                electeur.setFicheElect(listElect.get(position).getFicheElect());
+                electeur.setCinRecto(listElect.get(position).getCinRecto());
+                electeur.setCinVerso(listElect.get(position).getCinVerso());
+                electeur.setDateinscription(listElect.get(position).getDateinscription());
 
                 Gson gson = new Gson();
                 String myjson = gson.toJson(electeur);
@@ -79,20 +80,15 @@ public class ListeElecteurActivity extends AppCompatActivity {
         enregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                for (int i=0;i<listElect.size();i++) {
-//                    API.addNewElecteur(ListeElecteurActivity.this,listElect.get(i));
-//                }
-                boolean deleted = DB.deleteElect("101251195205");
-                if(deleted){
-                    Toast toast = Toast.makeText(ListeElecteurActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);
-                    toast.show();
-                    Intent i = new Intent(getApplicationContext(), MenuActivity.class);
-                    startActivity(i);
-                    finish();
+                for (int i = 0; i < listElect.size(); i++) {
+                    API.addNewElecteur(ListeElecteurActivity.this, listElect.get(i));
+                    //boolean deleted = DB.deleteElect(listElect.get(i).getCinElect());
                 }
-                else{
-                    Log.i("TAG", "tsy vofafa");
-                }
+                Toast toast = Toast.makeText(ListeElecteurActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);
+                toast.show();
+                Intent i = new Intent(getApplicationContext(), MenuActivity.class);
+                startActivity(i);
+                finish();
             }
         });
 

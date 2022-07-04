@@ -26,6 +26,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -234,10 +235,14 @@ public class InscriptionActivity extends AppCompatActivity {
         materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.setTimeInMillis((Long)selection);
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate  = format.format(calendar.getTime());
                 mShowSelectedDateText.setTextColor(Color.WHITE);
                 mPickDateButton.setEnabled(true);
-                dateNaiss = materialDatePicker.getHeaderText();
-                mShowSelectedDateText.setText("Daty nahaterahana: " + materialDatePicker.getHeaderText());
+                dateNaiss = formattedDate;
+                mShowSelectedDateText.setText("Daty nahaterahana: " + formattedDate);
             }
         });
     }

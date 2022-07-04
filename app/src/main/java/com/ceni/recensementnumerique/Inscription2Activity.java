@@ -24,6 +24,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -33,7 +34,7 @@ public class Inscription2Activity extends AppCompatActivity {
     private TextView mShowSelectedDateText,infoCin;
     private ImageView next,previous;
     private EditText cin,nserie,nserie2,lieuCin;
-    private CheckBox original, duplicata;
+    //private CheckBox original, duplicata;
     private String dateCin,origin;
     int countFormValide;
 
@@ -51,11 +52,11 @@ public class Inscription2Activity extends AppCompatActivity {
         nserie2 = findViewById(R.id.editTextNserie2);
         lieuCin = findViewById(R.id.editTextLieuCIN);
         infoCin = findViewById(R.id.infoCin);
-        original = findViewById(R.id.original);
-        duplicata = findViewById(R.id.duplicata);
+        //original = findViewById(R.id.original);
+        //duplicata = findViewById(R.id.duplicata);
         origin = "original";
 
-        original.setOnClickListener(new View.OnClickListener() {
+        /*original.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (original.isChecked()) {
@@ -82,7 +83,7 @@ public class Inscription2Activity extends AppCompatActivity {
                     original.setChecked(true);
                 }
             }
-        });
+        });*/
 
         cin.addTextChangedListener(new TextWatcher() {
             @Override
@@ -151,10 +152,14 @@ public class Inscription2Activity extends AppCompatActivity {
                     @SuppressLint("SetTextI18n")
                     @Override
                     public void onPositiveButtonClick(Object selection) {
+                        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                        calendar.setTimeInMillis((Long)selection);
+                        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                        String formattedDate  = format.format(calendar.getTime());
                         mShowSelectedDateText.setTextColor(Color.WHITE);
                         mPickDateButton.setEnabled(true);
-                        dateCin = materialDatePicker.getHeaderText();
-                        mShowSelectedDateText.setText("Daty nahazahona ny CIN: " + materialDatePicker.getHeaderText());
+                        dateCin = formattedDate;
+                        mShowSelectedDateText.setText("Daty nahazahona ny CIN: " + formattedDate);
                     }
                 });
 
@@ -179,10 +184,10 @@ public class Inscription2Activity extends AppCompatActivity {
                 }else{
                     nserie.setError("Diso");
                 }
-                if(origin=="original" || origin =="duplicata"){
+                /*if(origin=="original" || origin =="duplicata"){
                     electeur.setOriginCin(origin);
                     countFormValide+=1;
-                }
+                }*/
                 if(lieuCin.getText().toString().length()!=0) {
                     electeur.setLieuDeliv(lieuCin.getText().toString());
                     countFormValide+=1;
@@ -196,7 +201,7 @@ public class Inscription2Activity extends AppCompatActivity {
                     mShowSelectedDateText.setTextColor(Color.RED);
                     mShowSelectedDateText.setText("Mila apetraka ny daty nahazahona ny karatra");
                 }
-                if(countFormValide!=5){
+                if(countFormValide!=4){
                     new AlertDialog.Builder(Inscription2Activity.this)
                             .setTitle("Fahadisoana?")
                             .setMessage("Iangaviana enao mba ameno ireo banga na ny diso azafady.")
