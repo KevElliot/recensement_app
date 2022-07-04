@@ -67,8 +67,8 @@
                 android:hint="Anarana"
                 android:textColorHint="#7A7A7A"
                 android:textColor="#7A7A7A"
-                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
-                android:inputType="text"
+                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,-,',_, "
+                android:inputType="textCapCharacters"
                 android:maxLength="30"
                 android:minHeight="40dp"
                 tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
@@ -87,7 +87,7 @@
                 android:textColorHint="#7A7A7A"
                 android:textColor="#7A7A7A"
                 android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
-                android:inputType="text"
+                android:inputType="textCapWords"
                 android:minHeight="40dp"
                 tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
         <LinearLayout
@@ -225,7 +225,7 @@
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="150dp"
                 android:fontFamily="@font/courgette"
                 android:gravity="center"
                 android:text=""

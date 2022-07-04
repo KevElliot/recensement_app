@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ceni.model.User;
@@ -14,7 +15,7 @@ import com.google.gson.Gson;
 
 public class InfoUserActivity extends AppCompatActivity {
     private TextView nom,prenom,region,district,commune,nbsaisi;
-    private Button retour;
+    private ImageView retour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

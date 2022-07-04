@@ -18,9 +18,10 @@ import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 public class DetailElecteurActivity extends AppCompatActivity {
-    private ImageView ficheElect,cinRecto,cinVerso;
+    private ImageView ficheElect,cinRecto,cinVerso,retour;
     private TextView nfiche,dateInscr,nom,prenom,sexe,profession,adresse,dateNaiss,lieuNaiss,nomPere,nomMere,cinElect,nserie,originalite,dateDeliv,lieuDeliv;
-    private Button retour,suppression;
+    private Button suppression;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

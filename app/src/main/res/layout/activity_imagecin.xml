@@ -10,7 +10,7 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="304dp"
-        android:layout_height="498dp"
+        android:layout_height="wrap_content"
         android:padding="5dp"
         android:scrollbarStyle="outsideInset"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -108,7 +108,7 @@
             <TextView
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
-                android:layout_height="71dp"
+                android:layout_height="150dp"
                 android:fontFamily="@font/courgette"
                 android:gravity="center"
                 android:text=""

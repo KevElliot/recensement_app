@@ -9,7 +9,7 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="310dp"
-        android:layout_height="498dp"
+        android:layout_height="wrap_content"
         android:padding="5dp"
         android:scrollbarStyle="outsideInset"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -605,7 +605,7 @@
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"
-                android:layout_height="71dp"
+                android:layout_height="150dp"
                 android:fontFamily="@font/courgette"
                 android:gravity="center"
                 android:text=""
@@ -614,23 +614,16 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
+    <ImageView
         android:id="@+id/valider"
-        android:layout_width="188dp"
-        android:layout_height="49dp"
-        android:layout_weight="0"
-        android:background="@drawable/input_field"
-        android:fontFamily="@font/bangers"
-        android:gravity="center"
-        android:shadowDx="10"
-        android:shadowDy="5"
-        android:shadowRadius="4"
-        android:text="Miverina"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintHorizontal_bias="0.148"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        app:layout_constraintVertical_bias="0.963"
+        app:srcCompat="@drawable/buton_back" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

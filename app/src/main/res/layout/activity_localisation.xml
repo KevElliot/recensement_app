@@ -9,8 +9,8 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="575dp"
+        android:layout_width="330dp"
+        android:layout_height="wrap_content"
         android:padding="5dp"
         android:scrollbarStyle="outsideInset"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,6 +35,8 @@
                 android:gravity="center"
                 android:text="Momban'ny toerana:"
                 android:textColor="#000000"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:textSize="25sp" />
 
             <TextView
@@ -113,6 +115,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:fontFamily="@font/courgette"
+                android:gravity="center"
+                android:text=""
+                android:textColor="#878787"
+                android:textSize="20sp" />
         </LinearLayout>
     </ScrollView>
 
@@ -122,12 +133,24 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.881"
+        app:layout_constraintHorizontal_bias="0.889"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.94"
+        app:layout_constraintVertical_bias="0.963"
         app:srcCompat="@drawable/buton_next"
         tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/imageViewPrevious"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.142"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.963"
+        app:srcCompat="@drawable/buton_back" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
