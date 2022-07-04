@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Base64;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
+
 import com.ceni.model.Bv;
 import com.ceni.model.Commune;
 import com.ceni.model.Cv;
@@ -21,7 +23,6 @@ import com.ceni.model.Localisation;
 import com.ceni.model.Region;
 import com.ceni.model.User;
 
-import org.jetbrains.annotations.Nullable;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;

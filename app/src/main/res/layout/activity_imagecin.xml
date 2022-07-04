@@ -117,20 +117,18 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
+    <ImageView
         android:id="@+id/imageViewNext"
-        android:layout_width="104dp"
-        android:layout_height="49dp"
-        android:layout_weight="0"
-        android:background="@drawable/input_field"
-        android:fontFamily="@font/bangers"
-        android:text="Vita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.928"
+        app:layout_constraintHorizontal_bias="0.881"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        app:layout_constraintVertical_bias="0.963"
+        app:srcCompat="@drawable/buton_next"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/imageViewPrevious"

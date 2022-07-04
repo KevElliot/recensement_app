@@ -28,8 +28,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ImageCinActivity extends AppCompatActivity {
-    private Button buttonRecto, buttonVerso, next;
-    private ImageView previous, recto, verso;
+    private Button buttonRecto, buttonVerso;
+    private ImageView previous, recto, verso, next;
     private String format, imageRecto, imageVerso;
     private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
     private Db_sqLite DB;
