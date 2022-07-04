@@ -11,8 +11,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Base64;
 import android.util.Log;
 
-import androidx.annotation.Nullable;
-
 import com.ceni.model.Bv;
 import com.ceni.model.Commune;
 import com.ceni.model.Cv;
@@ -23,6 +21,8 @@ import com.ceni.model.Localisation;
 import com.ceni.model.Region;
 import com.ceni.model.User;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ import java.util.List;
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-    private static final int DB_VERSION = 10;
+    private static final int DB_VERSION = 12;
     /*---------------------------------------------------------------------------------------
                                            TABLE ELECTEUR
     ----------------------------------------------------------------------------------------*/
@@ -275,10 +275,16 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public void insertLocalisation(){
         SQLiteDatabase MyDB = this.getWritableDatabase();
         try{
+            String dataLocalisation = "";
+            for(int i=0;i<Localisation_data.localisation.length;i++){
+                dataLocalisation +=Localisation_data.localisation[i]+",";
+                if (i==Localisation_data.localisation.length-1){
+                    dataLocalisation +=Localisation_data.localisation[i]+";";
+                }
+            }
             String sql = "INSERT INTO Localisation (region_label,code_region,district_label,code_district,commune_label,code_commune," +
                     "fokontany_label,code_fokontany,cv_label,code_cv,bv_label,code_bv) VALUES " +
-                    "('region_label','code_region','district_label','code_district','commune_label','code_commune','fokontany_label','code_fokontany','cv_label','code_cv','bv_label','code_bv')," +
-                    "('region_label2','code_region2','district_label2','code_district2','commune_label2','code_commune2','fokontany_label2','code_fokontany2','cv_label2','code_cv2','bv_label2','code_bv2');";
+                    dataLocalisation;
             MyDB.execSQL(sql);
             Log.d("INSERTION LOCALISATION", "LOCALISATION INSERTED");
         }catch (Exception e) {
