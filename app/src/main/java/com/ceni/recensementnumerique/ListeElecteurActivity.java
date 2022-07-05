@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,6 +23,7 @@ import java.util.List;
 public class ListeElecteurActivity extends AppCompatActivity {
     ListView listViewElect;
     Button enregistrer;
+    ImageView retour;
     Api_service API;
     Db_sqLite DB;
     boolean delete = false;
@@ -32,6 +34,7 @@ public class ListeElecteurActivity extends AppCompatActivity {
         setContentView(R.layout.activity_liste_electeur);
         listViewElect = findViewById(R.id.listElecteur);
         enregistrer = findViewById(R.id.enregistrerToutBtn);
+        retour =  findViewById(R.id.imageViewPrevious);
         this.DB = new Db_sqLite(ListeElecteurActivity.this);
         API = new Api_service();
         List<Electeur> listElect = DB.selectElecteur();
@@ -89,6 +92,14 @@ public class ListeElecteurActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), MenuActivity.class);
                 startActivity(i);
                 finish();
+            }
+        });
+
+        //Button retour
+        retour.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
 

@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toast.makeText(MainActivity.this, "User found "+nbuser, Toast.LENGTH_LONG).show();
         DB = new Db_sqLite(this);
-        DB.deleteAllUser();
+        //DB.deleteAllUser();
         //DB.deleteAllElecteur();
         nbuser = DB.countUser();
         if (nbuser > 0) {

@@ -1,7 +1,7 @@
-- Verifier bouton retour
-- Essayer NOM et Prenom 'Case'text
 - Rehevo mikitika sqLite dia modifiena ny imageElect en imageFiche
 - Utilisateur atao anaty fichier afa
+- Pere non obligatoire + feu 
+- Prenom non obligatoire
 - Creer new activity Observation any aminy farany -> Tsy adino ny sqLite
 - Creer new activity pour inserer et voir la liste des doc reference
 - Ajouter docreference ao aminy activité LocalisationActivity en tant que Spinner -> ajouter dans sqLite

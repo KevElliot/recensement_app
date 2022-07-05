@@ -32,7 +32,7 @@ public class LocalisationActivity extends AppCompatActivity {
     private List<Fokontany> fokontany;
     private List<Cv> cv;
     private List<Bv> bv;
-    private ImageView next;
+    private ImageView next, previous;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class LocalisationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_localisation);
         Db_sqLite DB = new Db_sqLite(this);
         this.next = this.findViewById(R.id.buttonNext);
+        previous = this.findViewById(R.id.imageViewPrevious);
         localisationActivity = this;
         // Data:  code district 1101 code district an'ilay user
         this.communes = DB.selectCommuneFromDistrict("code_district");
@@ -129,6 +130,13 @@ public class LocalisationActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(),InscriptionActivity.class);
                 i.putExtra("newElect", myJson);
                 startActivity(i);
+            }
+        });
+        //Button previous
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
             }
         });
     }
