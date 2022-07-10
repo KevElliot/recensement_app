@@ -36,11 +36,11 @@
                 android:ems="10"
                 android:fontFamily="@font/courgette"
                 android:hint="Laharan'ny takelaka"
-                android:textColorHint="#7A7A7A"
-                android:textColor="#7A7A7A"
-                android:maxLength="12"
                 android:inputType="number"
+                android:maxLength="12"
                 android:minHeight="40dp"
+                android:textColor="#7A7A7A"
+                android:textColorHint="#7A7A7A"
                 tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <TextView
@@ -62,15 +62,15 @@
                 android:layout_marginTop="19dp"
                 android:layout_weight="1"
                 android:background="@drawable/input_field"
+                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,-,',_, "
                 android:ems="10"
                 android:fontFamily="@font/courgette"
                 android:hint="Anarana"
-                android:textColorHint="#7A7A7A"
-                android:textColor="#7A7A7A"
-                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,-,',_, "
                 android:inputType="textCapCharacters"
                 android:maxLength="30"
                 android:minHeight="40dp"
+                android:textColor="#7A7A7A"
+                android:textColorHint="#7A7A7A"
                 tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <EditText
@@ -79,52 +79,75 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
-                android:maxLength="25"
                 android:background="@drawable/input_field"
+                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
                 android:ems="10"
                 android:fontFamily="@font/courgette"
                 android:hint="Fanampin'anarana"
-                android:textColorHint="#7A7A7A"
-                android:textColor="#7A7A7A"
-                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
                 android:inputType="textCapWords"
+                android:maxLength="25"
                 android:minHeight="40dp"
+                android:textColor="#7A7A7A"
+                android:textColorHint="#7A7A7A"
                 tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/sexeHomme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="40dp"
+                    android:checked="true"
+                    android:text="Lahy"
+                    tools:layout_editor_absoluteX="45dp"
+                    tools:layout_editor_absoluteY="14dp" />
+
+                <CheckBox
+                    android:id="@+id/sexeFemme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vavy"
+                    tools:layout_editor_absoluteX="45dp"
+                    tools:layout_editor_absoluteY="14dp" />
+            </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
-            <CheckBox
-                android:id="@+id/sexeHomme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="40dp"
-                android:checked="true"
-                android:text="Lahy"
-                tools:layout_editor_absoluteX="45dp"
-                tools:layout_editor_absoluteY="14dp" />
-
-            <CheckBox
-                android:id="@+id/sexeFemme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vavy"
-                tools:layout_editor_absoluteX="45dp"
-                tools:layout_editor_absoluteY="14dp" />
-        </LinearLayout>
-
             <TextView
-                android:id="@+id/selected_Date"
-                android:layout_width="match_parent"
+                android:id="@+id/selected_Date1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:fontFamily="@font/courgette"
                 android:text="Daty nahaterahana:"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
+            <CheckBox
+                android:id="@+id/nevers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Vers" />
+
+        </LinearLayout>
+
+            <TextView
+                android:id="@+id/selected_Date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/courgette"
+                android:text=""
+                android:textColor="#000000"
+                android:textSize="20sp" />
             <Button
                 android:id="@+id/pick_date_button"
                 android:layout_width="wrap_content"
@@ -136,6 +159,23 @@
                 tools:ignore="MissingConstraints" />
 
             <EditText
+                android:id="@+id/editTextNevers"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:fontFamily="@font/courgette"
+                android:hint="Vers"
+                android:inputType="number"
+                android:maxLength="4"
+                android:minHeight="40dp"
+                android:textColor="#7A7A7A"
+                android:textColorHint="#7A7A7A"
+                android:layout_marginBottom="17dp"/>
+
+            <EditText
                 android:id="@+id/editTextLieuNaissance"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -143,12 +183,12 @@
                 android:background="@drawable/input_field"
                 android:ems="10"
                 android:fontFamily="@font/courgette"
-                android:hint="Toherana nahaterahana"
-                android:textColorHint="#7A7A7A"
-                android:textColor="#7A7A7A"
-                android:maxLength="25"
+                android:hint="Toerana nahaterahana"
                 android:inputType="text"
+                android:maxLength="25"
                 android:minHeight="40dp"
+                android:textColor="#7A7A7A"
+                android:textColorHint="#7A7A7A"
                 tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <EditText
@@ -158,15 +198,15 @@
                 android:layout_marginTop="17dp"
                 android:layout_weight="1"
                 android:background="@drawable/input_field"
+                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
                 android:ems="10"
                 android:fontFamily="@font/courgette"
                 android:hint="Asa"
-                android:textColorHint="#7A7A7A"
-                android:textColor="#7A7A7A"
-                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
-                android:maxLength="15"
                 android:inputType="text"
+                android:maxLength="15"
                 android:minHeight="40dp"
+                android:textColor="#7A7A7A"
+                android:textColorHint="#7A7A7A"
                 tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
             <EditText
@@ -179,48 +219,82 @@
                 android:ems="10"
                 android:fontFamily="@font/courgette"
                 android:hint="Adiresy"
-                android:textColorHint="#7A7A7A"
-                android:textColor="#7A7A7A"
+                android:inputType="text"
                 android:maxLength="25"
-                android:inputType="text"
                 android:minHeight="40dp"
+                android:textColor="#7A7A7A"
+                android:textColorHint="#7A7A7A"
                 tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
-            <EditText
-                android:id="@+id/editTextNomPere"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="17dp"
-                android:layout_weight="1"
-                android:background="@drawable/input_field"
-                android:ems="10"
-                android:fontFamily="@font/courgette"
-                android:hint="Anaran'ny ray"
-                android:textColorHint="#7A7A7A"
-                android:textColor="#7A7A7A"
-                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
-                android:maxLength="35"
-                android:inputType="text"
-                android:minHeight="40dp"
-                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editNomMere"
+                <EditText
+                    android:id="@+id/editTextNomPere"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="17dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/input_field"
+                    android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
+                    android:ems="10"
+                    android:fontFamily="@font/courgette"
+                    android:hint="Anaran'ny ray"
+                    android:inputType="text"
+                    android:maxLength="35"
+                    android:minHeight="40dp"
+                    android:textColor="#7A7A7A"
+                    android:textColorHint="#7A7A7A"
+                    tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+                <CheckBox
+                    android:id="@+id/feuPere"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginRight="10dp"
+                    android:checked="false"
+                    android:text="Feu"
+                    tools:layout_editor_absoluteX="45dp"
+                    tools:layout_editor_absoluteY="14dp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="17dp"
-                android:layout_weight="1"
-                android:background="@drawable/input_field"
-                android:ems="10"
-                android:fontFamily="@font/courgette"
-                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
-                android:hint="Anaran'ny reny"
-                android:textColorHint="#7A7A7A"
-                android:textColor="#7A7A7A"
-                android:maxLength="35"
-                android:inputType="text"
-                android:minHeight="40dp"
-                tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/editNomMere"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="17dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/input_field"
+                    android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,qwertzuiopasdfghjklyxcvbnm,-,',_, "
+                    android:ems="10"
+                    android:fontFamily="@font/courgette"
+                    android:hint="Anaran'ny reny"
+                    android:inputType="text"
+                    android:maxLength="35"
+                    android:minHeight="40dp"
+                    android:textColor="#7A7A7A"
+                    android:textColorHint="#7A7A7A"
+                    tools:ignore="MissingConstraints,SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
+
+                <CheckBox
+                    android:id="@+id/feuMere"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="17dp"
+                    android:layout_marginRight="10dp"
+                    android:checked="false"
+                    android:text="Feu"
+                    tools:layout_editor_absoluteX="45dp"
+                    tools:layout_editor_absoluteY="14dp" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/textView2"

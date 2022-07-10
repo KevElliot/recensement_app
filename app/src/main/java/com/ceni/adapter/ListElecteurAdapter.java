@@ -36,6 +36,7 @@ public class ListElecteurAdapter extends ArrayAdapter<Electeur> {
         ImageView imageElect = convertView.findViewById(R.id.imageElect);
         TextView nomElect = convertView.findViewById(R.id.nomElect);
         TextView cinElect = convertView.findViewById(R.id.cinElect);
+        TextView nFiche = convertView.findViewById(R.id.nFiche);
         TextView prenomElect = convertView.findViewById(R.id.prenomElect);
 
         byte[] img = Base64.decode(electeur.getFicheElect(), Base64.DEFAULT);
@@ -45,6 +46,7 @@ public class ListElecteurAdapter extends ArrayAdapter<Electeur> {
 
         imageElect.setImageBitmap(bm);
         cinElect.setText(electeur.getCinElect());
+        nFiche.setText(electeur.getnFiche());
         nomElect.setText(electeur.getNom());
         prenomElect.setText(electeur.getPrenom());
 

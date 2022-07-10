@@ -20,6 +20,15 @@
         android:theme="@style/Theme.RecensementNumerique"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".AddDocumentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DocumentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ObservationActivity"
+            android:exported="false" />
+        <activity
             android:name=".InfoUserActivity"
             android:exported="false" />
         <activity

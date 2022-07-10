@@ -63,7 +63,6 @@ public class ListeElecteurActivity extends AppCompatActivity {
                 electeur.setNomMere(listElect.get(position).getNomMere());
                 electeur.setCinElect(listElect.get(position).getCinElect());
                 electeur.setNserieCin(listElect.get(position).getNserieCin());
-                electeur.setOriginCin(listElect.get(position).getOriginCin());
                 electeur.setDateDeliv(listElect.get(position).getDateDeliv());
                 electeur.setLieuDeliv(listElect.get(position).getLieuDeliv());
                 electeur.setFicheElect(listElect.get(position).getFicheElect());

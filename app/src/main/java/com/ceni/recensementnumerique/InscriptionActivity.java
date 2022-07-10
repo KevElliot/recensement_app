@@ -37,11 +37,11 @@ public class InscriptionActivity extends AppCompatActivity {
     private TextView mShowSelectedDateText;
     private ImageView next;
     private ImageView previous;
-    private CheckBox sexeHomme, sexeFemme;
+    private CheckBox sexeHomme, sexeFemme, feuPere, feuMere,nevers;
     private String sexe, dateNaiss;
-    private EditText nFiche, nom, prenom, lieuNaiss, profession, adresse, nomMere, nomPere;
+    private EditText nFiche, nom, prenom, lieuNaiss, profession, adresse, nomMere, nomPere,editNevers;
     private int countFormValide;
-    private boolean isMemeFiche;
+    private boolean isMemeFiche,isNevers;
     private String msg;
 
     @Override
@@ -66,7 +66,51 @@ public class InscriptionActivity extends AppCompatActivity {
         adresse = findViewById(R.id.editTextAdresse);
         nomMere = findViewById(R.id.editNomMere);
         nomPere = findViewById(R.id.editTextNomPere);
+        feuPere = findViewById(R.id.feuPere);
+        feuMere = findViewById(R.id.feuMere);
+        nevers = findViewById(R.id.nevers);
+        editNevers = findViewById(R.id.editTextNevers);
+        isNevers = false;
 
+        nevers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(nevers.isChecked()){
+                    isNevers = true;
+                    mShowSelectedDateText.setVisibility(View.GONE);
+                    mPickDateButton.setVisibility(View.GONE);
+                    editNevers.setVisibility(View.VISIBLE);
+                }else{
+                    isNevers = false;
+                    editNevers.setVisibility(View.GONE);
+                    mShowSelectedDateText.setVisibility(View.VISIBLE);
+                    mPickDateButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        feuPere.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(feuPere.isChecked()){
+                    nomPere.setText("Feu");
+                    nomPere.setFocusable(false);
+                }else{
+                    nomPere.setFocusableInTouchMode(true);
+                }
+            }
+        });
+        feuMere.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(feuMere.isChecked()){
+                    nomMere.setText("Feu");
+                    nomMere.setFocusable(false);
+                }else{
+                    nomMere.setFocusableInTouchMode(true);
+                }
+            }
+        });
         sexeHomme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +153,7 @@ public class InscriptionActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
                 if (nFiche.getText().toString().length() != 0) {
-                     isMemeFiche = DB.isMemeFiche(nFiche.getText().toString());
+                    isMemeFiche = DB.isMemeFiche(nFiche.getText().toString());
                     if (isMemeFiche) {
                         msg = "Takelaka efa voasoratra!";
                     } else {
@@ -127,9 +171,8 @@ public class InscriptionActivity extends AppCompatActivity {
                 }
                 if (prenom.getText().toString().length() != 0) {
                     electeur.setPrenom(prenom.getText().toString());
-                    countFormValide += 1;
                 } else {
-                    prenom.setError("Mila fenoina");
+                    electeur.setPrenom("");
                 }
                 if (lieuNaiss.getText().toString().length() != 0) {
                     electeur.setLieuNaiss(lieuNaiss.getText().toString());
@@ -165,15 +208,25 @@ public class InscriptionActivity extends AppCompatActivity {
                     electeur.setSexe(sexe);
                     countFormValide += 1;
                 }
-                if (dateNaiss != null) {
-                    electeur.setDateNaiss(dateNaiss);
-                    countFormValide += 1;
-                } else {
-                    mShowSelectedDateText.setTextColor(Color.RED);
-                    mShowSelectedDateText.setText("Mila apetraka ny daty nahaterahana");
+                if(isNevers){
+                    if(editNevers.getText().toString()!=null){
+                        countFormValide+=1;
+                        electeur.setNevers(editNevers.getText().toString());
+                        electeur.setDateNaiss("");
+                    }else{
+                        editNevers.setError("Mila fenoina");
+                    }
+                }else{
+                    if(dateNaiss!=null){
+                        countFormValide+=1;
+                        electeur.setDateNaiss(dateNaiss);
+                        electeur.setNevers("");
+                    }else{
+                        mShowSelectedDateText.setTextColor(Color.RED);
+                        mShowSelectedDateText.setText("Mila apetraka ny daty nahaterahana");
+                    }
                 }
-
-                if (countFormValide != 10) {
+                if (countFormValide != 9) {
                     new AlertDialog.Builder(InscriptionActivity.this)
                             .setTitle("Fahadisoana?")
                             .setMessage(msg)
@@ -187,6 +240,7 @@ public class InscriptionActivity extends AppCompatActivity {
 
                 } else {
                     String myJson = gson.toJson(electeur);
+                    Log.d("INSCRIPTION ACTIVITY","JSON:  "+myJson);
                     Intent i = new Intent(getApplicationContext(), Inscription2Activity.class);
                     i.putExtra("newElect", myJson);
                     startActivity(i);
@@ -236,9 +290,9 @@ public class InscriptionActivity extends AppCompatActivity {
             @Override
             public void onPositiveButtonClick(Object selection) {
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                calendar.setTimeInMillis((Long)selection);
+                calendar.setTimeInMillis((Long) selection);
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                String formattedDate  = format.format(calendar.getTime());
+                String formattedDate = format.format(calendar.getTime());
                 mShowSelectedDateText.setTextColor(Color.WHITE);
                 mPickDateButton.setEnabled(true);
                 dateNaiss = formattedDate;

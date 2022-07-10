@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 public class DetailElecteurActivity extends AppCompatActivity {
     private ImageView ficheElect,cinRecto,cinVerso,retour;
-    private TextView nfiche,dateInscr,nom,prenom,sexe,profession,adresse,dateNaiss,lieuNaiss,nomPere,nomMere,cinElect,nserie,originalite,dateDeliv,lieuDeliv;
+    private TextView nfiche,dateInscr,nom,prenom,sexe,profession,adresse,dateNaiss,lieuNaiss,nomPere,nomMere,cinElect,nserie,dateDeliv,lieuDeliv;
     private Button suppression;
 
 
@@ -27,7 +27,7 @@ public class DetailElecteurActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailelecteur);
-        retour = findViewById(R.id.valider);
+        retour = findViewById(R.id.retour);
         suppression = findViewById(R.id.delete);
         ficheElect = findViewById(R.id.ficheElect);
         dateInscr = findViewById(R.id.dateInscr);
@@ -45,7 +45,6 @@ public class DetailElecteurActivity extends AppCompatActivity {
         nomMere = findViewById(R.id.nomMereElect);
         cinElect = findViewById(R.id.cinElect);
         nserie = findViewById(R.id.nSerie);
-        originalite = findViewById(R.id.originCin);
         dateDeliv = findViewById(R.id.dateCinElect);
         lieuDeliv = findViewById(R.id.lieuCinElect);
         Gson gson = new Gson();
@@ -57,13 +56,16 @@ public class DetailElecteurActivity extends AppCompatActivity {
         sexe.setText(electeur.getSexe());
         profession.setText(electeur.getProfession());
         adresse.setText(electeur.getAdresse());
-        dateNaiss.setText(electeur.getDateNaiss());
+        if(electeur.getDateNaiss()==""){
+            dateNaiss.setText(electeur.getNevers());
+        }else{
+            dateNaiss.setText(electeur.getDateNaiss());
+        }
         lieuNaiss.setText(electeur.getLieuNaiss());
         nomPere.setText(electeur.getNomPere());
         nomMere.setText(electeur.getNomMere());
         cinElect.setText(electeur.getCinElect());
         nserie.setText(electeur.getNserieCin());
-        originalite.setText(electeur.getOriginCin());
         dateDeliv.setText(electeur.getDateDeliv());
         lieuDeliv.setText(electeur.getLieuDeliv());
         Bitmap imgFiche = this.decodeImage(electeur.getFicheElect());

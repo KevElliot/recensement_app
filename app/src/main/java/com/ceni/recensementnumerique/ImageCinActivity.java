@@ -28,6 +28,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ImageCinActivity extends AppCompatActivity {
+    static ImageCinActivity imageCinActivity;
     private Button buttonRecto, buttonVerso;
     private ImageView previous, recto, verso, next;
     private String format, imageRecto, imageVerso;
@@ -40,6 +41,7 @@ public class ImageCinActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_imagecin);
+        imageCinActivity = this;
 
         this.buttonRecto = this.findViewById(R.id.button_image_recto);
         this.recto = this.findViewById(R.id.cin_recto);
@@ -73,31 +75,33 @@ public class ImageCinActivity extends AppCompatActivity {
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
                 if (imageRecto != null && imageVerso != null) {
                     electeur.setCinRecto(imageRecto);
-                    //Log.i("image recto", imageRecto);
                     electeur.setCinVerso(imageVerso);
-                    //Log.i("image verso", imageVerso);
-                    //String myjson = gson.toJson(electeur);
-                    Date daty = Calendar.getInstance().getTime();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                    String dat = sdf.format(daty.getTime());
-                    electeur.setDateinscription("" + dat);
-                    Log.d("DATTYYYYY", "" + dat);
+                    String myjson = gson.toJson(electeur);
+                    Log.i("Electeur", myjson);
+                    Intent i = new Intent(getApplicationContext(), ObservationActivity.class);
+                    i.putExtra("newElect", myjson);
+                    startActivity(i);
 
-                    boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getOriginCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getDateinscription());
-                    if (result) {
-                        Toast toast = Toast.makeText(ImageCinActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);
-                        toast.show();
-                        LocalisationActivity.getInstance().finish();
-                        ImageFicheActivity.getInstance().finish();
-                        Inscription2Activity.getInstance().finish();
-                        InscriptionActivity.getInstance().finish();
-                        Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
-                        startActivity(i);
-                        finish();
-                    } else {
-                        Toast toast = Toast.makeText(ImageCinActivity.this, "Erreur à l'enregistrement!", Toast.LENGTH_LONG);
-                        toast.show();
-                    }
+//                    Date daty = Calendar.getInstance().getTime();
+//                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//                    String dat = sdf.format(daty.getTime());
+//                    electeur.setDateinscription("" + dat);
+//
+//                    boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getOriginCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getDateinscription());
+//                    if (result) {
+//                        Toast toast = Toast.makeText(ImageCinActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);
+//                        toast.show();
+//                        LocalisationActivity.getInstance().finish();
+//                        ImageFicheActivity.getInstance().finish();
+//                        Inscription2Activity.getInstance().finish();
+//                        InscriptionActivity.getInstance().finish();
+//                        Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
+//                        startActivity(i);
+//                        finish();
+//                    } else {
+//                        Toast toast = Toast.makeText(ImageCinActivity.this, "Erreur à l'enregistrement!", Toast.LENGTH_LONG);
+//                        toast.show();
+//                    }
 
                 } else {
                     new AlertDialog.Builder(ImageCinActivity.this)
@@ -152,5 +156,8 @@ public class ImageCinActivity extends AppCompatActivity {
                 Toast.makeText(this, "Action Failed", Toast.LENGTH_LONG).show();
             }
         }
+    }
+    public static ImageCinActivity getInstance() {
+        return imageCinActivity;
     }
 }

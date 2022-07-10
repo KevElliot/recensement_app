@@ -13,8 +13,7 @@ import com.ceni.service.Db_sqLite;
 
 public class MenuActivity extends AppCompatActivity{
 
-    Button newElect;
-    Button listeElect;
+    Button newElect,listeElect,documents;
     private ImageView profil;
     private Db_sqLite DB;
     private Api_service API;
@@ -26,6 +25,7 @@ public class MenuActivity extends AppCompatActivity{
 
         newElect = findViewById(R.id.newInscription);
         listeElect = findViewById(R.id.listeSqLite);
+        documents = findViewById(R.id.documents);
         profil = findViewById(R.id.imageViewProfil);
         API = new Api_service();
         DB = new Db_sqLite(this);
@@ -50,6 +50,13 @@ public class MenuActivity extends AppCompatActivity{
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),InfoUserActivity.class);
                 i.putExtra("user",getIntent().getStringExtra("user"));
+                startActivity(i);
+            }
+        });
+        documents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(),DocumentActivity.class);
                 startActivity(i);
             }
         });
