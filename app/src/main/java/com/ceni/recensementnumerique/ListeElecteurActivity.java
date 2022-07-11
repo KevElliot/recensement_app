@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ceni.adapter.ListElecteurAdapter;
@@ -21,7 +22,9 @@ import com.google.gson.Gson;
 import java.util.List;
 
 public class ListeElecteurActivity extends AppCompatActivity {
+    static ListeElecteurActivity listeElecteurActivity;
     ListView listViewElect;
+    TextView nbElecteur;
     Button enregistrer;
     ImageView retour;
     Api_service API;
@@ -32,15 +35,20 @@ public class ListeElecteurActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_electeur);
+        listeElecteurActivity = this;
         listViewElect = findViewById(R.id.listElecteur);
         enregistrer = findViewById(R.id.enregistrerToutBtn);
+        nbElecteur = findViewById(R.id.nbElecteur);
         retour =  findViewById(R.id.imageViewPrevious);
         this.DB = new Db_sqLite(ListeElecteurActivity.this);
         API = new Api_service();
         List<Electeur> listElect = DB.selectElecteur();
         if (listElect.size() <= 0) {
+            nbElecteur.setText("isa ny mpifidy: 0");
             Toast toast = Toast.makeText(ListeElecteurActivity.this, "Tsy misy pifidy voasoratra!", Toast.LENGTH_LONG);
             toast.show();
+        }else{
+            nbElecteur.setText("isa ny mpifidy: "+listElect.size());
         }
         ListElecteurAdapter listElecteurAdapter = new ListElecteurAdapter(ListeElecteurActivity.this, listElect);
         listViewElect.setAdapter(listElecteurAdapter);
@@ -58,6 +66,7 @@ public class ListeElecteurActivity extends AppCompatActivity {
                 electeur.setProfession(listElect.get(position).getProfession());
                 electeur.setAdresse(listElect.get(position).getAdresse());
                 electeur.setDateNaiss(listElect.get(position).getDateNaiss());
+                electeur.setNevers(listElect.get(position).getNevers());
                 electeur.setLieuNaiss(listElect.get(position).getLieuNaiss());
                 electeur.setNomPere(listElect.get(position).getNomPere());
                 electeur.setNomMere(listElect.get(position).getNomMere());
@@ -68,15 +77,16 @@ public class ListeElecteurActivity extends AppCompatActivity {
                 electeur.setFicheElect(listElect.get(position).getFicheElect());
                 electeur.setCinRecto(listElect.get(position).getCinRecto());
                 electeur.setCinVerso(listElect.get(position).getCinVerso());
+                electeur.setObservation(listElect.get(position).getObservation());
+                electeur.setDocreference(listElect.get(position).getDocreference());
                 electeur.setDateinscription(listElect.get(position).getDateinscription());
-
+                Log.d("Liste Electeur Activity","...  "+electeur.toString());
                 Gson gson = new Gson();
                 String myjson = gson.toJson(electeur);
                 Log.i("Liste electeur activity", myjson);
                 Intent i = new Intent(getApplicationContext(), DetailElecteurActivity.class);
                 i.putExtra("electeur", myjson);
                 startActivity(i);
-                finish();
             }
         });
         enregistrer.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +111,8 @@ public class ListeElecteurActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
+    }
+    public static ListeElecteurActivity getInstance() {
+        return listeElecteurActivity;
     }
 }

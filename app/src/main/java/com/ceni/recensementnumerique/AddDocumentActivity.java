@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ceni.model.Document;
@@ -17,6 +18,7 @@ public class AddDocumentActivity extends AppCompatActivity {
     private Button ajouter;
     private ImageView previous;
     private EditText docreference;
+    private TextView erreur;
     private Db_sqLite DB;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +27,7 @@ public class AddDocumentActivity extends AppCompatActivity {
         ajouter = findViewById(R.id.btnAjouter);
         previous = findViewById(R.id.imageViewPrevious);
         docreference = findViewById(R.id.docref);
+        erreur = findViewById(R.id.erreur);
         DB = new Db_sqLite(this);
 
         ajouter.setOnClickListener(new View.OnClickListener() {
@@ -40,6 +43,7 @@ public class AddDocumentActivity extends AppCompatActivity {
                     startActivity(i);
                     finish();
                 } else {
+                    erreur.setText("Carnet efa voasoratra");
                     Toast toast = Toast.makeText(AddDocumentActivity.this, "Erreur à l'enregistrement!", Toast.LENGTH_LONG);
                     toast.show();
                 }

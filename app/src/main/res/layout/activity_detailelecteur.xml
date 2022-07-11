@@ -588,9 +588,9 @@
                     android:textStyle="italic" />
 
                 <TextView
-                    android:id="@+id/Observation"
+                    android:id="@+id/observation"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/courgette"
                     android:gravity="left|center"
                     android:text="observation"

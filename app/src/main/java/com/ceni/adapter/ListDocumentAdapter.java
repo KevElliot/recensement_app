@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,7 +22,9 @@ import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.recensementnumerique.DocumentActivity;
 import com.ceni.recensementnumerique.InfoUserActivity;
+import com.ceni.recensementnumerique.ObservationActivity;
 import com.ceni.recensementnumerique.R;
+import com.ceni.service.Db_sqLite;
 
 import java.util.List;
 
@@ -32,7 +35,7 @@ public class ListDocumentAdapter extends ArrayAdapter<Document> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
+        Db_sqLite DB = new Db_sqLite(DocumentActivity.getInstance());
         Document document = getItem(position);
         if (convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_document,parent,false);
@@ -42,12 +45,20 @@ public class ListDocumentAdapter extends ArrayAdapter<Document> {
         delete.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("DELETE","delete "+docreference.toString());
-                DocumentActivity.getInstance().finish();
-                DocumentActivity.getInstance().overridePendingTransition(0, 0);
-                Intent i = new Intent(DocumentActivity.getInstance(), DocumentActivity.class);
-                DocumentActivity.getInstance().startActivity(i);
-                DocumentActivity.getInstance().overridePendingTransition(0, 0);
+                String doc = docreference.getText().toString();
+                boolean result = DB.deleteDocument(doc);
+                if(result){
+                    Toast toast = Toast.makeText( DocumentActivity.getInstance(), "Document supprimer!", Toast.LENGTH_LONG);
+                    toast.show();
+                    DocumentActivity.getInstance().finish();
+                    DocumentActivity.getInstance().overridePendingTransition(0, 0);
+                    Intent i = new Intent(DocumentActivity.getInstance(), DocumentActivity.class);
+                    DocumentActivity.getInstance().startActivity(i);
+                    DocumentActivity.getInstance().overridePendingTransition(0, 0);
+                }else{
+                    Toast toast = Toast.makeText( DocumentActivity.getInstance(), "Erreur à la suppression!", Toast.LENGTH_LONG);
+                    toast.show();
+                }
             }
         });
 

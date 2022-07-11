@@ -90,7 +90,8 @@
             <Spinner
                 android:id="@+id/spinner_cv"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
                 android:spinnerMode="dialog"
                 android:background="#6FFFFFFF"
                 app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +110,8 @@
             <Spinner
                 android:id="@+id/spinner_bv"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
                 android:spinnerMode="dialog"
                 android:background="#6FFFFFFF"
                 app:layout_constraintStart_toStartOf="parent"

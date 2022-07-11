@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,6 +24,7 @@ import com.ceni.model.Fokontany;
 import com.ceni.model.Localisation;
 import com.ceni.model.Region;
 import com.ceni.model.User;
+import com.ceni.recensementnumerique.R;
 
 
 import java.io.UnsupportedEncodingException;
@@ -169,16 +171,46 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return result;
     }
 
-    public Boolean insertDocument(Document doc) {
+    public Boolean isMemeDoc(String docRef) {
+        boolean result = false;
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_DOCREFERENCE, doc.getDocreference());
-        long result = MyDB.insert(TABLE_Document, null, contentValues);
-        if (result == -1) {
-            return false;
-        } else {
-            return true;
+        Cursor cursor = MyDB.rawQuery("Select " + COLUMN_DOCREFERENCE + " from documents where " + COLUMN_DOCREFERENCE + " =?", new String[]{docRef});
+        try {
+            if (cursor.getCount() != 0) {
+                result = true;
+            }
+        } catch (Exception e) {
+            Log.e("ERROR isMemeDoc", " " + e);
+        } finally {
+            cursor.close();
+            MyDB.close();
         }
+        return result;
+    }
+
+    public Boolean insertDocument(Document doc) {
+        boolean ismemedoc = isMemeDoc(doc.getDocreference());
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        boolean res = false;
+        if (!ismemedoc) {
+            try {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(COLUMN_DOCREFERENCE, doc.getDocreference());
+                long result = MyDB.insert(TABLE_Document, null, contentValues);
+                if (result == -1) {
+                    res = false;
+                } else {
+                    res = true;
+                }
+            } catch (Exception e) {
+                Log.e("ERROR isMemeDoc", " " + e);
+            } finally {
+                MyDB.close();
+            }
+        } else {
+            res = false;
+        }
+        return res;
     }
 
     public List<Document> selectDocument() {
@@ -302,28 +334,6 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public boolean deleteAllUser() {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         return MyDB.delete(TABLE_User, null, null) > 0;
-    }
-
-    public void insertLocalisation() {
-        SQLiteDatabase MyDB = this.getWritableDatabase();
-        try {
-            String dataLocalisation = "";
-            for (int i = 0; i < Localisation_data.localisation.length; i++) {
-                dataLocalisation += Localisation_data.localisation[i] + ",";
-                if (i == Localisation_data.localisation.length - 1) {
-                    dataLocalisation += Localisation_data.localisation[i] + ";";
-                }
-            }
-            String sql = "INSERT INTO Localisation (region_label,code_region,district_label,code_district,commune_label,code_commune," +
-                    "fokontany_label,code_fokontany,cv_label,code_cv,bv_label,code_bv) VALUES " +
-                    dataLocalisation;
-            MyDB.execSQL(sql);
-            Log.d("INSERTION LOCALISATION", "LOCALISATION INSERTED");
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            MyDB.close();
-        }
     }
 
     public List<Localisation> selectLocalisation() {
@@ -512,13 +522,54 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
     }
 
+    public List<Electeur> Recherche(String champ, String recherche) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        List<Electeur> listElect = new ArrayList<>();
+        Cursor cursor = MyDB.rawQuery("Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "';", null);
+        try {
+            while (cursor.moveToNext()) {
+                Electeur e = new Electeur();
+                e.setIdElect(cursor.getInt(0));
+                e.setCode_bv(cursor.getString(1));
+                e.setnFiche(cursor.getString(2));
+                e.setNom(cursor.getString(3));
+                e.setPrenom(cursor.getString(4));
+                e.setSexe(cursor.getString(5));
+                e.setProfession(cursor.getString(6));
+                e.setAdresse(cursor.getString(7));
+                e.setDateNaiss(cursor.getString(8));
+                e.setNevers(cursor.getString(9));
+                e.setLieuNaiss(cursor.getString(10));
+                e.setNomPere(cursor.getString(11));
+                e.setNomMere(cursor.getString(12));
+                e.setCinElect(cursor.getString(13));
+                e.setNserieCin(cursor.getString(14));
+                e.setDateDeliv(cursor.getString(15));
+                e.setLieuDeliv(cursor.getString(16));
+                e.setFicheElect(cursor.getString(17));
+                e.setCinRecto(cursor.getString(18));
+                e.setCinVerso(cursor.getString(19));
+                e.setObservation(cursor.getString(20));
+                e.setDocreference(cursor.getString(21));
+                e.setDateinscription(cursor.getString(22));
+                listElect.add(e);
+            }
+        } catch (Exception ex) {
+            Log.e("error Select SQLITE", "ERROR SELECT ELECTEUR");
+        } finally {
+            cursor.close();
+            MyDB.close();
+        }
+        return listElect;
+    }
+
     public void insertCompte() {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         try {
             String sql = "INSERT INTO Compte (idUser,nomUser,prenomUser,role,pseudo,motdepasse," +
                     "regionUser,code_region,districtUser,code_district,communeUser,code_commune,nbSaisi) VALUES " +
-                    "('idUser','nomUser','prenomUser','role','pseudo','motdepasse','regionUser','code_region','districtUser','code_district','communeUser','code_commune',0)," +
-                    "('idUser2','nomUser2','prenomUser2','role','koto','koto','regionUser2','code_region2','districtUser2','code_district2','communeUser2','code_commune2',0);";
+                    "('idUser','nomUser','prenomUser','role','pseudo','mdp','regionUser','code_region','districtUser','code_district','communeUser','code_commune',0)," +
+                    "('idUser2','nomUser2','prenomUser2','role','koto','koto','ANALAMANGA','11','ANTANANARIVO-ATSIMONDRANO','1105','ALAKAMISY FENOARIVO','110501',0);";
             MyDB.execSQL(sql);
             Log.d("INSERTION USER", "COMPTE INSERTED");
         } catch (Exception e) {
@@ -646,5 +697,27 @@ public class Db_sqLite extends SQLiteOpenHelper {
             e.printStackTrace();
         }
         return texts;
+    }
+
+    public void insertLocalisation(Context c) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        try {
+            Resources res = c.getResources();
+            String[] localisation = res.getStringArray(R.array.localisation);
+            MyDB.beginTransaction();
+            for (int i = 0; i < localisation.length; i++) {
+                String sql = "INSERT INTO Localisation (region_label,code_region,district_label,code_district,commune_label,code_commune," +
+                        "fokontany_label,code_fokontany,cv_label,code_cv,bv_label,code_bv) VALUES " +
+                        localisation[i];
+                MyDB.execSQL(sql);
+            }
+            MyDB.setTransactionSuccessful();
+            MyDB.endTransaction();
+            Log.d("INSERTION LOCALISATION", "LOCALISATION INSERTED");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            MyDB.close();
+        }
     }
 }

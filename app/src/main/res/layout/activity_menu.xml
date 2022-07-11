@@ -68,6 +68,22 @@
         tools:ignore="MissingConstraints" />
 
     <Button
+        android:id="@+id/recherche"
+        android:layout_width="277dp"
+        android:layout_height="49dp"
+        android:layout_gravity="center"
+        android:background="@drawable/input_field"
+        android:fontFamily="@font/bangers"
+        android:text="Mitady mpifidy"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.564"
+        tools:ignore="MissingConstraints" />
+
+    <Button
         android:id="@+id/newInscription"
         android:layout_width="277dp"
         android:layout_height="49dp"
@@ -96,7 +112,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.568"
+        app:layout_constraintVertical_bias="0.693"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

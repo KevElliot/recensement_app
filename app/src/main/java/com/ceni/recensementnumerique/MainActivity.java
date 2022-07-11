@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toast.makeText(MainActivity.this, "User found "+nbuser, Toast.LENGTH_LONG).show();
         DB = new Db_sqLite(this);
         //DB.deleteAllUser();
         //DB.deleteAllElecteur();
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, 5000);
         } else {
-            DB.insertLocalisation();
+            DB.insertLocalisation(this);
             DB.insertCompte();
             new Handler().postDelayed(new Runnable() {
                 @Override

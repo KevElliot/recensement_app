@@ -20,6 +20,7 @@ import com.ceni.model.Commune;
 import com.ceni.model.Cv;
 import com.ceni.model.Electeur;
 import com.ceni.model.Fokontany;
+import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
@@ -42,8 +43,10 @@ public class LocalisationActivity extends AppCompatActivity {
         this.next = this.findViewById(R.id.buttonNext);
         previous = this.findViewById(R.id.imageViewPrevious);
         localisationActivity = this;
-        // Data:  code district 1101 code district an'ilay user
-        this.communes = DB.selectCommuneFromDistrict("code_district");
+        Gson gson = new Gson();
+        User user = gson.fromJson(getIntent().getStringExtra("user"), User.class);
+        String codeDistrict = user.getCode_district();
+        this.communes = DB.selectCommuneFromDistrict(codeDistrict);
         this.spinnerCommune = (Spinner) this.findViewById(R.id.spinner_commune);
 
 

@@ -11,9 +11,9 @@ import android.widget.ImageView;
 import com.ceni.service.Api_service;
 import com.ceni.service.Db_sqLite;
 
-public class MenuActivity extends AppCompatActivity{
+public class MenuActivity extends AppCompatActivity {
 
-    Button newElect,listeElect,documents;
+    Button newElect, listeElect, documents, recherche;
     private ImageView profil;
     private Db_sqLite DB;
     private Api_service API;
@@ -26,6 +26,7 @@ public class MenuActivity extends AppCompatActivity{
         newElect = findViewById(R.id.newInscription);
         listeElect = findViewById(R.id.listeSqLite);
         documents = findViewById(R.id.documents);
+        recherche = findViewById(R.id.recherche);
         profil = findViewById(R.id.imageViewProfil);
         API = new Api_service();
         DB = new Db_sqLite(this);
@@ -33,7 +34,16 @@ public class MenuActivity extends AppCompatActivity{
         newElect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),LocalisationActivity.class);
+                Intent i = new Intent(getApplicationContext(), LocalisationActivity.class);
+                i.putExtra("user", getIntent().getStringExtra("user"));
+                startActivity(i);
+            }
+        });
+
+        recherche.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), RechercheElecteur.class);
                 startActivity(i);
             }
         });
@@ -41,22 +51,22 @@ public class MenuActivity extends AppCompatActivity{
         listeElect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),ListeElecteurActivity.class);
+                Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
                 startActivity(i);
             }
         });
         profil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),InfoUserActivity.class);
-                i.putExtra("user",getIntent().getStringExtra("user"));
+                Intent i = new Intent(getApplicationContext(), InfoUserActivity.class);
+                i.putExtra("user", getIntent().getStringExtra("user"));
                 startActivity(i);
             }
         });
         documents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),DocumentActivity.class);
+                Intent i = new Intent(getApplicationContext(), DocumentActivity.class);
                 startActivity(i);
             }
         });

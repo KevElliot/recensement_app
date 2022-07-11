@@ -27,7 +27,7 @@ public class ObservationActivity extends AppCompatActivity {
     private CheckBox obs1,obs2,obs3;
     private Db_sqLite DB;
     private Api_service API;
-    private String observation ="";
+    private String observation ="Nouveau titulaire CIN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +100,7 @@ public class ObservationActivity extends AppCompatActivity {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                     String dat = sdf.format(daty.getTime());
                     electeur.setDateinscription("" + dat);
-
+                    Log.d("Electeur final:","Electeur : "+electeur.toString());
                     boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(),electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(),electeur.getObservation(),electeur.getDocreference(), electeur.getDateinscription());
                     if (result) {
                         Toast toast = Toast.makeText(ObservationActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);

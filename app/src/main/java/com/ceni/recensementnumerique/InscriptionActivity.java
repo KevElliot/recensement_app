@@ -13,12 +13,19 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ceni.adapter.SpinerCommuneAdapter;
+import com.ceni.adapter.SpinnerDocumentAdapter;
+import com.ceni.model.Commune;
+import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.service.Db_sqLite;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -28,20 +35,22 @@ import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.TimeZone;
 
 public class InscriptionActivity extends AppCompatActivity {
     static InscriptionActivity inscriptionActivity;
-    private Db_sqLite DB;
+    private List<Document> document;
+    private Spinner spinnerDocument;
     private Button mPickDateButton;
     private TextView mShowSelectedDateText;
     private ImageView next;
     private ImageView previous;
-    private CheckBox sexeHomme, sexeFemme, feuPere, feuMere,nevers;
+    private CheckBox sexeHomme, sexeFemme, feuPere, feuMere, nevers;
     private String sexe, dateNaiss;
-    private EditText nFiche, nom, prenom, lieuNaiss, profession, adresse, nomMere, nomPere,editNevers;
+    private EditText nFiche, nom, prenom, lieuNaiss, profession, adresse, nomMere, nomPere, editNevers;
     private int countFormValide;
-    private boolean isMemeFiche,isNevers;
+    private boolean isMemeFiche, isNevers;
     private String msg;
 
     @Override
@@ -49,7 +58,7 @@ public class InscriptionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         inscriptionActivity = this;
         setContentView(R.layout.activity_inscription);
-        DB = new Db_sqLite(this);
+        Db_sqLite DB = new Db_sqLite(this);
         sexe = "Homme";
         msg = "Iangaviana enao mba ameno ireo banga na ny diso azafady.";
         sexeHomme = findViewById(R.id.sexeHomme);
@@ -70,17 +79,40 @@ public class InscriptionActivity extends AppCompatActivity {
         feuMere = findViewById(R.id.feuMere);
         nevers = findViewById(R.id.nevers);
         editNevers = findViewById(R.id.editTextNevers);
+        this.document = DB.selectDocument();
+        this.spinnerDocument = this.findViewById(R.id.spinner_document);
         isNevers = false;
+        final String[] docReference = {""};
+
+        // Adapter Document
+        SpinnerDocumentAdapter adapterDocument = new SpinnerDocumentAdapter(InscriptionActivity.this,
+                R.layout.dropdown_document,
+                R.id.textViewLabel,
+                this.document);
+        this.spinnerDocument.setAdapter(adapterDocument);
+        this.spinnerDocument.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Document docSelected = (Document) spinnerDocument.getSelectedItem();
+                docReference[0] = docSelected.getDocreference().toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
         nevers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(nevers.isChecked()){
+                if (nevers.isChecked()) {
                     isNevers = true;
                     mShowSelectedDateText.setVisibility(View.GONE);
                     mPickDateButton.setVisibility(View.GONE);
                     editNevers.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     isNevers = false;
                     editNevers.setVisibility(View.GONE);
                     mShowSelectedDateText.setVisibility(View.VISIBLE);
@@ -92,10 +124,10 @@ public class InscriptionActivity extends AppCompatActivity {
         feuPere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(feuPere.isChecked()){
+                if (feuPere.isChecked()) {
                     nomPere.setText("Feu");
                     nomPere.setFocusable(false);
-                }else{
+                } else {
                     nomPere.setFocusableInTouchMode(true);
                 }
             }
@@ -103,10 +135,10 @@ public class InscriptionActivity extends AppCompatActivity {
         feuMere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(feuMere.isChecked()){
+                if (feuMere.isChecked()) {
                     nomMere.setText("Feu");
                     nomMere.setFocusable(false);
-                }else{
+                } else {
                     nomMere.setFocusableInTouchMode(true);
                 }
             }
@@ -208,25 +240,32 @@ public class InscriptionActivity extends AppCompatActivity {
                     electeur.setSexe(sexe);
                     countFormValide += 1;
                 }
-                if(isNevers){
-                    if(editNevers.getText().toString()!=null){
-                        countFormValide+=1;
+                if (isNevers) {
+                    if (editNevers.getText().toString() != null) {
+                        countFormValide += 1;
                         electeur.setNevers(editNevers.getText().toString());
                         electeur.setDateNaiss("");
-                    }else{
+                    } else {
                         editNevers.setError("Mila fenoina");
                     }
-                }else{
-                    if(dateNaiss!=null){
-                        countFormValide+=1;
+                } else {
+                    if (dateNaiss !=null) {
+                        countFormValide += 1;
                         electeur.setDateNaiss(dateNaiss);
                         electeur.setNevers("");
-                    }else{
+                    } else {
                         mShowSelectedDateText.setTextColor(Color.RED);
                         mShowSelectedDateText.setText("Mila apetraka ny daty nahaterahana");
                     }
                 }
-                if (countFormValide != 9) {
+                if(docReference[0]!=""){
+                    electeur.setDocreference(docReference[0]);
+                    countFormValide+=1;
+                }else{
+                    Toast toast = Toast.makeText(InscriptionActivity.this, "Selectionner un carnet!", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                if (countFormValide != 10) {
                     new AlertDialog.Builder(InscriptionActivity.this)
                             .setTitle("Fahadisoana?")
                             .setMessage(msg)
@@ -240,7 +279,7 @@ public class InscriptionActivity extends AppCompatActivity {
 
                 } else {
                     String myJson = gson.toJson(electeur);
-                    Log.d("INSCRIPTION ACTIVITY","JSON:  "+myJson);
+                    Log.d("INSCRIPTION ACTIVITY", "JSON:  " + myJson);
                     Intent i = new Intent(getApplicationContext(), Inscription2Activity.class);
                     i.putExtra("newElect", myJson);
                     startActivity(i);

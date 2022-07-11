@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 
 public class DetailElecteurActivity extends AppCompatActivity {
     private ImageView ficheElect,cinRecto,cinVerso,retour;
-    private TextView nfiche,dateInscr,nom,prenom,sexe,profession,adresse,dateNaiss,lieuNaiss,nomPere,nomMere,cinElect,nserie,dateDeliv,lieuDeliv;
+    private TextView nfiche,dateInscr,nom,prenom,sexe,profession,adresse,dateNaiss,lieuNaiss,nomPere,nomMere,cinElect,nserie,dateDeliv,lieuDeliv,observation;
     private Button suppression;
 
 
@@ -47,6 +47,7 @@ public class DetailElecteurActivity extends AppCompatActivity {
         nserie = findViewById(R.id.nSerie);
         dateDeliv = findViewById(R.id.dateCinElect);
         lieuDeliv = findViewById(R.id.lieuCinElect);
+        observation = findViewById(R.id.observation);
         Gson gson = new Gson();
         Electeur electeur = gson.fromJson(getIntent().getStringExtra("electeur"), Electeur.class);
         nfiche.setText(electeur.getnFiche());
@@ -56,10 +57,10 @@ public class DetailElecteurActivity extends AppCompatActivity {
         sexe.setText(electeur.getSexe());
         profession.setText(electeur.getProfession());
         adresse.setText(electeur.getAdresse());
-        if(electeur.getDateNaiss()==""){
-            dateNaiss.setText(electeur.getNevers());
-        }else{
+        if(electeur.getDateNaiss().length()!=0){
             dateNaiss.setText(electeur.getDateNaiss());
+        }else{
+            dateNaiss.setText(electeur.getNevers());
         }
         lieuNaiss.setText(electeur.getLieuNaiss());
         nomPere.setText(electeur.getNomPere());
@@ -74,12 +75,12 @@ public class DetailElecteurActivity extends AppCompatActivity {
         ficheElect.setImageBitmap(imgFiche);
         cinRecto.setImageBitmap(imgCinRecto);
         cinVerso.setImageBitmap(imgCinVerso);
+        observation.setText(electeur.getObservation());
+
         retour.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
-                startActivity(i);
-                finish();
+                onBackPressed();
             }
         });
         suppression.setOnClickListener(new View.OnClickListener() {
@@ -88,9 +89,10 @@ public class DetailElecteurActivity extends AppCompatActivity {
                 Db_sqLite DB = new Db_sqLite(DetailElecteurActivity.this);
                 Boolean deleted = DB.deleteElect(electeur.getCinElect());
                 if(deleted){
-                    finish();
+                    ListeElecteurActivity.getInstance().finish();
                     Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
                     startActivity(i);
+                    finish();
 
                 }else{
                     Toast toast = Toast.makeText(DetailElecteurActivity.this, "Erreur lors de la suppression!", Toast.LENGTH_LONG);
