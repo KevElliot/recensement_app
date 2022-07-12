@@ -569,7 +569,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
             String sql = "INSERT INTO Compte (idUser,nomUser,prenomUser,role,pseudo,motdepasse," +
                     "regionUser,code_region,districtUser,code_district,communeUser,code_commune,nbSaisi) VALUES " +
                     "('idUser','nomUser','prenomUser','role','pseudo','mdp','regionUser','code_region','districtUser','code_district','communeUser','code_commune',0)," +
-                    "('idUser2','nomUser2','prenomUser2','role','koto','koto','ANALAMANGA','11','ANTANANARIVO-ATSIMONDRANO','1105','ALAKAMISY FENOARIVO','110501',0);";
+                    "('1','Rasolo','Bera','Agent','1105AR0001','1105','ANALAMANGA','11','ANTANANARIVO-ATSIMONDRANO','1105','ALAKAMISY FENOARIVO','110501',0);";
             MyDB.execSQL(sql);
             Log.d("INSERTION USER", "COMPTE INSERTED");
         } catch (Exception e) {
