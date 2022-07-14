@@ -336,77 +336,6 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return MyDB.delete(TABLE_User, null, null) > 0;
     }
 
-    public List<Localisation> selectLocalisation() {
-        SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from Localisation", null);
-        List<Localisation> listLoc = new ArrayList<>();
-        try {
-            while (cursor.moveToNext()) {
-                Localisation l = new Localisation();
-                l.setRegion_label(cursor.getString(0));
-                l.setCode_region(cursor.getString(1));
-                l.setDistrict_label(cursor.getString(2));
-                l.setCode_district(cursor.getString(3));
-                l.setCommune_label(cursor.getString(4));
-                l.setCode_commune(cursor.getString(5));
-                l.setFokontany_label(cursor.getString(6));
-                l.setCode_fokontany(cursor.getString(7));
-                l.setCv_label(cursor.getString(8));
-                l.setCode_cv(cursor.getString(9));
-                l.setBv_label(cursor.getString(10));
-                l.setCode_bv(cursor.getString(11));
-                listLoc.add(l);
-            }
-        } catch (Exception e) {
-            Log.e("error Select SQLITE", "ERROR SELECT LOCALISATION");
-        } finally {
-            cursor.close();
-            MyDB.close();
-        }
-        return listLoc;
-    }
-
-    public List<Region> selectRegion() {
-        SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select " + code_region + "," + region_label + " from Localisation group by code_region", null);
-        List<Region> listRegion = new ArrayList<>();
-        try {
-            while (cursor.moveToNext()) {
-                Region c = new Region();
-                c.setCode_region(cursor.getString(0));
-                c.setLabel_region(cursor.getString(1));
-                listRegion.add(c);
-            }
-        } catch (Exception e) {
-            Log.e("error Select SQLITE", "ERROR SELECT REGION");
-        } finally {
-            cursor.close();
-            MyDB.close();
-        }
-        return listRegion;
-    }
-
-    public List<District> selectDistrictFromRegion(String codeRegion) {
-        SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select " + code_district + "," + code_commune + "," + district_label + " from Localisation where " + code_region + "=? group by code_district", new String[]{codeRegion});
-        List<District> listDistrict = new ArrayList<>();
-        try {
-            while (cursor.moveToNext()) {
-                District c = new District();
-                c.setCode_district(cursor.getString(0));
-                c.setCode_region(cursor.getString(1));
-                c.setLabel_district(cursor.getString(2));
-                listDistrict.add(c);
-            }
-        } catch (Exception e) {
-            Log.e("error Select SQLITE", "ERROR SELECT DISTRICT");
-        } finally {
-            cursor.close();
-            MyDB.close();
-        }
-        return listDistrict;
-    }
-
     public List<Commune> selectCommuneFromDistrict(String codeDistrict) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         Cursor cursor = MyDB.rawQuery("Select * from Localisation where " + code_district + "=? group by code_commune", new String[]{codeDistrict});
@@ -679,24 +608,6 @@ public class Db_sqLite extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         long c = DatabaseUtils.queryNumEntries(db, "Electeur", null);
         return (int) c;
-    }
-
-    public String encrypt(String text) throws UnsupportedEncodingException {
-        String encode = null;
-        byte[] data = text.getBytes("UTF-8");
-        encode = Base64.encodeToString(data, Base64.DEFAULT);
-        return encode;
-    }
-
-    public String decrypt(String text) {
-        String texts = null;
-        try {
-            byte[] data = Base64.decode(text, Base64.DEFAULT);
-            texts = new String(data, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return texts;
     }
 
     public void insertLocalisation(Context c) {

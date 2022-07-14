@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         DB = new Db_sqLite(this);
-        //DB.deleteAllUser();
+        DB.deleteAllUser();
         //DB.deleteAllElecteur();
         nbuser = DB.countUser();
         if (nbuser > 0) {

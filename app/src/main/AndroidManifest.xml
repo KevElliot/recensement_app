@@ -38,9 +38,6 @@
             android:name=".LocalisationActivity"
             android:exported="true" />
         <activity
-            android:name=".RegisterUserActivity"
-            android:exported="true" />
-        <activity
             android:name=".ListeElecteurActivity"
             android:exported="true" />
         <activity
