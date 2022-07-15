@@ -3,10 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projet/recensement_app/app/src/main/res/layout/activity_apercu_inscription.xml" value="0.20416666666666666" />
         <entry key="..\:/Projet/recensement_app/app/src/main/res/layout/activity_inscription.xml" value="0.20416666666666666" />
         <entry key="..\:/Projet/recensement_app/app/src/main/res/layout/activity_inscription2.xml" value="0.20416666666666666" />
         <entry key="..\:/Projet/recensement_app/app/src/main/res/layout/activity_liste_electeur.xml" value="0.20416666666666666" />
         <entry key="..\:/Projet/recensement_app/app/src/main/res/layout/activity_localisation.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projet/recensement_app/app/src/main/res/layout/activity_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projet/recensement_app/app/src/main/res/layout/activity_observation.xml" value="0.20416666666666666" />
         <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_detailelecteur.xml" value="0.25" />
         <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_imagefiche.xml" value="0.17074275362318841" />
         <entry key="..\:/ceni/Mobile/recensement_app/app/src/main/res/layout/activity_inscription.xml" value="0.33" />

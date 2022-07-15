@@ -24,10 +24,10 @@ import java.util.Date;
 
 public class ObservationActivity extends AppCompatActivity {
     private ImageView previous, next;
-    private CheckBox obs1,obs2,obs3;
+    private CheckBox obs1, obs2, obs3;
     private Db_sqLite DB;
     private Api_service API;
-    private String observation ="Nouveau titulaire CIN";
+    private String observation = "Nouveau titulaire CIN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,29 +96,17 @@ public class ObservationActivity extends AppCompatActivity {
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
                 if (observation != "") {
                     electeur.setObservation(observation);
-                    Date daty = Calendar.getInstance().getTime();
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                    String dat = sdf.format(daty.getTime());
-                    electeur.setDateinscription("" + dat);
-                    Log.d("Electeur final:","Electeur : "+electeur.toString());
-                    boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(),electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(),electeur.getObservation(),electeur.getDocreference(), electeur.getDateinscription());
-                    if (result) {
-                        Toast toast = Toast.makeText(ObservationActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);
-                        toast.show();
-                        LocalisationActivity.getInstance().finish();
-                        ImageFicheActivity.getInstance().finish();
-                        Inscription2Activity.getInstance().finish();
-                        InscriptionActivity.getInstance().finish();
-                        ImageCinActivity.getInstance().finish();
-                        Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
-                        startActivity(i);
-                        finish();
-                    } else {
-                        Toast toast = Toast.makeText(ObservationActivity.this, "Erreur à l'enregistrement!", Toast.LENGTH_LONG);
-                        toast.show();
-                    }
-
+                    String myjson = gson.toJson(electeur);
+                    Log.i("Electeur", myjson);
+                    Intent i = new Intent(getApplicationContext(), ApercuInscriptionActivity.class);
+                    i.putExtra("newElect", myjson);
+                    startActivity(i);
+                    finish();
+                } else {
+                    Toast toast = Toast.makeText(ObservationActivity.this, "Observation diso!", Toast.LENGTH_LONG);
+                    toast.show();
                 }
+
             }
         });
         this.previous.setOnClickListener(new Button.OnClickListener() {

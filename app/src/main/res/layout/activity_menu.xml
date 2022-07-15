@@ -56,6 +56,7 @@
         android:layout_width="277dp"
         android:layout_height="49dp"
         android:layout_gravity="center"
+        android:layout_marginTop="26dp"
         android:background="@drawable/input_field"
         android:fontFamily="@font/bangers"
         android:text="Listra ny pifidy"
@@ -63,8 +64,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.442"
+        app:layout_constraintTop_toBottomOf="@+id/newInscription"
+        app:layout_constraintVertical_bias="0.116"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -72,6 +73,7 @@
         android:layout_width="277dp"
         android:layout_height="49dp"
         android:layout_gravity="center"
+        android:layout_marginTop="26dp"
         android:background="@drawable/input_field"
         android:fontFamily="@font/bangers"
         android:text="Mitady mpifidy"
@@ -79,8 +81,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.564"
+        app:layout_constraintTop_toBottomOf="@+id/listeSqLite"
+        app:layout_constraintVertical_bias="0.139"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -88,6 +90,7 @@
         android:layout_width="277dp"
         android:layout_height="49dp"
         android:layout_gravity="center"
+        android:layout_marginTop="26dp"
         android:background="@drawable/input_field"
         android:fontFamily="@font/bangers"
         android:text="Mampiditra pifidy vaovao"
@@ -95,8 +98,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.321"
+        app:layout_constraintTop_toBottomOf="@+id/documents"
+        app:layout_constraintVertical_bias="0.082"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -112,7 +115,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.693"
+        app:layout_constraintVertical_bias="0.234"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
