@@ -20,6 +20,9 @@
         android:theme="@style/Theme.RecensementNumerique"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ListeElecteurActivity"
+            android:exported="false" />
+        <activity
             android:name=".ApercuInscriptionActivity"
             android:exported="false" />
         <activity
@@ -41,7 +44,7 @@
             android:name=".LocalisationActivity"
             android:exported="true" />
         <activity
-            android:name=".ListeElecteurActivity"
+            android:name=".ListeFokontanyActivity"
             android:exported="true" />
         <activity
             android:name=".DetailElecteurActivity"

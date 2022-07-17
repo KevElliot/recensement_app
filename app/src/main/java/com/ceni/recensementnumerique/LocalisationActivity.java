@@ -39,6 +39,7 @@ public class LocalisationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_localisation);
+        MenuActivity.setNewElect(true);
         Db_sqLite DB = new Db_sqLite(this);
         this.next = this.findViewById(R.id.buttonNext);
         previous = this.findViewById(R.id.imageViewPrevious);
@@ -46,6 +47,7 @@ public class LocalisationActivity extends AppCompatActivity {
         Gson gson = new Gson();
         User user = gson.fromJson(getIntent().getStringExtra("user"), User.class);
         String codeDistrict = user.getCode_district();
+        String idUser = user.getIdUser();
         this.communes = DB.selectCommuneFromDistrict(codeDistrict);
         this.spinnerCommune = (Spinner) this.findViewById(R.id.spinner_commune);
 
@@ -128,6 +130,7 @@ public class LocalisationActivity extends AppCompatActivity {
                 Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
                 Electeur electeur = new Electeur();
                 electeur.setCode_bv(bvSelected.getCode_bv());
+                electeur.setNum_userinfo(idUser);
                 Gson gson = new Gson();
                 String myJson = gson.toJson(electeur);
                 Intent i = new Intent(getApplicationContext(),InscriptionActivity.class);

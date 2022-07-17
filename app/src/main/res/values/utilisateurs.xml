@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="utilisateurs">
+        <item>"('idUser','nomUser','prenomUser','role','pseudo','mdp','regionUser','code_region','districtUser','code_district','communeUser','code_commune',0)"</item>
+        <item>"('1','Rasolo','Bera','Agent','a','a','ANALAMANGA','11','ANTANANARIVO-ATSIMONDRANO','1105','ALAKAMISY FENOARIVO','110501',0)"</item>
+    </string-array>
+</resources>

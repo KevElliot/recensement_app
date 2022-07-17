@@ -5,17 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fond"
-    tools:context=".DocumentActivity">
+    tools:context=".ListeFokontanyActivity">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
+        android:layout_width="408dp"
         android:layout_height="45dp"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="30dp"
         android:fontFamily="@font/courgette"
         android:gravity="left|center"
-        android:text=" Laharan'ny karine:"
+        android:text=" Lisitra ny mpifidy:"
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,31 +24,53 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
 
-    <Button
-        android:id="@+id/ajouter"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        app:icon="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toTopOf="@+id/listCarnet"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.333" />
-
-    <ListView
-        android:id="@+id/listCarnet"
+    <TextView
+        android:id="@+id/nbElecteur"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
+        android:layout_height="45dp"
+        android:layout_marginRight="15dp"
+        android:fontFamily="@font/courgette"
+        android:gravity="right|center"
+        android:text=" isa ny mpifidy voasoratra:"
+        android:textColor="#000000"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.09" />
+
+    <ListView
+        android:id="@+id/listElecteurFokontany"
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nbElecteur"
         app:layout_constraintVertical_bias="0.0"
-        tools:listitem="@layout/list_item_document" />
+        android:paddingBottom="150dp"
+        android:layout_marginBottom="120dp"
+        tools:listitem="@layout/list_item_fokontany" />
+
+    <Button
+        android:id="@+id/enregistrerToutBtn"
+        android:layout_width="150dp"
+        android:layout_height="49dp"
+        android:fontFamily="@font/bangers"
+        android:gravity="center"
+        android:shadowRadius="4"
+        android:text="Enregistrer"
+        app:cornerRadius="40dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.938"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.976" />
 
     <ImageView
         android:id="@+id/imageViewPrevious"
@@ -63,5 +84,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.976"
         app:srcCompat="@drawable/buton_back" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

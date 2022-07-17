@@ -32,6 +32,7 @@ public class DocumentActivity extends AppCompatActivity {
         documentActivity = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_document);
+        MenuActivity.setDocuments(true);
         listViewDocument = findViewById(R.id.listCarnet);
         ajouter = findViewById(R.id.ajouter);
         retour = findViewById(R.id.imageViewPrevious);

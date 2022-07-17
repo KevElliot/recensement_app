@@ -45,8 +45,8 @@ public class ListElecteurAdapter extends ArrayAdapter<Electeur> {
         Bitmap bm = BitmapFactory.decodeByteArray(img, 0, img.length, opt);
 
         imageElect.setImageBitmap(bm);
-        cinElect.setText(electeur.getCinElect());
-        nFiche.setText(electeur.getnFiche());
+        cinElect.setText("CIN: "+electeur.getCinElect());
+        nFiche.setText("Takelaka: "+electeur.getnFiche());
         nomElect.setText(electeur.getNom());
         prenomElect.setText(electeur.getPrenom());
 

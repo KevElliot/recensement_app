@@ -50,44 +50,47 @@
                             <TextView
                                 android:id="@+id/nomElect"
                                 android:layout_width="match_parent"
-                                android:layout_height="30dp"
+                                android:layout_height="50dp"
+                                android:padding="5dp"
                                 android:layout_weight="66.6"
                                 android:fontFamily="@font/courgette"
                                 android:gravity="center"
-                                android:text="nom"
-                                android:textSize="16dp" />
+                                android:text="Nom"
+                                android:textSize="14dp" />
 
                             <TextView
                                 android:id="@+id/prenomElect"
                                 android:layout_width="match_parent"
-                                android:layout_height="30dp"
+                                android:layout_height="50dp"
+                                android:padding="2dp"
                                 android:layout_weight="66.6"
                                 android:fontFamily="@font/courgette"
                                 android:gravity="center"
                                 android:text="Prenom"
-                                android:textSize="16dp" />
+                                android:textSize="14dp" />
 
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="320dp"
-                            android:layout_height="60dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="33.3"
                             android:orientation="vertical">
 
                             <TextView
                                 android:id="@+id/nFiche"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="50dp"
+                                android:padding="5dp"
                                 android:layout_weight="66.6"
                                 android:fontFamily="@font/croissant_one"
-                                android:text="FICHE"
+                                android:text="Fiche"
                                 android:textSize="15dp" />
 
                             <TextView
                                 android:id="@+id/cinElect"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_height="50dp"
                                 android:layout_weight="66.6"
                                 android:fontFamily="@font/croissant_one"
                                 android:text="CIN"

@@ -36,6 +36,7 @@ public class RechercheElecteur extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recherche_electeur);
+        MenuActivity.setRecherche(true);
         search1 = this.findViewById(R.id.search1);
         search2 = this.findViewById(R.id.search2);
         search3 = this.findViewById(R.id.search3);
@@ -51,11 +52,13 @@ public class RechercheElecteur extends AppCompatActivity {
             public void onClick(View v) {
                 if (search1.isChecked()) {
                     valeurSearch = "cinElect";
+                    inputRecherche.setText("");
                     search1.setChecked(true);
                     search2.setChecked(false);
                     search3.setChecked(false);
                 } else {
                     valeurSearch = "nFiche";
+                    inputRecherche.setText("");
                     search1.setChecked(false);
                     search2.setChecked(true);
                     search3.setChecked(false);
@@ -67,11 +70,13 @@ public class RechercheElecteur extends AppCompatActivity {
             public void onClick(View view) {
                 if (search2.isChecked()) {
                     valeurSearch = "nFiche";
+                    inputRecherche.setText("");
                     search1.setChecked(false);
                     search2.setChecked(true);
                     search3.setChecked(false);
                 } else {
                     valeurSearch = "docreference";
+                    inputRecherche.setText("");
                     search1.setChecked(false);
                     search2.setChecked(false);
                     search3.setChecked(true);
@@ -83,11 +88,13 @@ public class RechercheElecteur extends AppCompatActivity {
             public void onClick(View view) {
                 if (search3.isChecked()) {
                     valeurSearch = "docreference";
+                    inputRecherche.setText("");
                     search1.setChecked(false);
                     search2.setChecked(false);
                     search3.setChecked(true);
                 } else {
                     valeurSearch = "cinElect";
+                    inputRecherche.setText("");
                     search1.setChecked(true);
                     search2.setChecked(false);
                     search3.setChecked(false);
@@ -98,8 +105,6 @@ public class RechercheElecteur extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String rech = inputRecherche.getText().toString();
-                Log.d("kk","... "+rech);
-                Log.d("xxx","... "+valeurSearch);
                 if(rech.length()!=0) {
                     elect = DB.Recherche(valeurSearch, rech);
                     if (elect.size() != 0) {

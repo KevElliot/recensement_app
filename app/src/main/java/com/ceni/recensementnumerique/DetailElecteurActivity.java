@@ -89,8 +89,9 @@ public class DetailElecteurActivity extends AppCompatActivity {
                 Db_sqLite DB = new Db_sqLite(DetailElecteurActivity.this);
                 Boolean deleted = DB.deleteElect(electeur.getCinElect());
                 if(deleted){
+                    ListeFokontanyActivity.getInstance().finish();
                     ListeElecteurActivity.getInstance().finish();
-                    Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
+                    Intent i = new Intent(getApplicationContext(), ListeFokontanyActivity.class);
                     startActivity(i);
                     finish();
 

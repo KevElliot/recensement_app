@@ -34,8 +34,7 @@ public class Inscription2Activity extends AppCompatActivity {
     private TextView mShowSelectedDateText,infoCin;
     private ImageView next,previous;
     private EditText cin,nserie,nserie2,lieuCin;
-    //private CheckBox original, duplicata;
-    private String dateCin,origin;
+    private String dateCin;
     int countFormValide;
 
     @Override
@@ -52,38 +51,6 @@ public class Inscription2Activity extends AppCompatActivity {
         nserie2 = findViewById(R.id.editTextNserie2);
         lieuCin = findViewById(R.id.editTextLieuCIN);
         infoCin = findViewById(R.id.infoCin);
-        //original = findViewById(R.id.original);
-        //duplicata = findViewById(R.id.duplicata);
-        origin = "original";
-
-        /*original.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (original.isChecked()) {
-                    origin = "original";
-                    original.setChecked(true);
-                    duplicata.setChecked(false);
-                } else {
-                    origin = "duplicata";
-                    original.setChecked(false);
-                    duplicata.setChecked(true);
-                }
-            }
-        });
-        duplicata.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (duplicata.isChecked()) {
-                    origin = "duplicata";
-                    duplicata.setChecked(true);
-                    original.setChecked(false);
-                } else {
-                    origin = "original";
-                    duplicata.setChecked(false);
-                    original.setChecked(true);
-                }
-            }
-        });*/
 
         cin.addTextChangedListener(new TextWatcher() {
             @Override

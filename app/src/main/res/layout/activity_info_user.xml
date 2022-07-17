@@ -42,21 +42,21 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#61878787"
                 android:fontFamily="@font/courgette"
                 android:gravity="center"
                 android:text="Personnel:"
                 android:textColor="#000000"
-                android:background="#61878787"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -67,8 +67,7 @@
                     android:gravity="left|center"
                     android:text="Nom:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/nomUser"
@@ -81,12 +80,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -97,8 +97,7 @@
                     android:gravity="left|center"
                     android:text="Prénom:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/prenomUser"
@@ -111,12 +110,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -127,8 +127,7 @@
                     android:gravity="left|center"
                     android:text="Region:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/regionUser"
@@ -141,12 +140,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -157,8 +157,7 @@
                     android:gravity="left|center"
                     android:text="District:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/districtUser"
@@ -171,12 +170,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -187,8 +187,7 @@
                     android:gravity="left|center"
                     android:text="Commune:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/communeUser"
@@ -201,12 +200,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -217,8 +217,7 @@
                     android:gravity="left|center"
                     android:text="Nombre de saisi:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/nbsaisi"
@@ -230,6 +229,7 @@
                     android:textColor="#878787"
                     android:textSize="20sp" />
             </LinearLayout>
+
             <TextView
                 android:id="@+id/textView5"
                 android:layout_width="match_parent"

@@ -40,13 +40,7 @@ public class LoginActivity extends AppCompatActivity {
                 String pseudo = txtpseudo.getText().toString();
                 String motdepass=txtmdp.getText().toString();
                 Gson gson = new Gson();
-                nbUser = Integer.parseInt(getIntent().getStringExtra("nbuser").toString());
-                if(nbUser>0){
                     user = DB.selectUser(pseudo,motdepass);
-                }else{
-                    user = DB.selectCompte(pseudo,motdepass);
-                    DB.insertUser(user);
-                }
                 if(user.getCode_district()!=null){
                     String myjson = gson.toJson(user);
                     Intent i = new Intent(getApplicationContext(),MenuActivity.class);

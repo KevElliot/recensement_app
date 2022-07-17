@@ -5,29 +5,36 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ceni.model.Electeur;
 import com.ceni.service.Api_service;
 import com.ceni.service.Db_sqLite;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class ObservationActivity extends AppCompatActivity {
     private ImageView previous, next;
     private CheckBox obs1, obs2, obs3;
-    private Db_sqLite DB;
-    private Api_service API;
-    private String observation = "Nouveau titulaire CIN";
+    private Button mPickDateButton;
+    private TextView mShowSelectedDateText;
+    private String daterecensement ="";
+    private String observation = "Nouveau recensement electeur";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,21 +43,25 @@ public class ObservationActivity extends AppCompatActivity {
         this.obs1 = this.findViewById(R.id.Observation1);
         this.obs2 = this.findViewById(R.id.Observation2);
         this.obs3 = this.findViewById(R.id.Observation3);
+        mPickDateButton = findViewById(R.id.pick_date_button);
+        mShowSelectedDateText = findViewById(R.id.selected_Date);
         this.next = this.findViewById(R.id.imageViewNext);
         this.previous = this.findViewById(R.id.imageViewPrevious);
-        DB = new Db_sqLite(this);
-        API = new Api_service();
+
+        int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
+        int anneeMajor = anneeNow - 18;
+        int anneeDead = anneeNow - 150;
 
         obs1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (obs1.isChecked()) {
-                    observation = "Nouveau titulaire CIN";
+                    observation = "Nouveau recensement electeur";
                     obs1.setChecked(true);
                     obs2.setChecked(false);
                     obs3.setChecked(false);
                 } else {
-                    observation = "JSN/CIN";
+                    observation = "Nouveau titulaire CIN";
                     obs1.setChecked(false);
                     obs2.setChecked(true);
                     obs3.setChecked(false);
@@ -61,12 +72,12 @@ public class ObservationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (obs2.isChecked()) {
-                    observation = "JSN/CIN";
+                    observation = "Nouveau titulaire CIN";
                     obs1.setChecked(false);
                     obs2.setChecked(true);
                     obs3.setChecked(false);
                 } else {
-                    observation = "Nouveau recensement electeur";
+                    observation = "JSN/CIN";
                     obs1.setChecked(false);
                     obs2.setChecked(false);
                     obs3.setChecked(true);
@@ -77,12 +88,12 @@ public class ObservationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (obs3.isChecked()) {
-                    observation = "Nouveau recensement electeur";
+                    observation = "JSN/CIN";
                     obs1.setChecked(false);
                     obs2.setChecked(false);
                     obs3.setChecked(true);
                 } else {
-                    observation = "Nouveau titulaire CIN";
+                    observation = "Nouveau recensement electeur";
                     obs1.setChecked(true);
                     obs2.setChecked(false);
                     obs3.setChecked(false);
@@ -94,8 +105,9 @@ public class ObservationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Gson gson = new Gson();
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
-                if (observation != "") {
+                if (daterecensement.length() !=0) {
                     electeur.setObservation(observation);
+                    electeur.setDateinscription(daterecensement);
                     String myjson = gson.toJson(electeur);
                     Log.i("Electeur", myjson);
                     Intent i = new Intent(getApplicationContext(), ApercuInscriptionActivity.class);
@@ -103,8 +115,8 @@ public class ObservationActivity extends AppCompatActivity {
                     startActivity(i);
                     finish();
                 } else {
-                    Toast toast = Toast.makeText(ObservationActivity.this, "Observation diso!", Toast.LENGTH_LONG);
-                    toast.show();
+                    mShowSelectedDateText.setTextColor(Color.RED);
+                    mShowSelectedDateText.setText("Mila apetraka ny daty nanoratana an'ilay mpifidy!");
                 }
 
             }
@@ -113,6 +125,54 @@ public class ObservationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
+            }
+        });
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.clear();
+
+        calendar.set(Calendar.YEAR, anneeMajor);
+        calendar.set(Calendar.MONTH, Calendar.JULY);
+        Long anneeFin = calendar.getTimeInMillis();
+
+        calendar.set(Calendar.YEAR, anneeDead);
+        Long anneeStart = calendar.getTimeInMillis();
+
+        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
+        constraintBuilder.setStart(anneeStart);
+        constraintBuilder.setEnd(anneeFin);
+
+        MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
+        materialDateBuilder.setSelection(anneeFin);
+        materialDateBuilder.setCalendarConstraints(constraintBuilder.build());
+        materialDateBuilder.setTitleText("Daty: ");
+        final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
+
+        mPickDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPickDateButton.setEnabled(false);
+                materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
+            }
+        });
+        materialDatePicker.addOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                mPickDateButton.setEnabled(true);
+            }
+        });
+
+        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.setTimeInMillis((Long) selection);
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate = format.format(calendar.getTime());
+                mShowSelectedDateText.setTextColor(Color.WHITE);
+                mPickDateButton.setEnabled(true);
+                daterecensement = formattedDate;
+                mShowSelectedDateText.setText("Daty recensement: " + formattedDate);
             }
         });
     }

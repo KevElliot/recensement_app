@@ -68,8 +68,7 @@
                     android:gravity="left|center"
                     android:text="Carnet N:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/nFiche"
@@ -99,8 +98,7 @@
                     android:gravity="left|center"
                     android:text="Inscrit le:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/dateInscr"
@@ -151,8 +149,7 @@
                     android:gravity="left|center"
                     android:text="Nom:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/nomElect"
@@ -182,8 +179,7 @@
                     android:gravity="left|center"
                     android:text="Prenom:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/prenomElect"
@@ -213,8 +209,7 @@
                     android:gravity="left|center"
                     android:text="Sexe:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/sexeElect"
@@ -238,14 +233,13 @@
 
                 <TextView
                     android:id="@+id/soratra4"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="134dp"
+                    android:layout_height="40dp"
                     android:fontFamily="@font/courgette"
                     android:gravity="left|center"
                     android:text="Profession:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/professionElect"
@@ -275,8 +269,7 @@
                     android:gravity="left|center"
                     android:text="Adresse:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/adresseElect"
@@ -307,8 +300,7 @@
                     android:text="Date
                     Naissance:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/dateNaissElect"
@@ -339,8 +331,7 @@
                     android:text="Lieu
                     Naissance:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/lieuNaissElect"
@@ -368,10 +359,9 @@
                     android:layout_height="40dp"
                     android:fontFamily="@font/courgette"
                     android:gravity="left|center"
-                    android:text="Pere:"
+                    android:text="Père:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/nomPereElect"
@@ -399,10 +389,9 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/courgette"
                     android:gravity="left|center"
-                    android:text="Mere:"
+                    android:text="Mère:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/nomMereElect"
@@ -445,8 +434,7 @@
                     android:gravity="left|center"
                     android:text="CIN:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/cinElect"
@@ -476,8 +464,7 @@
                     android:gravity="left|center"
                     android:text="N:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/nSerie"
@@ -507,8 +494,7 @@
                     android:gravity="left|center"
                     android:text="Date CIN:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/dateCinElect"
@@ -538,8 +524,7 @@
                     android:gravity="left|center"
                     android:text="Lieu CIN:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/lieuCinElect"
@@ -612,8 +597,7 @@
                     android:gravity="left|center"
                     android:text="Observation:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/observation"

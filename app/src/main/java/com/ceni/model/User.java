@@ -1,7 +1,7 @@
 package com.ceni.model;
 
 public class User {
-    private int idUser;
+    private String idUser;
     private String nomUser;
     private String prenomUser;
     private String role;
@@ -17,7 +17,7 @@ public class User {
 
     public User(){}
 
-    public User(int idUser, String nomUser, String prenomUser, String role, String pseudo, String motdepasse, String regionUser, String code_region, String districtUser, String code_district, String communeUser, String code_commune, int nbSaisi) {
+    public User(String idUser, String nomUser, String prenomUser, String role, String pseudo, String motdepasse, String regionUser, String code_region, String districtUser, String code_district, String communeUser, String code_commune, int nbSaisi) {
         this.idUser = idUser;
         this.nomUser = nomUser;
         this.prenomUser = prenomUser;
@@ -67,11 +67,11 @@ public class User {
                 '}';
     }
 
-    public int getIdUser() {
+    public String getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(int idUser) {
+    public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
 

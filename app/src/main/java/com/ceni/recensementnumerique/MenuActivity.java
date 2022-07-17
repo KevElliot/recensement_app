@@ -7,16 +7,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 
 import com.ceni.service.Api_service;
 import com.ceni.service.Db_sqLite;
 
 public class MenuActivity extends AppCompatActivity {
 
-    Button newElect, listeElect, documents, recherche;
+    private static Button newElect;
+    private static Button listeElect;
+    private static Button documents;
+    private static Button recherche;
     private ImageView profil;
-    private Db_sqLite DB;
-    private Api_service API;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +31,11 @@ public class MenuActivity extends AppCompatActivity {
         documents = findViewById(R.id.documents);
         recherche = findViewById(R.id.recherche);
         profil = findViewById(R.id.imageViewProfil);
-        API = new Api_service();
-        DB = new Db_sqLite(this);
 
         newElect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                newElect.setEnabled(false);
                 Intent i = new Intent(getApplicationContext(), LocalisationActivity.class);
                 i.putExtra("user", getIntent().getStringExtra("user"));
                 startActivity(i);
@@ -43,6 +45,7 @@ public class MenuActivity extends AppCompatActivity {
         recherche.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                recherche.setEnabled(false);
                 Intent i = new Intent(getApplicationContext(), RechercheElecteur.class);
                 startActivity(i);
             }
@@ -51,7 +54,8 @@ public class MenuActivity extends AppCompatActivity {
         listeElect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
+                listeElect.setEnabled(false);
+                Intent i = new Intent(getApplicationContext(), ListeFokontanyActivity.class);
                 startActivity(i);
             }
         });
@@ -66,9 +70,26 @@ public class MenuActivity extends AppCompatActivity {
         documents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                documents.setEnabled(false);
                 Intent i = new Intent(getApplicationContext(), DocumentActivity.class);
                 startActivity(i);
             }
         });
+    }
+
+    public static void setListeElect(boolean x) {
+        listeElect.setEnabled(x);
+    }
+
+    public static void setNewElect(boolean x) {
+        newElect.setEnabled(x);
+    }
+
+    public static void setDocuments(boolean x) {
+        documents.setEnabled(x);
+    }
+
+    public static void setRecherche(boolean x) {
+        recherche.setEnabled(x);
     }
 }

@@ -87,12 +87,11 @@ public class ApercuInscriptionActivity extends AppCompatActivity {
                 Db_sqLite DB = new Db_sqLite(ApercuInscriptionActivity.this);
                 Gson gson = new Gson();
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
-                Date daty = Calendar.getInstance().getTime();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                String dat = sdf.format(daty.getTime());
-                electeur.setDateinscription("" + dat);
                 Log.d("Electeur final:", "Electeur : " + electeur.toString());
-                boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), electeur.getDateinscription());
+                boolean result = true;
+                for(int i=0;i<100;i++) {
+                    result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), electeur.getDateinscription());
+                }
                 if (result) {
                     Toast toast = Toast.makeText(ApercuInscriptionActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);
                     toast.show();
@@ -101,7 +100,7 @@ public class ApercuInscriptionActivity extends AppCompatActivity {
                     Inscription2Activity.getInstance().finish();
                     InscriptionActivity.getInstance().finish();
                     ImageCinActivity.getInstance().finish();
-                    Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
+                    Intent i = new Intent(getApplicationContext(), ListeFokontanyActivity.class);
                     startActivity(i);
                     finish();
                 } else {

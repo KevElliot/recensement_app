@@ -50,7 +50,7 @@ public class InscriptionActivity extends AppCompatActivity {
     private String sexe, dateNaiss;
     private EditText nFiche, nom, prenom, lieuNaiss, profession, adresse, nomMere, nomPere, editNevers;
     private int countFormValide;
-    private boolean isMemeFiche, isNevers;
+    private boolean isMemeFiche, isNevers, feuMereSelected, feuPereSelected;
     private String msg;
 
     @Override
@@ -81,7 +81,12 @@ public class InscriptionActivity extends AppCompatActivity {
         editNevers = findViewById(R.id.editTextNevers);
         this.document = DB.selectDocument();
         this.spinnerDocument = this.findViewById(R.id.spinner_document);
+        int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
+        int anneeMajor = anneeNow - 18;
+        int anneeDead = anneeNow - 150;
         isNevers = false;
+        feuMereSelected = false;
+        feuPereSelected = false;
         final String[] docReference = {""};
 
         // Adapter Document
@@ -124,22 +129,24 @@ public class InscriptionActivity extends AppCompatActivity {
         feuPere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String np = nomPere.getText().toString();
                 if (feuPere.isChecked()) {
-                    nomPere.setText("Feu");
-                    nomPere.setFocusable(false);
+                    nomPere.setText(np+"(Feu)");
                 } else {
-                    nomPere.setFocusableInTouchMode(true);
+                    String newnp = np.replace("(Feu)","");
+                    nomPere.setText(newnp);
                 }
             }
         });
         feuMere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String nm = nomMere.getText().toString();
                 if (feuMere.isChecked()) {
-                    nomMere.setText("Feu");
-                    nomMere.setFocusable(false);
+                    nomMere.setText(nm+"(Feu)");
                 } else {
-                    nomMere.setFocusableInTouchMode(true);
+                    String newnm = nm.replace("(Feu)","");
+                    nomMere.setText(newnm);
                 }
             }
         });
@@ -184,7 +191,7 @@ public class InscriptionActivity extends AppCompatActivity {
                 countFormValide = 0;
                 Gson gson = new Gson();
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
-                if (nFiche.getText().toString().length() != 0) {
+                if (nFiche.getText().toString().length() == 12) {
                     isMemeFiche = DB.isMemeFiche(nFiche.getText().toString());
                     if (isMemeFiche) {
                         msg = "Takelaka efa voasoratra!";
@@ -193,7 +200,7 @@ public class InscriptionActivity extends AppCompatActivity {
                         countFormValide += 1;
                     }
                 } else {
-                    nFiche.setError("Mila fenoina");
+                    nFiche.setError("Misy diso");
                 }
                 if (nom.getText().toString().length() != 0) {
                     electeur.setNom(nom.getText().toString());
@@ -241,12 +248,17 @@ public class InscriptionActivity extends AppCompatActivity {
                     countFormValide += 1;
                 }
                 if (isNevers) {
-                    if (editNevers.getText().toString() != null) {
-                        countFormValide += 1;
-                        electeur.setNevers(editNevers.getText().toString());
-                        electeur.setDateNaiss("");
+                    int anneeNevers = Integer.parseInt(editNevers.getText().toString());
+                    if (editNevers.getText().toString().length() == 4) {
+                        if(anneeNevers<anneeMajor && anneeNevers>anneeDead){
+                            countFormValide += 1;
+                            electeur.setNevers(editNevers.getText().toString());
+                            electeur.setDateNaiss("");
+                        }else{
+                            editNevers.setError("Tsy ao anatiny taona");
+                        }
                     } else {
-                        editNevers.setError("Mila fenoina");
+                        editNevers.setError("Diso");
                     }
                 } else {
                     if (dateNaiss !=null) {
@@ -289,10 +301,6 @@ public class InscriptionActivity extends AppCompatActivity {
 
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.clear();
-
-        int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
-        int anneeMajor = anneeNow - 18;
-        int anneeDead = anneeNow - 101;
 
         calendar.set(Calendar.YEAR, anneeMajor);
         calendar.set(Calendar.MONTH, Calendar.JULY);

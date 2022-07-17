@@ -25,13 +25,14 @@
         app:layout_constraintVertical_bias="0.023" />
 
     <TextView
-        android:id="@+id/nbElecteur"
+        android:id="@+id/fokontanyLabel"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginRight="15dp"
+        android:paddingRight="15dp"
         android:fontFamily="@font/courgette"
         android:gravity="right|center"
-        android:text=" isa ny mpifidy:"
+        android:text=" Fokontany:"
         android:textColor="#000000"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -49,26 +50,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nbElecteur"
+        app:layout_constraintTop_toBottomOf="@+id/fokontanyLabel"
         app:layout_constraintVertical_bias="0.0"
+        android:paddingBottom="150dp"
+        android:layout_marginBottom="120dp"
         tools:listitem="@layout/list_item_electeur" />
-
-    <Button
-        android:id="@+id/enregistrerToutBtn"
-        android:layout_width="150dp"
-        android:layout_height="49dp"
-        android:fontFamily="@font/bangers"
-        android:gravity="center"
-        android:shadowRadius="4"
-        android:text="Enregistrer"
-        app:cornerRadius="40dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.938"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
 
     <ImageView
         android:id="@+id/imageViewPrevious"

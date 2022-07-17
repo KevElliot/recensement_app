@@ -17,15 +17,10 @@ import android.widget.Toast;
 
 import com.ceni.model.Electeur;
 import com.ceni.service.Api_service;
-import com.ceni.service.Common;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 
 public class ImageCinActivity extends AppCompatActivity {
     static ImageCinActivity imageCinActivity;
@@ -35,7 +30,6 @@ public class ImageCinActivity extends AppCompatActivity {
     private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
     private Db_sqLite DB;
     private Api_service API;
-    private Common checkCo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +45,6 @@ public class ImageCinActivity extends AppCompatActivity {
         this.previous = this.findViewById(R.id.imageViewPrevious);
         DB = new Db_sqLite(this);
         API = new Api_service();
-        checkCo = new Common();
 
         this.buttonRecto.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -81,27 +74,6 @@ public class ImageCinActivity extends AppCompatActivity {
                     Intent i = new Intent(getApplicationContext(), ObservationActivity.class);
                     i.putExtra("newElect", myjson);
                     startActivity(i);
-
-//                    Date daty = Calendar.getInstance().getTime();
-//                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//                    String dat = sdf.format(daty.getTime());
-//                    electeur.setDateinscription("" + dat);
-//
-//                    boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getOriginCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getDateinscription());
-//                    if (result) {
-//                        Toast toast = Toast.makeText(ImageCinActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);
-//                        toast.show();
-//                        LocalisationActivity.getInstance().finish();
-//                        ImageFicheActivity.getInstance().finish();
-//                        Inscription2Activity.getInstance().finish();
-//                        InscriptionActivity.getInstance().finish();
-//                        Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
-//                        startActivity(i);
-//                        finish();
-//                    } else {
-//                        Toast toast = Toast.makeText(ImageCinActivity.this, "Erreur à l'enregistrement!", Toast.LENGTH_LONG);
-//                        toast.show();
-//                    }
 
                 } else {
                     new AlertDialog.Builder(ImageCinActivity.this)

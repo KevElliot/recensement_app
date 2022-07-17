@@ -24,11 +24,12 @@ public class Electeur {
     private String cinVerso;
     private String observation;
     private String docreference;
+    private String num_userinfo;
     private String dateinscription;
 
     public Electeur(){}
 
-    public Electeur(String code_bv,String nFiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss,String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String ficheElect, String cinRecto, String cinVerso,String observation,String docreference,String dateinscription) {
+    public Electeur(String code_bv,String nFiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss,String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String ficheElect, String cinRecto, String cinVerso,String observation,String docreference,String num_userinfo,String dateinscription) {
         this.code_bv = code_bv;
         this.nFiche = nFiche;
         this.nom = nom;
@@ -50,10 +51,11 @@ public class Electeur {
         this.cinVerso = cinVerso;
         this.observation = observation;
         this.docreference = docreference;
+        this.num_userinfo = num_userinfo;
         this.dateinscription=dateinscription;
     }
 
-    public Electeur(int idElect, String code_bv, String numelect, String nFiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss, String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String ficheElect, String cinRecto, String cinVerso,String observation,String docreference, String dateinscription) {
+    public Electeur(int idElect, String code_bv, String numelect, String nFiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss, String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String ficheElect, String cinRecto, String cinVerso,String observation,String docreference,String num_userinfo, String dateinscription) {
         this.idElect = idElect;
         this.code_bv = code_bv;
         this.numelect = numelect;
@@ -77,6 +79,7 @@ public class Electeur {
         this.cinVerso = cinVerso;
         this.observation = observation;
         this.docreference = docreference;
+        this.num_userinfo = num_userinfo;
         this.dateinscription = dateinscription;
     }
 
@@ -89,6 +92,13 @@ public class Electeur {
                 " observation = "+observation+" dateinscription =" +dateinscription);
     }
 
+    public String getNum_userinfo() {
+        return num_userinfo;
+    }
+
+    public void setNum_userinfo(String num_userinfo) {
+        this.num_userinfo = num_userinfo;
+    }
 
     public String getDocreference() {
         return docreference;

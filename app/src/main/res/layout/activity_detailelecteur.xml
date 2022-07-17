@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/fond"
     tools:context=".DetailElecteurActivity">
+
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="310dp"
@@ -36,42 +37,44 @@
                 android:gravity="center"
                 android:textColor="#878787"
                 android:textSize="20sp" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="33.3"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/soratraNum"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:fontFamily="@font/courgette"
-                android:gravity="left|center"
-                android:text="Carnet N:"
-                android:layout_marginRight="15dp"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                android:textStyle="italic" />
-            <TextView
-                android:id="@+id/nFiche"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:fontFamily="@font/courgette"
-                android:gravity="left|center"
-                android:text="Numero de serie"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-        </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/soratraNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginRight="15dp"
+                    android:fontFamily="@font/courgette"
+                    android:gravity="left|center"
+                    android:text="Carnet N:"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/nFiche"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:fontFamily="@font/courgette"
+                    android:gravity="left|center"
+                    android:text="Numero de serie"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -82,8 +85,7 @@
                     android:gravity="left|center"
                     android:text="Inscrit le:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/dateInscr"
@@ -101,13 +103,13 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#61878787"
                 android:fontFamily="@font/courgette"
                 android:gravity="center"
                 android:text="Ny momban'ny mpifidy:"
                 android:textColor="#000000"
-                android:background="#61878787"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:textSize="20sp" />
 
             <ImageView
@@ -121,9 +123,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -134,8 +136,7 @@
                     android:gravity="left|center"
                     android:text="Nom:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/nomElect"
@@ -148,12 +149,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -164,8 +166,7 @@
                     android:gravity="left|center"
                     android:text="Prenom:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/prenomElect"
@@ -178,12 +179,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -194,8 +196,7 @@
                     android:gravity="left|center"
                     android:text="Sexe:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/sexeElect"
@@ -208,12 +209,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -224,8 +226,7 @@
                     android:gravity="left|center"
                     android:text="Profession:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/professionElect"
@@ -238,12 +239,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -254,8 +256,7 @@
                     android:gravity="left|center"
                     android:text="Adresse:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/adresseElect"
@@ -268,12 +269,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -285,8 +287,7 @@
                     android:text="Date
                     Naissance:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/dateNaissElect"
@@ -299,12 +300,13 @@
                     android:textSize="18sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -316,8 +318,7 @@
                     android:text="Lieu
                     Naissance:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/lieuNaissElect"
@@ -330,12 +331,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="15dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -346,8 +348,7 @@
                     android:gravity="left|center"
                     android:text="Pere:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/nomPereElect"
@@ -360,12 +361,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -376,8 +378,7 @@
                     android:gravity="left|center"
                     android:text="Mere:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/nomMereElect"
@@ -395,21 +396,21 @@
                 android:id="@+id/textViewCin1"
                 android:layout_width="match_parent"
                 android:layout_height="46dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#61878787"
                 android:fontFamily="@font/courgette"
                 android:gravity="center"
                 android:text="Ny momban'ny CIN:"
                 android:textColor="#000000"
-                android:background="#61878787"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:textSize="20sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -420,8 +421,7 @@
                     android:gravity="left|center"
                     android:text="CIN:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/cinElect"
@@ -434,12 +434,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -450,8 +451,7 @@
                     android:gravity="left|center"
                     android:text="N:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/nSerie"
@@ -464,12 +464,13 @@
                     android:textSize="20sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -480,8 +481,7 @@
                     android:gravity="left|center"
                     android:text="Date CIN:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/dateCinElect"
@@ -494,12 +494,13 @@
                     android:textSize="18sp" />
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -510,8 +511,7 @@
                     android:gravity="left|center"
                     android:text="Lieu CIN:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/lieuCinElect"
@@ -571,9 +571,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="33.3"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
+                android:layout_weight="33.3"
                 android:orientation="horizontal">
 
                 <TextView
@@ -584,8 +584,7 @@
                     android:gravity="left|center"
                     android:text="Observation:"
                     android:textColor="#000000"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/observation"
