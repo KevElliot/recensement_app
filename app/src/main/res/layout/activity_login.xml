@@ -7,6 +7,7 @@
     android:background="@drawable/fond"
     tools:context=".LoginActivity">
 
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="174dp"
@@ -16,64 +17,73 @@
         android:text="Login"
         android:textColor="#000000"
         android:textSize="50sp"
-        app:layout_constraintBottom_toTopOf="@+id/editTextPseudo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.557" />
-
-    <Button
-        android:id="@+id/connecterBtn"
-        android:layout_width="152dp"
-        android:layout_height="48dp"
-        android:background="@drawable/button_custom"
-        android:fontFamily="@font/bangers"
-        android:text="Connecter"
-        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.544"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.633"
-        app:rippleColor="#FFFFFF"
-        tools:ignore="TextContrastCheck,TextContrastCheck" />
+        app:layout_constraintVertical_bias="0.091" />
 
-    <EditText
-        android:id="@+id/editTextPseudo"
-        android:layout_width="287dp"
-        android:layout_height="48dp"
-        android:background="@drawable/input_field"
-        android:ems="10"
-        android:fontFamily="@font/courgette"
-        android:hint="Pseudo"
-        android:textColorHint="#7A7A7A"
-        android:textColor="#7A7A7A"
-        android:minHeight="48dp"
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:scrollbarStyle="outsideInset"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.549"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.331"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.0">
 
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="287dp"
-        android:layout_height="48dp"
-        android:background="@drawable/input_field"
-        android:ems="10"
-        android:fontFamily="@font/courgette"
-        android:hint="Mot de passe"
-        android:textColorHint="#7A7A7A"
-        android:textColor="#7A7A7A"
-        android:inputType="textPassword"
-        android:minHeight="48dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.549"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.474" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="70dp">
+
+
+            <EditText
+
+                android:id="@+id/editTextPseudo"
+                android:layout_width="287dp"
+                android:layout_height="48dp"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:fontFamily="@font/courgette"
+                android:hint="Pseudo"
+                android:layout_marginBottom="20dp"
+                android:minHeight="48dp"
+                android:textColor="#7A7A7A"
+                android:textColorHint="#7A7A7A" />
+
+            <EditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="287dp"
+                android:layout_height="48dp"
+                android:background="@drawable/input_field"
+                android:ems="10"
+                android:fontFamily="@font/courgette"
+                android:hint="Mot de passe"
+                android:layout_marginBottom="20dp"
+                android:inputType="textPassword"
+                android:minHeight="48dp"
+                android:textColor="#7A7A7A"
+                android:textColorHint="#7A7A7A" />
+
+            <Button
+                android:id="@+id/connecterBtn"
+                android:layout_width="152dp"
+                android:layout_height="48dp"
+                android:background="@drawable/button_custom"
+                android:fontFamily="@font/bangers"
+                android:text="Connecter"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="30dp"
+                app:rippleColor="#FFFFFF" />
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

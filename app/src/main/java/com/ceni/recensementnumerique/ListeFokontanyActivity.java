@@ -2,6 +2,7 @@ package com.ceni.recensementnumerique;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ceni.adapter.ListFokontanyAdapter;
+import com.ceni.model.Electeur;
 import com.ceni.model.ListFokontany;
 import com.ceni.service.Api_service;
 import com.ceni.service.Db_sqLite;
@@ -68,22 +70,19 @@ public class ListeFokontanyActivity extends AppCompatActivity {
                 }
             });
         }
-//
-//
-//        enregistrer.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                for (int i = 0; i < listElect.size(); i++) {
-//                    API.addNewElecteur(ListeElecteurActivity.this, listElect.get(i));
-//                    //boolean deleted = DB.deleteElect(listElect.get(i).getCinElect());
-//                }
-//                Toast toast = Toast.makeText(ListeElecteurActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);
-//                toast.show();
-//                Intent i = new Intent(getApplicationContext(), MenuActivity.class);
-//                startActivity(i);
-//                finish();
-//            }
-//        });
+
+
+        enregistrer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean enregistrer = ListeFokontanyActivity.enregistrerElecteur(ListeFokontanyActivity.this,API,DB);
+                if (enregistrer) {
+                    Intent i = new Intent(getApplicationContext(), MenuActivity.class);
+                    startActivity(i);
+                    finish();
+                }
+            }
+        });
 
         //Button retour
         retour.setOnClickListener(new View.OnClickListener() {
@@ -92,6 +91,27 @@ public class ListeFokontanyActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+    private static boolean enregistrerElecteur(Context c, Api_service API, Db_sqLite DB){
+        boolean result = false;
+        List<Electeur> listElect = DB.selectElecteur();
+        for (int i = 0; i < listElect.size(); i++) {
+            boolean res = API.addNewElecteur(c, listElect.get(i));
+            if(res){
+                boolean deleted = DB.deleteElect(listElect.get(i).getCinElect());
+                if(deleted){
+                    result = true;
+                    Toast toast = Toast.makeText(c, "Electeur enregistrer!", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }else{
+                Toast toast = Toast.makeText(c, "Misy probleme ny webservice!", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+
+        return result;
     }
 
     public static ListeFokontanyActivity getInstance() {

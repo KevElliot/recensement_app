@@ -19,7 +19,7 @@ public class MenuActivity extends AppCompatActivity {
     private static Button listeElect;
     private static Button documents;
     private static Button recherche;
-    private ImageView profil;
+    private ImageView profil,deco;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class MenuActivity extends AppCompatActivity {
         documents = findViewById(R.id.documents);
         recherche = findViewById(R.id.recherche);
         profil = findViewById(R.id.imageViewProfil);
+        deco = findViewById(R.id.imageViewDeco);
 
         newElect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +73,14 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 documents.setEnabled(false);
                 Intent i = new Intent(getApplicationContext(), DocumentActivity.class);
+                startActivity(i);
+            }
+        });
+        deco.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+                finish();
                 startActivity(i);
             }
         });

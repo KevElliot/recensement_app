@@ -19,11 +19,9 @@ import java.text.SimpleDateFormat;
 
 
 public class Api_service {
-    //private static String base_url = "https://cenirecensement.herokuapp.com/";
     private static String base_url = "http://192.168.8.101:8080/";
 
-    SimpleDateFormat dateFormat= new SimpleDateFormat("dd/MM/yyyy");
-    public void addNewElecteur(Context context,Electeur electeur) {
+    public boolean addNewElecteur(Context context,Electeur electeur) {
         final boolean[] result = {false};
         try {
             JSONObject jsonObject = new JSONObject();
@@ -57,10 +55,7 @@ public class Api_service {
                         @Override
                         public void onResponse(JSONObject response) {
                             Log.d(TAG, "Reponse Insert : " + response);
-                            /*Toast toast = Toast.makeText(context, "ELECTEUR AJOUTER A LA BASE", Toast.LENGTH_LONG);
-                            Intent i = new Intent(context, MenuActivity.class);
-                            context.startActivity(i);
-                            ((Activity)context).finish();*/
+                            result[0] = true;
                         }
                         @Override
                         public void onError(ANError error) {
@@ -78,5 +73,6 @@ public class Api_service {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return result[0];
     }
 }
