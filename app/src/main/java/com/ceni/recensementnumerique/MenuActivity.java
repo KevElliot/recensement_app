@@ -80,8 +80,8 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(),LoginActivity.class);
-                finish();
                 startActivity(i);
+                finish();
             }
         });
     }
