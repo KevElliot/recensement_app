@@ -19,10 +19,9 @@ import java.text.SimpleDateFormat;
 
 
 public class Api_service {
-    private static String base_url = "http://192.168.8.101:8080/";
-
     public boolean addNewElecteur(Context context,Electeur electeur) {
         final boolean[] result = {false};
+        String base_url = "http://192.168.8.101:8080/";
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code_bv", electeur.getCode_bv());
@@ -33,6 +32,7 @@ public class Api_service {
             jsonObject.put("profession", electeur.getProfession());
             jsonObject.put("adresse", electeur.getAdresse());
             jsonObject.put("datenaiss", electeur.getDateNaiss());
+            jsonObject.put("nevers", electeur.getNevers());
             jsonObject.put("lieunaiss", electeur.getLieuNaiss());
             jsonObject.put("nompereelect", electeur.getNomPere());
             jsonObject.put("nommereelect", electeur.getNomMere());
@@ -43,6 +43,9 @@ public class Api_service {
             jsonObject.put("imageelect", electeur.getFicheElect());
             jsonObject.put("cinrecto", electeur.getCinRecto());
             jsonObject.put("cinverso", electeur.getCinVerso());
+            jsonObject.put("observation", electeur.getObservation());
+            jsonObject.put("docreference", electeur.getDocreference());
+            jsonObject.put("num_userinfo", electeur.getNum_userinfo());
             jsonObject.put("drecensement", electeur.getDateinscription());
             Log.d("date inscr "," "+electeur.getDateinscription());
             AndroidNetworking.post(base_url + "Electeur/ElecteurApi")
