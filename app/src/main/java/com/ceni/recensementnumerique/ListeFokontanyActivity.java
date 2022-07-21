@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.ceni.adapter.ListFokontanyAdapter;
 import com.ceni.model.Electeur;
 import com.ceni.model.ListFokontany;
+import com.ceni.model.User;
 import com.ceni.service.Api_service;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
@@ -30,6 +31,7 @@ public class ListeFokontanyActivity extends AppCompatActivity {
     private Button enregistrer;
     private ImageView retour;
     private int nombreElect;
+    private String role_user;
     Api_service API;
     Db_sqLite DB;
     List<ListFokontany> listFokontany;
@@ -38,12 +40,23 @@ public class ListeFokontanyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_fokontany);
+        Gson gson = new Gson();
+        User user = gson.fromJson(getIntent().getStringExtra("user"), User.class);
+        role_user = user.getRole();
         MenuActivity.setListeElect(true);
         listeFokontanyActivity = this;
         listViewElectFokontany = findViewById(R.id.listElecteurFokontany);
         enregistrer = findViewById(R.id.enregistrerToutBtn);
         nbElecteur = findViewById(R.id.nbElecteur);
         retour = findViewById(R.id.imageViewPrevious);
+        Log.d("ROLE","CID"+role_user);
+        if(role_user.equals("CID")){
+            Log.d("cid","visible "+role_user);
+            enregistrer.setVisibility(View.VISIBLE);
+        }else{
+            Log.d("agent","invisible "+role_user);
+            enregistrer.setVisibility(View.GONE);
+        }
         this.DB = new Db_sqLite(ListeFokontanyActivity.this);
         API = new Api_service();
         listFokontany = DB.selectElecteurGroupByFokontany();

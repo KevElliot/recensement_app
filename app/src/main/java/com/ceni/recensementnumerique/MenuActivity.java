@@ -20,6 +20,7 @@ public class MenuActivity extends AppCompatActivity {
     private static Button documents;
     private static Button recherche;
     private ImageView profil,deco;
+    private String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +33,14 @@ public class MenuActivity extends AppCompatActivity {
         recherche = findViewById(R.id.recherche);
         profil = findViewById(R.id.imageViewProfil);
         deco = findViewById(R.id.imageViewDeco);
+        user = getIntent().getStringExtra("user");
 
         newElect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 newElect.setEnabled(false);
                 Intent i = new Intent(getApplicationContext(), LocalisationActivity.class);
-                i.putExtra("user", getIntent().getStringExtra("user"));
+                i.putExtra("user", user);
                 startActivity(i);
             }
         });
@@ -57,6 +59,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 listeElect.setEnabled(false);
                 Intent i = new Intent(getApplicationContext(), ListeFokontanyActivity.class);
+                i.putExtra("user", user);
                 startActivity(i);
             }
         });
@@ -64,7 +67,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), InfoUserActivity.class);
-                i.putExtra("user", getIntent().getStringExtra("user"));
+                i.putExtra("user", user);
                 startActivity(i);
             }
         });
