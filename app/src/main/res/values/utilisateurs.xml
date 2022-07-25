@@ -2,6 +2,6 @@
 <resources>
     <string-array name="utilisateurs">
         <item>"('idUser','nomUser','prenomUser','Agent','pseudo','mdp','regionUser','code_region','districtUser','code_district','communeUser','code_commune',0)"</item>
-        <item>"('1','Rasolo','Bera','CIN','a','a','ANALAMANGA','11','ANTANANARIVO-ATSIMONDRANO','1105','ALAKAMISY FENOARIVO','110501',0)"</item>
+        <item>"('1','Rasolo','Bera','CID','a','a','ANALAMANGA','11','ANTANANARIVO-ATSIMONDRANO','1105','ALAKAMISY FENOARIVO','110501',0)"</item>
     </string-array>
 </resources>

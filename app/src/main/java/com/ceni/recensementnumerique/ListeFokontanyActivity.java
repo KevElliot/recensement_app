@@ -32,7 +32,6 @@ public class ListeFokontanyActivity extends AppCompatActivity {
     private ImageView retour;
     private int nombreElect;
     private String role_user;
-    Api_service API;
     Db_sqLite DB;
     List<ListFokontany> listFokontany;
 
@@ -41,7 +40,8 @@ public class ListeFokontanyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_fokontany);
         Gson gson = new Gson();
-        User user = gson.fromJson(getIntent().getStringExtra("user"), User.class);
+//        User user = gson.fromJson(getIntent().getStringExtra("user"), User.class);
+        User user = LoginActivity.getUser();
         role_user = user.getRole();
         MenuActivity.setListeElect(true);
         listeFokontanyActivity = this;
@@ -49,16 +49,12 @@ public class ListeFokontanyActivity extends AppCompatActivity {
         enregistrer = findViewById(R.id.enregistrerToutBtn);
         nbElecteur = findViewById(R.id.nbElecteur);
         retour = findViewById(R.id.imageViewPrevious);
-        Log.d("ROLE","CID"+role_user);
         if(role_user.equals("CID")){
-            Log.d("cid","visible "+role_user);
             enregistrer.setVisibility(View.VISIBLE);
         }else{
-            Log.d("agent","invisible "+role_user);
             enregistrer.setVisibility(View.GONE);
         }
         this.DB = new Db_sqLite(ListeFokontanyActivity.this);
-        API = new Api_service();
         listFokontany = DB.selectElecteurGroupByFokontany();
         if (listFokontany.size() <= 0) {
             nbElecteur.setText("isa ny mpifidy: 0");
@@ -66,6 +62,7 @@ public class ListeFokontanyActivity extends AppCompatActivity {
             toast.show();
         } else {
             for (int i = 0; i < listFokontany.size(); i++) {
+                Log.d("nombreElect size",""+listFokontany.get(i).toString()+" "+i);
                 nombreElect += listFokontany.get(i).getNbElecteur();
             }
             nbElecteur.setText("isa ny mpifidy voasoratra: " + nombreElect);
@@ -88,12 +85,8 @@ public class ListeFokontanyActivity extends AppCompatActivity {
         enregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean enregistrer = ListeFokontanyActivity.enregistrerElecteur(ListeFokontanyActivity.this,API,DB);
-                if (enregistrer) {
-                    Intent i = new Intent(getApplicationContext(), MenuActivity.class);
-                    startActivity(i);
-                    finish();
-                }
+                Intent i = new Intent(getApplicationContext(), Parametre.class);
+                startActivity(i);
             }
         });
 
@@ -104,27 +97,6 @@ public class ListeFokontanyActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-    }
-
-    private static boolean enregistrerElecteur(Context c, Api_service API, Db_sqLite DB){
-        boolean result = false;
-        List<Electeur> listElect = DB.selectElecteur();
-        for (int i = 0; i < listElect.size(); i++) {
-            boolean res = API.addNewElecteur(c, listElect.get(i));
-            if(res){
-                boolean deleted = DB.deleteElect(listElect.get(i).getCinElect());
-                if(deleted){
-                    result = true;
-                    Toast toast = Toast.makeText(c, "Electeur enregistrer!", Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            }else{
-                Toast toast = Toast.makeText(c, "Misy probleme ny webservice!", Toast.LENGTH_LONG);
-                toast.show();
-            }
-        }
-
-        return result;
     }
 
     public static ListeFokontanyActivity getInstance() {

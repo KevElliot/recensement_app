@@ -22,7 +22,7 @@ public class LoginActivity extends AppCompatActivity {
     Button connecter;
     Db_sqLite DB;
     int nbUser;
-    User user;
+    static User user;
     private EditText txtpseudo, txtmdp;
 
     @Override
@@ -54,5 +54,13 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public static User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

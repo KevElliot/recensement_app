@@ -51,7 +51,7 @@ public class InscriptionActivity extends AppCompatActivity {
     private EditText nFiche, nom, prenom, lieuNaiss, profession, adresse, nomMere, nomPere, editNevers;
     private int countFormValide;
     private boolean isMemeFiche, isNevers, feuMereSelected, feuPereSelected;
-    private String msg;
+    private String msg,user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +79,7 @@ public class InscriptionActivity extends AppCompatActivity {
         feuMere = findViewById(R.id.feuMere);
         nevers = findViewById(R.id.nevers);
         editNevers = findViewById(R.id.editTextNevers);
+        user = getIntent().getStringExtra("user");
         this.document = DB.selectDocument();
         this.spinnerDocument = this.findViewById(R.id.spinner_document);
         int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
@@ -293,6 +294,7 @@ public class InscriptionActivity extends AppCompatActivity {
                     String myJson = gson.toJson(electeur);
                     Log.d("INSCRIPTION ACTIVITY", "JSON:  " + myJson);
                     Intent i = new Intent(getApplicationContext(), Inscription2Activity.class);
+                    i.putExtra("user", user);
                     i.putExtra("newElect", myJson);
                     startActivity(i);
                 }

@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     nbuser = 0;
-                    Toast.makeText(MainActivity.this, "First load", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Premier chargement...", Toast.LENGTH_LONG).show();
                     Gson gson = new Gson();
                     String myjson = gson.toJson(nbuser);
                     Intent i = new Intent(MainActivity.this, LoginActivity.class);

@@ -20,6 +20,9 @@
         android:theme="@style/Theme.RecensementNumerique"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Parametre"
+            android:exported="false" />
+        <activity
             android:name=".ListeElecteurActivity"
             android:exported="false" />
         <activity

@@ -34,7 +34,7 @@ public class Inscription2Activity extends AppCompatActivity {
     private TextView mShowSelectedDateText,infoCin;
     private ImageView next,previous;
     private EditText cin,nserie,nserie2,lieuCin;
-    private String dateCin;
+    private String dateCin,user;
     int countFormValide;
 
     @Override
@@ -51,6 +51,7 @@ public class Inscription2Activity extends AppCompatActivity {
         nserie2 = findViewById(R.id.editTextNserie2);
         lieuCin = findViewById(R.id.editTextLieuCIN);
         infoCin = findViewById(R.id.infoCin);
+        user = getIntent().getStringExtra("user");
 
         cin.addTextChangedListener(new TextWatcher() {
             @Override
@@ -185,6 +186,7 @@ public class Inscription2Activity extends AppCompatActivity {
                     Log.i("Electeur", myjson);
                     Intent i = new Intent(getApplicationContext(), ImageFicheActivity.class);
                     i.putExtra("newElect", myjson);
+                    i.putExtra("user", user);
                     startActivity(i);
                 }
             }

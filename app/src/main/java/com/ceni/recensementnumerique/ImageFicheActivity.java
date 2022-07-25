@@ -28,7 +28,7 @@ public class ImageFicheActivity extends AppCompatActivity {
     private ImageView next;
     private ImageView previous;
     private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
-    private String dataFicheElect;
+    private String dataFicheElect,user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,7 @@ public class ImageFicheActivity extends AppCompatActivity {
         this.imageView = (ImageView) this.findViewById(R.id.imageView);
         this.next = (ImageView) this.findViewById(R.id.imageViewNext);
         this.previous = (ImageView) this.findViewById(R.id.imageViewPrevious);
+        user = getIntent().getStringExtra("user");
 
         this.buttonImage.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -59,6 +60,7 @@ public class ImageFicheActivity extends AppCompatActivity {
                     Log.i("Electeur", myjson);
                     Intent i = new Intent(getApplicationContext(), ImageCinActivity.class);
                     i.putExtra("newElect", myjson);
+                    i.putExtra("user", user);
                     startActivity(i);
                 }else{
                     new AlertDialog.Builder(ImageFicheActivity.this)

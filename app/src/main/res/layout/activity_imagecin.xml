@@ -51,6 +51,7 @@
                 android:layout_width="253dp"
                 android:layout_height="210dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/cadre_photo"
                 tools:ignore="VectorDrawableCompat" />
 
             <Button
@@ -89,6 +90,7 @@
                 android:layout_width="253dp"
                 android:layout_height="210dp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/cadre_photo"
                 tools:ignore="VectorDrawableCompat" />
 
             <Button

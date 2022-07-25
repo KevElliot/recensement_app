@@ -134,6 +134,7 @@ public class LocalisationActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 String myJson = gson.toJson(electeur);
                 Intent i = new Intent(getApplicationContext(),InscriptionActivity.class);
+                i.putExtra("user", getIntent().getStringExtra("user"));
                 i.putExtra("newElect", myJson);
                 startActivity(i);
             }

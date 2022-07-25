@@ -352,7 +352,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 ListFokontany e = new ListFokontany();
                 e.setCodeFokontany(cursor.getString(0));
                 e.setFokontany(cursor.getString(1));
-                e.setNbElecteur(cursor.getInt(2) / 3);
+                e.setNbElecteur(cursor.getInt(2));
                 listElect.add(e);
             }
         } catch (Exception e) {

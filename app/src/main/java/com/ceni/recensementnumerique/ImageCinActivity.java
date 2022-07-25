@@ -26,7 +26,7 @@ public class ImageCinActivity extends AppCompatActivity {
     static ImageCinActivity imageCinActivity;
     private Button buttonRecto, buttonVerso;
     private ImageView previous, recto, verso, next;
-    private String format, imageRecto, imageVerso;
+    private String format, imageRecto, imageVerso,user;
     private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
     private Db_sqLite DB;
     private Api_service API;
@@ -43,6 +43,7 @@ public class ImageCinActivity extends AppCompatActivity {
         this.verso = this.findViewById(R.id.cin_verso);
         this.next = this.findViewById(R.id.imageViewNext);
         this.previous = this.findViewById(R.id.imageViewPrevious);
+        user = getIntent().getStringExtra("user");
         DB = new Db_sqLite(this);
         API = new Api_service();
 
@@ -73,6 +74,7 @@ public class ImageCinActivity extends AppCompatActivity {
                     Log.i("Electeur", myjson);
                     Intent i = new Intent(getApplicationContext(), ObservationActivity.class);
                     i.putExtra("newElect", myjson);
+                    i.putExtra("user", user);
                     startActivity(i);
 
                 } else {

@@ -26,6 +26,7 @@ public class ApercuInscriptionActivity extends AppCompatActivity {
     private ImageView ficheElect, cinRecto, cinVerso, retour;
     private TextView nfiche, dateInscr, nom, prenom, sexe, profession, adresse, dateNaiss, lieuNaiss, nomPere, nomMere, cinElect, nserie, dateDeliv, lieuDeliv, observation;
     private Button enregistrer;
+    private String user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,7 @@ public class ApercuInscriptionActivity extends AppCompatActivity {
         cinRecto.setImageBitmap(imgCinRecto);
         cinVerso.setImageBitmap(imgCinVerso);
         observation.setText(electeur.getObservation());
+        user = getIntent().getStringExtra("user");
 
         enregistrer.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -98,6 +100,7 @@ public class ApercuInscriptionActivity extends AppCompatActivity {
                     InscriptionActivity.getInstance().finish();
                     ImageCinActivity.getInstance().finish();
                     Intent i = new Intent(getApplicationContext(), ListeFokontanyActivity.class);
+                    i.putExtra("user", user);
                     startActivity(i);
                     finish();
                 } else {

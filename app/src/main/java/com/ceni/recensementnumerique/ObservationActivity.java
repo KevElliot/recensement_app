@@ -33,6 +33,7 @@ public class ObservationActivity extends AppCompatActivity {
     private CheckBox obs1, obs2, obs3;
     private Button mPickDateButton;
     private TextView mShowSelectedDateText;
+    private String user;
     private String daterecensement ="";
     private String observation = "Nouveau recensement electeur";
 
@@ -45,12 +46,13 @@ public class ObservationActivity extends AppCompatActivity {
         this.obs3 = this.findViewById(R.id.Observation3);
         mPickDateButton = findViewById(R.id.pick_date_button);
         mShowSelectedDateText = findViewById(R.id.selected_Date);
+        user = getIntent().getStringExtra("user");
         this.next = this.findViewById(R.id.imageViewNext);
         this.previous = this.findViewById(R.id.imageViewPrevious);
 
         int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
-        int anneeMajor = anneeNow - 18;
-        int anneeDead = anneeNow - 150;
+        int anneeMajor = anneeNow ;
+        int anneeDead = anneeNow - 1;
 
         obs1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +114,7 @@ public class ObservationActivity extends AppCompatActivity {
                     Log.i("Electeur", myjson);
                     Intent i = new Intent(getApplicationContext(), ApercuInscriptionActivity.class);
                     i.putExtra("newElect", myjson);
+                    i.putExtra("user", user);
                     startActivity(i);
                     finish();
                 } else {
