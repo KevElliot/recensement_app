@@ -1,44 +1,42 @@
 package com.ceni.recensementnumerique;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ceni.adapter.ListElecteurAdapter;
-import com.ceni.adapter.RecyclerViewAdapter;
 import com.ceni.model.Electeur;
 import com.ceni.model.ListFokontany;
-import com.ceni.service.Api_service;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class ListeElecteurActivity extends AppCompatActivity {
     static ListeElecteurActivity listeElecteurActivity;
+    private ListElecteurAdapter listElecteurAdapter;
     private ListView listViewElect;
     private TextView fokontanyLabel;
     private ImageView retour;
-    Db_sqLite DB;
-    List<Electeur> listElect;
-
-//    RecyclerView recyclerView;
-//    RecyclerViewAdapter recyclerViewAdapter;
-//    ArrayList<String>dataset = new ArrayList<>();
-//    boolean isLoading = false;
-
+    private Db_sqLite DB;
+    private List<Electeur> listElect;
+    private List<Electeur> incrList;
+    private int debutList = 0;
+    private int finList = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +50,20 @@ public class ListeElecteurActivity extends AppCompatActivity {
         Gson gson = new Gson();
         ListFokontany fokontany = gson.fromJson(getIntent().getStringExtra("fokontany"), ListFokontany.class);
         String code_fokontany = fokontany.getCodeFokontany();
+
         listElect = DB.selectElecteurbycodeFokontany(code_fokontany);
+        incrList = new ArrayList<Electeur>();
+        if(listElect.size()<=10){
+            Log.d("TAG","inferieur a 10");
+            incrList = listElect;
+        }else{
+            Log.d("TAG","supperieur a 10");
+            for(int k=debutList;k<finList;k++){
+                incrList.add(listElect.get(k));
+            }
+        }
         fokontanyLabel.setText("Fokontany: " + fokontany.getFokontany());
-        ListElecteurAdapter listElecteurAdapter = new ListElecteurAdapter(ListeElecteurActivity.this, listElect);
+        listElecteurAdapter  = new ListElecteurAdapter(ListeElecteurActivity.this, incrList);
         listViewElect.setAdapter(listElecteurAdapter);
         listViewElect.setClickable(true);
         listViewElect.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -68,6 +77,27 @@ public class ListeElecteurActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+        listViewElect.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+                        && (listViewElect.getLastVisiblePosition() - listViewElect.getHeaderViewsCount() -
+                        listViewElect.getFooterViewsCount()) >= (listElecteurAdapter.getCount() - 1)) {
+                    if(listElect.size()-1>finList) {
+                        incrList.add(listElect.get(finList));
+                        listViewElect.setAdapter(listElecteurAdapter);
+                        finList += 1;
+                        Log.d("fin", "FIN");
+                        Log.d("SIZE", ": "+incrList.size());
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
 
         //Button retour
         retour.setOnClickListener(new View.OnClickListener() {
@@ -76,48 +106,6 @@ public class ListeElecteurActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-//        recyclerView = findViewById(R.id.recyclerView);
-//        populateData();
-//        setupAdapter();
-//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                LinearLayoutManager linearLayoutManager =(LinearLayoutManager) recyclerView.getLayoutManager();
-//                if(!isLoading){
-//                    if(linearLayoutManager != null && linearLayoutManager.findLastCompletelyVisibleItemPosition() == dataset.size()-2) {
-//                        isLoading = true;
-//                        getMoreData();
-//                    }
-//                }
-//            }
-//        });
-//    }
-//
-//    private void getMoreData() {
-//        dataset.add(null);
-//        recyclerViewAdapter.notifyItemInserted(dataset.size()-1);
-//        dataset.remove(dataset.size()-1);
-//        int currentSize = dataset.size();
-//        int nextSize = currentSize+10;
-//        while(currentSize<nextSize){
-//            dataset.add("Item "+currentSize);
-//            currentSize++;
-//        }
-//        recyclerViewAdapter.notifyDataSetChanged();
-//        isLoading = false;
-//    }
-//
-//    private void populateData(){
-//        int i = 0;
-//        while(i<10){
-//            dataset.add("item "+1);
-//            i++;
-//        }
-//    }
-//    private void setupAdapter(){
-//        recyclerViewAdapter = new RecyclerViewAdapter(dataset);
-//        recyclerView.setAdapter(recyclerViewAdapter);
     }
 
     public static ListeElecteurActivity getInstance() {

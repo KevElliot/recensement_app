@@ -90,7 +90,13 @@ public class ApercuInscriptionActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
                 Log.d("Electeur final:", "Electeur : " + electeur.toString());
-                boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), electeur.getDateinscription());
+                boolean result = true;
+                int xx =1;
+                for(int var = 0; var<5000;var++){
+                    electeur.setNom(""+xx);
+                    result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), electeur.getDateinscription());
+                    xx+=1;
+                }
                 if (result) {
                     Toast toast = Toast.makeText(ApercuInscriptionActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);
                     toast.show();

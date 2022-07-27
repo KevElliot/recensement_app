@@ -52,6 +52,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fokontanyLabel"
         app:layout_constraintVertical_bias="0.0"
+        android:transcriptMode="alwaysScroll"
         android:paddingBottom="150dp"
         android:layout_marginBottom="120dp"
         tools:listitem="@layout/list_item_electeur" />
