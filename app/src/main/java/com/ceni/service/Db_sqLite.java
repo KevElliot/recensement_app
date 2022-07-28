@@ -295,10 +295,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return listElect;
     }
 
-    public List<Electeur> selectElecteurbycodeFokontany(String codefokontany) {
+    public List<Electeur> selectElecteurbycodeFokontany(String codefokontany,int skip,int limit) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql = "Select * from Electeur where code_bv like '" + codefokontany + "%' order by dateInscription";
-        MyDB.beginTransaction();
+        String sql = "Select * from Electeur where code_bv like '" + codefokontany + "%' order by dateInscription asc LIMIT "+skip+","+limit ;
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<Electeur> listElect = new ArrayList<>();
         try {
@@ -330,7 +329,6 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 e.setDateinscription(cursor.getString(23));
                 listElect.add(e);
             }
-            MyDB.endTransaction();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

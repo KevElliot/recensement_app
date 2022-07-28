@@ -35,8 +35,8 @@ public class ListeElecteurActivity extends AppCompatActivity {
     private Db_sqLite DB;
     private List<Electeur> listElect;
     private List<Electeur> incrList;
-    private int debutList = 0;
-    private int finList = 10;
+    private int skip = 0;
+    private int limit = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,19 +51,11 @@ public class ListeElecteurActivity extends AppCompatActivity {
         ListFokontany fokontany = gson.fromJson(getIntent().getStringExtra("fokontany"), ListFokontany.class);
         String code_fokontany = fokontany.getCodeFokontany();
 
-        listElect = DB.selectElecteurbycodeFokontany(code_fokontany);
+        listElect = DB.selectElecteurbycodeFokontany(code_fokontany, skip, limit);
+        Log.d("a", "" + listElect.size());
         incrList = new ArrayList<Electeur>();
-        if(listElect.size()<=10){
-            Log.d("TAG","inferieur a 10");
-            incrList = listElect;
-        }else{
-            Log.d("TAG","supperieur a 10");
-            for(int k=debutList;k<finList;k++){
-                incrList.add(listElect.get(k));
-            }
-        }
         fokontanyLabel.setText("Fokontany: " + fokontany.getFokontany());
-        listElecteurAdapter  = new ListElecteurAdapter(ListeElecteurActivity.this, incrList);
+        listElecteurAdapter = new ListElecteurAdapter(ListeElecteurActivity.this, listElect);
         listViewElect.setAdapter(listElecteurAdapter);
         listViewElect.setClickable(true);
         listViewElect.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -83,13 +75,14 @@ public class ListeElecteurActivity extends AppCompatActivity {
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
                         && (listViewElect.getLastVisiblePosition() - listViewElect.getHeaderViewsCount() -
                         listViewElect.getFooterViewsCount()) >= (listElecteurAdapter.getCount() - 1)) {
-                    if(listElect.size()-1>finList) {
-                        incrList.add(listElect.get(finList));
-                        listViewElect.setAdapter(listElecteurAdapter);
-                        finList += 1;
-                        Log.d("fin", "FIN");
-                        Log.d("SIZE", ": "+incrList.size());
+                    skip += 10;
+                    incrList = DB.selectElecteurbycodeFokontany(code_fokontany, skip, limit);
+                    for (int k = 0; k < incrList.size() - 1; k++) {
+                        listElect.add(incrList.get(k));
                     }
+                    listElecteurAdapter.notifyDataSetChanged();
+                    //listViewElect.setAdapter(listElecteurAdapter);
+                    Log.d("fin", "FIN");
                 }
             }
 
