@@ -1,5 +1,8 @@
 package com.ceni.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +27,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_electeur,parent,false);
-        return null;
+        return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        byte[] img = Base64.decode(electeurs.get(position).getFicheElect(), Base64.DEFAULT);
+        BitmapFactory.Options opt = new BitmapFactory.Options();
+        opt.inMutable = true;
+        Bitmap bm = BitmapFactory.decodeByteArray(img, 0, img.length, opt);
 
+        holder.imageElect.setImageBitmap(bm);
+        holder.cinElect.setText(electeurs.get(position).getCinElect());
+        holder.nomElect.setText(electeurs.get(position).getNom());
+        holder.cinElect.setText(electeurs.get(position).getCinElect());
+        holder.nFiche.setText(electeurs.get(position).getnFiche());
+        holder.prenomElect.setText(electeurs.get(position).getPrenom());
     }
 
     @Override
