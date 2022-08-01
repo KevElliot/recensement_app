@@ -92,7 +92,7 @@ public class ApercuInscriptionActivity extends AppCompatActivity {
                 Log.d("Electeur final:", "Electeur : " + electeur.toString());
                 boolean result = true;
                 int xx =1;
-                for(int var = 0; var<5000;var++){
+                for(int var = 0; var<500;var++){
                     electeur.setNom(""+xx);
                     result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), electeur.getDateinscription());
                     xx+=1;

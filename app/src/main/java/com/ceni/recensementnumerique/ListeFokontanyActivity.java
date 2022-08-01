@@ -74,7 +74,8 @@ public class ListeFokontanyActivity extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                     Gson gson = new Gson();
                     String myjson = gson.toJson(listFokontany.get(position));
-                    Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
+                   // Intent i = new Intent(getApplicationContext(), ListeElecteurActivity.class);
+                    Intent i = new Intent(getApplicationContext(), Display_electeur.class);
                     i.putExtra("fokontany", myjson);
                     startActivity(i);
                 }
