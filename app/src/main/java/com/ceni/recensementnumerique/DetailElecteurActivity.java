@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,7 +19,7 @@ import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 public class DetailElecteurActivity extends AppCompatActivity {
-    private ImageView ficheElect,cinRecto,cinVerso,retour;
+    private ImageView ficheElect,cinRecto,cinVerso,retour,modif;
     private TextView nfiche,dateInscr,nom,prenom,sexe,profession,adresse,dateNaiss,lieuNaiss,nomPere,nomMere,cinElect,nserie,dateDeliv,lieuDeliv,observation;
     private Button suppression;
 
@@ -28,6 +29,7 @@ public class DetailElecteurActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailelecteur);
         retour = findViewById(R.id.retour);
+        modif = findViewById(R.id.modif);
         suppression = findViewById(R.id.delete);
         ficheElect = findViewById(R.id.ficheElect);
         dateInscr = findViewById(R.id.dateInscr);
@@ -81,6 +83,15 @@ public class DetailElecteurActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
+            }
+        });
+        modif.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+            Intent i = new Intent(getApplicationContext(), ModifierElecteur.class);
+            String myjson = gson.toJson(electeur);
+            i.putExtra("elect", myjson);
+            startActivity(i);
+            finish();
             }
         });
         suppression.setOnClickListener(new View.OnClickListener() {
