@@ -9,6 +9,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ceni.model.Electeur;
+import com.google.gson.Gson;
+
 public class ModifierElecteur extends AppCompatActivity {
     private EditText nFiche,nomElect,prenomElect,professionElect,adresseElect,lieuNaissElect,nomPereElect,nomMereElect,cinElect,nSerie,lieuCinElect,editTextNevers;
     private ImageView ficheElect, cin_recto,cin_verso;
@@ -20,7 +23,8 @@ public class ModifierElecteur extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modifier_electeur);
-
+        Gson gson = new Gson(electeur.get);
+        Electeur electeur = gson.fromJson(getIntent().getStringExtra("electeur"), Electeur.class);
         nFiche = findViewById(R.id.nFiche);
         nomElect = findViewById(R.id.nomElect);
         prenomElect = findViewById(R.id.prenomElect);
@@ -49,5 +53,30 @@ public class ModifierElecteur extends AppCompatActivity {
         observation3 = findViewById(R.id.Observation3);
         dateNaissElect = findViewById(R.id.dateNaissElect);
         dateCinElect = findViewById(R.id.dateCinElect);
+
+
+        nFiche.setText(electeur.getnFiche());
+        nomElect.setText(electeur.getNom());
+        prenomElect.setText(electeur.getPrenom());
+        professionElect.setText(electeur.getProfession());
+        adresseElect.setText(electeur.getAdresse());
+        lieuNaissElect.setText(electeur.getLieuNaiss());
+        nomPereElect.setText(electeur.getNomPere());
+        nomMereElect.setText(electeur.getNomMere());
+        cinElect.setText(electeur.getCinElect());
+        nSerie.setText(electeur.getNserieCin());
+        lieuCinElect.setText(electeur.getLieuDeliv());
+        editTextNevers.setText(electeur.getNevers());
+        ficheElect.setText(electeur.get);
+        cin_recto.setText(electeur.get);
+        cin_verso.setText(electeur.get);
+        sexeHomme.setText(electeur.get);
+        sexeFemme.setText(electeur.get);
+        nevers.setText(electeur.get);
+        observation1.setText(electeur.get);
+        observation2.setText(electeur.get);
+        observation3.setText(electeur.get);
+        dateNaissElect.setText(electeur.getDateNaiss());
+        dateCinElect.setText(electeur.getDateDeliv());
     }
 }
