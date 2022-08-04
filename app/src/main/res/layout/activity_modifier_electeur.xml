@@ -41,7 +41,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="33.3"
                 android:orientation="horizontal">
@@ -60,7 +60,7 @@
                 <EditText
                     android:id="@+id/nFiche"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:fontFamily="@font/courgette"
                     android:gravity="left|center"
                     android:text="Numero de serie"
@@ -338,7 +338,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
@@ -356,7 +355,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:text="Teraka taminy" />
+                    android:text="Teraka taminy"
+                    />
 
             </LinearLayout>
             <EditText

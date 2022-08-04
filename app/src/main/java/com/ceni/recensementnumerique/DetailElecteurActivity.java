@@ -89,7 +89,7 @@ public class DetailElecteurActivity extends AppCompatActivity {
             public void onClick(View view) {
             Intent i = new Intent(getApplicationContext(), ModifierElecteur.class);
             String myjson = gson.toJson(electeur);
-            i.putExtra("elect", myjson);
+            i.putExtra("electeur", myjson);
             startActivity(i);
             finish();
             }
