@@ -252,6 +252,45 @@ public class Db_sqLite extends SQLiteOpenHelper {
             return true;
         }
     }
+    public boolean updateElect(Electeur elect){
+        String id = ""+elect.getIdElect();
+        boolean result = false;
+        try {
+            SQLiteDatabase MyDB = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COLUMN_CODE_BV, elect.getCode_bv());
+            contentValues.put(COLUMN_NFICHE, elect.getnFiche());
+            contentValues.put(COLUMN_NOM, elect.getNom());
+            contentValues.put(COLUMN_PRENOM, elect.getPrenom());
+            contentValues.put(COLUMN_SEXE, elect.getSexe());
+            contentValues.put(COLUMN_PROFESSION, elect.getProfession());
+            contentValues.put(COLUMN_ADRESSE, elect.getAdresse());
+            contentValues.put(COLUMN_DATENAISS, elect.getDateNaiss());
+            contentValues.put(COLUMN_NEVERS, elect.getNevers());
+            contentValues.put(COLUMN_LIEUNAISS, elect.getLieuNaiss());
+            contentValues.put(COLUMN_NOMPERE, elect.getNomPere());
+            contentValues.put(COLUMN_NOMMERE, elect.getNomMere());
+            contentValues.put(COLUMN_CINELECT, elect.getCinElect());
+            contentValues.put(COLUMN_NSERIECIN, elect.getNserieCin());
+            contentValues.put(COLUMN_DATEDELIV, elect.getDateDeliv());
+            contentValues.put(COLUMN_LIEUDELIV, elect.getLieuDeliv());
+            contentValues.put(COLUMN_IMAGEELECT, elect.getFicheElect());
+            contentValues.put(COLUMN_CINRECTO, elect.getCinRecto());
+            contentValues.put(COLUMN_CINVERSO, elect.getCinVerso());
+            contentValues.put(COLUMN_OBSERVATION, elect.getObservation());
+            contentValues.put(COLUMN_DOCREFERENCE, elect.getDocreference());
+            contentValues.put(COLUMN_DATEINSCRIPTION, elect.getDateinscription());
+            long res = MyDB.update(TABLE_ELECTEUR, contentValues, "_id = ?", new String[]{id});
+            if (res == -1) {
+                result = false;
+            } else {
+                result = true;
+            }
+        }catch(Exception e){
+            Log.e("error Updqte Electeur", "error Updqte Electeur "+e);
+        }
+        return result;
+    }
 
     public List<Electeur> selectElecteur() {
         SQLiteDatabase MyDB = this.getWritableDatabase();

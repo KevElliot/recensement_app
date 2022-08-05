@@ -325,7 +325,7 @@ public class InscriptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mPickDateButton.setEnabled(false);
-                materialDatePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
+                materialDatePicker.show(getSupportFragmentManager(), "DATE DE NAISSANCE");
             }
         });
         materialDatePicker.addOnDismissListener(new DialogInterface.OnDismissListener() {
