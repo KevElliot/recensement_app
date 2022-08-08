@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -16,13 +18,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ceni.model.Electeur;
+import com.ceni.service.Db_sqLite;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -33,7 +38,9 @@ public class ModifierElecteur extends AppCompatActivity {
     private Button button_image_fiche, mPickDateButton, pick_datecin, button_image_recto, button_image_verso, enregistrer;
     private CheckBox sexeHomme, sexeFemme, nevers, observation1, observation2, observation3;
     private TextView dateNaissElect, dateCinElect;
-    private String dateNaiss,neversDate, dateCin, sexe, electSexe, observationElect;
+    private String format,imageFiche, imageRecto, imageVerso,dateNaiss,neversDate, dateCin, sexe, electSexe, observationElect;
+    private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
+    Db_sqLite db_sqLite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,10 @@ public class ModifierElecteur extends AppCompatActivity {
         setContentView(R.layout.activity_modifier_electeur);
         Gson gson = new Gson();
         Electeur electeur = gson.fromJson(getIntent().getStringExtra("electeur"), Electeur.class);
+        imageFiche = electeur.getFicheElect();
+        imageRecto = electeur.getCinRecto();
+        imageVerso = electeur.getCinVerso();
+        db_sqLite = new Db_sqLite(this);
         int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
         int anneeMajor = anneeNow - 18;
         int anneeDead = anneeNow - 150;
@@ -144,6 +155,28 @@ public class ModifierElecteur extends AppCompatActivity {
                     mPickDateButton.setVisibility(View.VISIBLE);
                     dateNaissElect.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        button_image_recto.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                format = "recto";
+                capture();
+            }
+        });
+        button_image_verso.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                format = "verso";
+                capture();
+            }
+        });
+        button_image_fiche.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                format = "fiche";
+                capture();
             }
         });
 
@@ -324,9 +357,13 @@ public class ModifierElecteur extends AppCompatActivity {
                 int idElect = electeur.getIdElect();
                 if(editTextNevers.getText().toString().length()!=0){
                     neversDate = editTextNevers.getText().toString();
-                }else{
                     dateNaiss="";
+                }else{
+                    neversDate = "";
                 }
+                e.setIdElect(idElect);
+                e.setDocreference(electeur.getDocreference());
+                e.setCode_bv(electeur.getCode_bv());
                 e.setnFiche(nFiche.getText().toString());
                 e.setNom(nomElect.getText().toString());
                 e.setPrenom(prenomElect.getText().toString());
@@ -342,10 +379,24 @@ public class ModifierElecteur extends AppCompatActivity {
                 e.setNserieCin(nSerie.getText().toString());
                 e.setDateDeliv(dateCin);
                 e.setLieuDeliv(lieuCinElect.getText().toString());
-                e.setFicheElect("fiche");
-                e.setCinRecto("recto");
-                e.setCinVerso("verso");
+                e.setFicheElect(imageFiche);
+                Log.d("fiche",""+imageFiche.length());
+                e.setCinRecto(imageRecto);
+                Log.d("recto",""+imageRecto.length());
+                e.setCinVerso(imageVerso);
+                Log.d("verso",""+imageVerso.length());
                 e.setObservation(observationElect);
+                e.setDateinscription(electeur.getDateinscription());
+                boolean update = db_sqLite.updateElect(e);
+                if(update){
+                    RechercheElecteur.getInstance().finish();
+                    finish();
+                    Intent i = new Intent(getApplicationContext(), RechercheElecteur.class);
+                    startActivity(i);
+                }else{
+                    Toast toast = Toast.makeText(ModifierElecteur.this, "Erreur lors de la modification!", Toast.LENGTH_LONG);
+                    toast.show();
+                }
                 Log.d("TAG", "onClick: "+e.toString());
                 Log.d("ID", "ID: "+idElect);
             }
@@ -361,5 +412,38 @@ public class ModifierElecteur extends AppCompatActivity {
         opt.inMutable = true;
         bm = BitmapFactory.decodeByteArray(img, 0, img.length, opt);
         return bm;
+    }
+    private void capture() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        this.startActivityForResult(intent, REQUEST_ID_IMAGE_CAPTURE);
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_ID_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
+                Bitmap bp = (Bitmap) data.getExtras().get("data");
+
+                //Encode Image
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+                if(this.format == "fiche"){
+                    imageFiche = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    this.ficheElect.setImageBitmap(bp);
+                }
+                if (this.format == "recto") {
+                    imageRecto = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    this.cin_recto.setImageBitmap(bp);
+                } else if (this.format == "verso") {
+                    imageVerso = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    this.cin_verso.setImageBitmap(bp);
+                }
+            } else if (resultCode == RESULT_CANCELED) {
+                Toast.makeText(this, "Action canceled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Action Failed", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

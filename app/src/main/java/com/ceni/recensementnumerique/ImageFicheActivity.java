@@ -110,14 +110,6 @@ public class ImageFicheActivity extends AppCompatActivity {
                 byte[] byteArray = stream.toByteArray();
                 dataFicheElect = Base64.encodeToString(byteArray, Base64.DEFAULT);
                 Log.i("IMAGE",""+Base64.encodeToString(byteArray, Base64.DEFAULT));
-
-                //Decode image
-                /*byte[] img = Base64.decode(dataFicheElect, Base64.DEFAULT);
-                Bitmap bm;
-                BitmapFactory.Options opt = new BitmapFactory.Options();
-                opt.inMutable = true;
-                bm = BitmapFactory.decodeByteArray(img, 0, img.length, opt);*/
-
                 this.imageView.setImageBitmap(bp);
 
             } else if (resultCode == RESULT_CANCELED) {

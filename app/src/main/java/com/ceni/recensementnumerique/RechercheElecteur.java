@@ -31,11 +31,13 @@ public class RechercheElecteur extends AppCompatActivity {
     private List<Electeur> elect;
     private ListElecteurAdapter listElecteurAdapter;
     private Db_sqLite DB;
+    static RechercheElecteur rechercheElecteur;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recherche_electeur);
+        rechercheElecteur = this;
         MenuActivity.setRecherche(true);
         search1 = this.findViewById(R.id.search1);
         search2 = this.findViewById(R.id.search2);
@@ -164,5 +166,8 @@ public class RechercheElecteur extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+    public static RechercheElecteur getInstance(){
+        return rechercheElecteur;
     }
 }
