@@ -1,17 +1,38 @@
 package com.ceni.recensementnumerique;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.provider.SyncStateContract;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
+import com.ceni.model.Tablette;
 import com.ceni.service.Api_service;
 import com.ceni.service.Db_sqLite;
+import com.google.gson.Gson;
+
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -19,6 +40,7 @@ public class MenuActivity extends AppCompatActivity {
     private static Button listeElect;
     private static Button documents;
     private static Button recherche;
+    private static Button tablette;
     private ImageView profil,deco;
     private String user;
 
@@ -27,6 +49,7 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        tablette = findViewById(R.id.tablette);
         newElect = findViewById(R.id.newInscription);
         listeElect = findViewById(R.id.listeSqLite);
         documents = findViewById(R.id.documents);
@@ -34,7 +57,20 @@ public class MenuActivity extends AppCompatActivity {
         profil = findViewById(R.id.imageViewProfil);
         deco = findViewById(R.id.imageViewDeco);
         user = getIntent().getStringExtra("user");
+        Gson gson = new Gson();
+        Tablette tab = gson.fromJson(getIntent().getStringExtra("configTab"), Tablette.class);
+        Log.d("xx",tab.toString());
 
+        tablette.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getApplicationContext(), RecensementTablette.class);
+                i.putExtra("user", user);
+                String configTab = gson.toJson(tab);
+                i.putExtra("configTab", configTab);
+                startActivity(i);
+            }
+        });
         newElect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +97,7 @@ public class MenuActivity extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), ListeFokontanyActivity.class);
                 i.putExtra("user", user);
                 startActivity(i);
+
             }
         });
         profil.setOnClickListener(new View.OnClickListener() {
@@ -104,4 +141,6 @@ public class MenuActivity extends AppCompatActivity {
     public static void setRecherche(boolean x) {
         recherche.setEnabled(x);
     }
+
+
 }

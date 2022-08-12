@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ceni.model.Electeur;
+import com.ceni.model.Tablette;
 import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
@@ -28,6 +29,8 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Gson gson = new Gson();
+        Tablette tab = gson.fromJson(getIntent().getStringExtra("configTab"), Tablette.class);
         setContentView(R.layout.activity_login);
         connecter = findViewById(R.id.connecterBtn);
         txtpseudo =findViewById(R.id.editTextPseudo);
@@ -39,12 +42,13 @@ public class LoginActivity extends AppCompatActivity {
                 DB = new Db_sqLite(LoginActivity.this);
                 String pseudo = txtpseudo.getText().toString();
                 String motdepass=txtmdp.getText().toString();
-                Gson gson = new Gson();
-                    user = DB.selectUser(pseudo,motdepass);
+                user = DB.selectUser(pseudo,motdepass);
                 if(user.getCode_district()!=null){
                     String myjson = gson.toJson(user);
+                    String configTab = gson.toJson(tab);
                     Intent i = new Intent(getApplicationContext(),MenuActivity.class);
                     i.putExtra("user", myjson);
+                    i.putExtra("configTab", configTab);
                     startActivity(i);
                     finish();
                 }
