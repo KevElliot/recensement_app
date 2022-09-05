@@ -178,7 +178,7 @@
         android:shadowDx="10"
         android:shadowDy="5"
         android:shadowRadius="4"
-        android:text="Mampiditra"
+        android:text="Mampiditra tablette"
         app:cornerRadius="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
