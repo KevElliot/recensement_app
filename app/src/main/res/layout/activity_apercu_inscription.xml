@@ -414,7 +414,7 @@
                 android:background="#61878787"
                 android:fontFamily="@font/courgette"
                 android:gravity="center"
-                android:text="Ny momban'ny CIN:"
+                android:text="Ny momban'ny CNI:"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -432,7 +432,7 @@
                     android:layout_height="40dp"
                     android:fontFamily="@font/courgette"
                     android:gravity="left|center"
-                    android:text="CIN:"
+                    android:text="CNI:"
                     android:textColor="#000000"
                     android:textSize="20sp" />
 
@@ -442,7 +442,7 @@
                     android:layout_height="40dp"
                     android:fontFamily="@font/croissant_one"
                     android:gravity="left|center"
-                    android:text="CIN"
+                    android:text="CNI"
                     android:textColor="#878787"
                     android:textSize="20sp" />
 
@@ -492,7 +492,7 @@
                     android:layout_height="40dp"
                     android:fontFamily="@font/courgette"
                     android:gravity="left|center"
-                    android:text="Date CIN:"
+                    android:text="Date CNI:"
                     android:textColor="#000000"
                     android:textSize="20sp" />
 
@@ -502,7 +502,7 @@
                     android:layout_height="40dp"
                     android:fontFamily="@font/croissant_one"
                     android:gravity="left|center"
-                    android:text="date CIN"
+                    android:text="date CNI"
                     android:textColor="#878787"
                     android:textSize="18sp" />
 
@@ -522,7 +522,7 @@
                     android:layout_height="40dp"
                     android:fontFamily="@font/courgette"
                     android:gravity="left|center"
-                    android:text="Lieu CIN:"
+                    android:text="Lieu CNI:"
                     android:textColor="#000000"
                     android:textSize="20sp" />
 
@@ -532,7 +532,7 @@
                     android:layout_height="40dp"
                     android:fontFamily="@font/courgette"
                     android:gravity="left|center"
-                    android:text="lieu CIN"
+                    android:text="lieu CNI"
                     android:textColor="#878787"
                     android:textSize="20sp" />
 
@@ -596,6 +596,7 @@
                     android:fontFamily="@font/courgette"
                     android:gravity="left|center"
                     android:text="Observation:"
+                    android:visibility="gone"
                     android:textColor="#000000"
                     android:textSize="20sp" />
 

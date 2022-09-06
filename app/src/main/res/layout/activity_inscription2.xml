@@ -34,7 +34,7 @@
                 android:layout_height="46dp"
                 android:fontFamily="@font/courgette"
                 android:gravity="center"
-                android:text="Ny momban'ny CIN:"
+                android:text="Ny momban'ny CNI:"
                 android:textColor="#000000"
                 android:textSize="25sp" />
 
@@ -47,7 +47,7 @@
                 android:background="@drawable/input_field"
                 android:ems="10"
                 android:fontFamily="@font/courgette"
-                android:hint="Laharan'ny CIN"
+                android:hint="Laharan'ny CNI"
                 android:textColorHint="#7A7A7A"
                 android:textColor="#7A7A7A"
                 android:maxLength="12"
@@ -121,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/courgette"
-                android:text="Daty ny CIN:"
+                android:text="Datin'ny CNI:"
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
@@ -143,7 +143,7 @@
                 android:background="@drawable/input_field"
                 android:ems="10"
                 android:fontFamily="@font/courgette"
-                android:hint="Toerana nahazahona ny CIN"
+                android:hint="Toerana nahazahona ny CNI"
                 android:textColorHint="#7A7A7A"
                 android:textColor="#7A7A7A"
                 android:inputType="text"

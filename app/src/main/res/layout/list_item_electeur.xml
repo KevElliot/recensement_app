@@ -93,7 +93,7 @@
                                 android:layout_height="50dp"
                                 android:layout_weight="66.6"
                                 android:fontFamily="@font/croissant_one"
-                                android:text="CIN"
+                                android:text="CNI"
                                 android:textSize="15dp" />
                         </LinearLayout>
                     </LinearLayout>

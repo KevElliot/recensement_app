@@ -108,7 +108,7 @@ public class ObservationActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
                 if (daterecensement.length() !=0) {
-                    electeur.setObservation(observation);
+                    electeur.setObservation("null");
                     electeur.setDateinscription(daterecensement);
                     String myjson = gson.toJson(electeur);
                     Log.i("Electeur", myjson);
