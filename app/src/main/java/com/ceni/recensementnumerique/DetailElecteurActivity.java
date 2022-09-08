@@ -77,7 +77,7 @@ public class DetailElecteurActivity extends AppCompatActivity {
         ficheElect.setImageBitmap(imgFiche);
         cinRecto.setImageBitmap(imgCinRecto);
         cinVerso.setImageBitmap(imgCinVerso);
-        observation.setText(electeur.getObservation());
+        //observation.setText(electeur.getObservation());
 
         retour.setOnClickListener(new View.OnClickListener() {
             @Override
