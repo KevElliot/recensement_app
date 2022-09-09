@@ -606,6 +606,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/courgette"
                     android:gravity="left|center"
+                    android:visibility="gone"
                     android:text="observation"
                     android:textColor="#878787"
                     android:textSize="20sp" />

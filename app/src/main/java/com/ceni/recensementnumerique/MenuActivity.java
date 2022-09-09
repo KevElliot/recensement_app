@@ -41,6 +41,7 @@ public class MenuActivity extends AppCompatActivity {
     private static Button documents;
     private static Button recherche;
     private static Button tablette;
+    private static Tablette tab;
     private ImageView profil,deco;
     private String user;
 
@@ -58,7 +59,8 @@ public class MenuActivity extends AppCompatActivity {
         deco = findViewById(R.id.imageViewDeco);
         user = getIntent().getStringExtra("user");
         Gson gson = new Gson();
-        Tablette tab = gson.fromJson(getIntent().getStringExtra("configTab"), Tablette.class);
+        tab = gson.fromJson(getIntent().getStringExtra("configTab"), Tablette.class);
+        this.setTab(tab);
         Log.d("xx",tab.toString());
 
         tablette.setOnClickListener(new View.OnClickListener() {
@@ -142,5 +144,11 @@ public class MenuActivity extends AppCompatActivity {
         recherche.setEnabled(x);
     }
 
+    public static Tablette getTab() {
+        return tab;
+    }
 
+    public void setTab(Tablette tab) {
+        this.tab = tab;
+    }
 }

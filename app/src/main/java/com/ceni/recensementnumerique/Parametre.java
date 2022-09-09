@@ -14,8 +14,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ceni.model.Electeur;
+import com.ceni.model.Tablette;
 import com.ceni.service.Api_service;
 import com.ceni.service.Db_sqLite;
+import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
@@ -38,8 +40,9 @@ public class Parametre extends AppCompatActivity  {
         this.enregistrer = this.findViewById(R.id.enregistrerToutBtn);
         this.DB = new Db_sqLite(Parametre.this);
         this.API = new Api_service();
+        Gson gson = new Gson();
         this.resultat = getSharedPreferences("response",Context.MODE_PRIVATE);
-
+        Tablette tab = MenuActivity.getTab();
         enregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,6 +52,8 @@ public class Parametre extends AppCompatActivity  {
                 boolean enregistrer = Parametre.enregistrerElecteur(Parametre.this,ip,p,API,DB);
                 if (enregistrer) {
                     Intent i = new Intent(getApplicationContext(), MenuActivity.class);
+                    String configTab = gson.toJson(tab);
+                    i.putExtra("configTab", configTab);
                     startActivity(i);
                     ListeFokontanyActivity.getInstance().finish();
                     finish();

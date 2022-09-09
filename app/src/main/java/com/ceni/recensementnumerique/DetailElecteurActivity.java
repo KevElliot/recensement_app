@@ -101,7 +101,7 @@ public class DetailElecteurActivity extends AppCompatActivity {
                 Boolean deleted = DB.deleteElect(electeur.getCinElect());
                 if(deleted){
                     ListeFokontanyActivity.getInstance().finish();
-                    ListeElecteurActivity.getInstance().finish();
+                    RechercheElecteur.getInstance().finish();
                     Intent i = new Intent(getApplicationContext(), ListeFokontanyActivity.class);
                     startActivity(i);
                     finish();
