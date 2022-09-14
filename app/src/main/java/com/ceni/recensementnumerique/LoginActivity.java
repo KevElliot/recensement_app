@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         txtpseudo =findViewById(R.id.editTextPseudo);
         txtmdp = findViewById(R.id.editTextPassword);
         DB = new Db_sqLite(this);
+
         connecter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                     toast.show();
                 }
             }
+
         });
     }
 

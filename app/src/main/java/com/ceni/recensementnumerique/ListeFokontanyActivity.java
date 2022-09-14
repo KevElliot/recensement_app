@@ -40,8 +40,7 @@ public class ListeFokontanyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_liste_fokontany);
         Gson gson = new Gson();
-//        User user = gson.fromJson(getIntent().getStringExtra("user"), User.class);
-        User user = LoginActivity.getUser();
+        User user = gson.fromJson(getIntent().getStringExtra("user"), User.class);
         role_user = user.getRole();
         MenuActivity.setListeElect(true);
         listeFokontanyActivity = this;

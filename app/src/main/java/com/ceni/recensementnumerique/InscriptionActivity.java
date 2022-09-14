@@ -29,11 +29,14 @@ import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.service.Db_sqLite;
 import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.CompositeDateValidator;
+import com.google.android.material.datepicker.DateValidatorPointBackward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
@@ -305,21 +308,33 @@ public class InscriptionActivity extends AppCompatActivity {
         calendar.clear();
 
         calendar.set(Calendar.YEAR, anneeMajor);
-        calendar.set(Calendar.MONTH, Calendar.JULY);
+        calendar.set(Calendar.MONTH, Calendar.JUNE);
         Long anneeFin = calendar.getTimeInMillis();
 
         calendar.set(Calendar.YEAR, anneeDead);
         Long anneeStart = calendar.getTimeInMillis();
 
         CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
+        Calendar max = Calendar.getInstance();
+        max.set(Calendar.YEAR,anneeMajor);
+        max.set(Calendar.MONTH,Calendar.JUNE);
+        max.set(Calendar.DAY_OF_MONTH,11);
+
+        CalendarConstraints.DateValidator dateValidatorMax = DateValidatorPointBackward.before(max.getTimeInMillis());
+        ArrayList<CalendarConstraints.DateValidator> listValidators = new ArrayList<CalendarConstraints.DateValidator>();
+        listValidators.add(dateValidatorMax);
+        CalendarConstraints.DateValidator validators = CompositeDateValidator.allOf(listValidators);
+        constraintBuilder.setValidator(validators);
         constraintBuilder.setStart(anneeStart);
         constraintBuilder.setEnd(anneeFin);
 
         MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
+
         materialDateBuilder.setSelection(anneeFin);
         materialDateBuilder.setCalendarConstraints(constraintBuilder.build());
         materialDateBuilder.setTitleText("Daty nahaterahana:");
         final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
+
 
         mPickDateButton.setOnClickListener(new View.OnClickListener() {
             @Override

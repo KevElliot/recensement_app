@@ -45,7 +45,8 @@ public class LocalisationActivity extends AppCompatActivity {
         previous = this.findViewById(R.id.imageViewPrevious);
         localisationActivity = this;
         Gson gson = new Gson();
-        User user = gson.fromJson(getIntent().getStringExtra("user"), User.class);
+        //User user = gson.fromJson(getIntent().getStringExtra("user"), User.class);
+        User user = LoginActivity.getUser();
         String codeDistrict = user.getCode_district();
         String idUser = user.getIdUser();
         this.communes = DB.selectCommuneFromDistrict(codeDistrict);

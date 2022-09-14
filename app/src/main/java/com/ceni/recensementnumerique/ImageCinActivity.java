@@ -21,6 +21,7 @@ import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.ByteBuffer;
 
 public class ImageCinActivity extends AppCompatActivity {
     static ImageCinActivity imageCinActivity;
@@ -112,6 +113,10 @@ public class ImageCinActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Bitmap bp = (Bitmap) data.getExtras().get("data");
 
+//                ByteBuffer buffer = ByteBuffer.allocate(bp.getRowBytes() * bp.getHeight());
+//                bp.copyPixelsToBuffer(buffer);
+//                byte[] byteArray = buffer.array();
+
                 //Encode Image
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -119,9 +124,11 @@ public class ImageCinActivity extends AppCompatActivity {
 
                 if (this.format == "recto") {
                     imageRecto = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    Log.d("Recto",imageRecto);
                     this.recto.setImageBitmap(bp);
                 } else if (this.format == "verso") {
                     imageVerso = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    Log.d("Verso",imageVerso);
                     this.verso.setImageBitmap(bp);
                 }
             } else if (resultCode == RESULT_CANCELED) {

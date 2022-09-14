@@ -587,6 +587,36 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
     }
 
+    public boolean UpdateUser(User user){
+        String id = ""+user.getIdUser();
+        boolean result = false;
+        try {
+            SQLiteDatabase MyDB = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(NOMUSER, user.getNomUser());
+            contentValues.put(PRENOMUSER, user.getPrenomUser());
+            contentValues.put(ROLE, user.getRole());
+            contentValues.put(PSEUDO, user.getPseudo());
+            contentValues.put(MOTDEPASSE, user.getMotdepasse());
+            contentValues.put(REGIONUSER, user.getRegionUser());
+            contentValues.put(USER_CODEREGION, user.getCode_region());
+            contentValues.put(DISTRICTUSER, user.getDistrictUser());
+            contentValues.put(USER_CODEDISTRICT, user.getCode_district());
+            contentValues.put(COMMUNEUSER, user.getCommuneUser());
+            contentValues.put(USER_CODECOMMUNE, user.getCode_commune());
+            contentValues.put(NBSAISI, user.getNbSaisi());
+            long res = MyDB.update(TABLE_User, contentValues, "idUser = ?", new String[]{id});
+            if (res == -1) {
+                result = false;
+            } else {
+                result = true;
+            }
+        }catch(Exception e){
+            Log.e("error Update User", "error Update User "+e);
+        }
+        return result;
+    }
+
     public User selectUser(String pseudo, String mdp) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         User e = new User();

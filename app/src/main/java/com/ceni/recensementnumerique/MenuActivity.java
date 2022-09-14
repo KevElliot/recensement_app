@@ -24,6 +24,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
 import com.ceni.model.Tablette;
+import com.ceni.model.User;
 import com.ceni.service.Api_service;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
@@ -42,6 +43,7 @@ public class MenuActivity extends AppCompatActivity {
     private static Button recherche;
     private static Button tablette;
     private static Tablette tab;
+    private static User current_user;
     private ImageView profil,deco;
     private String user;
 
@@ -60,7 +62,9 @@ public class MenuActivity extends AppCompatActivity {
         user = getIntent().getStringExtra("user");
         Gson gson = new Gson();
         tab = gson.fromJson(getIntent().getStringExtra("configTab"), Tablette.class);
+        current_user = gson.fromJson(user, User.class);
         this.setTab(tab);
+        this.setCurrent_user(current_user);
         Log.d("xx",tab.toString());
 
         tablette.setOnClickListener(new View.OnClickListener() {
@@ -150,5 +154,13 @@ public class MenuActivity extends AppCompatActivity {
 
     public void setTab(Tablette tab) {
         this.tab = tab;
+    }
+
+    public static User getCurrent_user() {
+        return current_user;
+    }
+
+    public static void setCurrent_user(User current_user) {
+        MenuActivity.current_user = current_user;
     }
 }

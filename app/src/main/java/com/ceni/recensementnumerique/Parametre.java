@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.ceni.model.Electeur;
 import com.ceni.model.Tablette;
+import com.ceni.model.User;
 import com.ceni.service.Api_service;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
@@ -29,6 +30,7 @@ public class Parametre extends AppCompatActivity  {
     private Button enregistrer;
     private Api_service API;
     private Db_sqLite DB;
+    private User user;
     private static SharedPreferences resultat;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +45,20 @@ public class Parametre extends AppCompatActivity  {
         Gson gson = new Gson();
         this.resultat = getSharedPreferences("response",Context.MODE_PRIVATE);
         Tablette tab = MenuActivity.getTab();
+         this.user = MenuActivity.getCurrent_user();
         enregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String ip = adressIp.getText().toString();
                 String p = port.getText().toString();
                 Log.d("ip: ",ip);
-                boolean enregistrer = Parametre.enregistrerElecteur(Parametre.this,ip,p,API,DB);
+                boolean enregistrer = Parametre.enregistrerElecteur(user,Parametre.this,ip,p,API,DB);
                 if (enregistrer) {
                     Intent i = new Intent(getApplicationContext(), MenuActivity.class);
                     String configTab = gson.toJson(tab);
                     i.putExtra("configTab", configTab);
+                    String myJson = gson.toJson(user);
+                    i.putExtra("user", myJson);
                     startActivity(i);
                     ListeFokontanyActivity.getInstance().finish();
                     finish();
@@ -68,7 +73,7 @@ public class Parametre extends AppCompatActivity  {
             }
         });
     }
-    private static boolean enregistrerElecteur(Context c, String ip, String port, Api_service API, Db_sqLite DB){
+    private static boolean enregistrerElecteur(User us, Context c, String ip, String port, Api_service API, Db_sqLite DB){
         boolean result = false;
         List<Electeur> listElect = DB.selectElecteur();
         for (int i = 0; i < listElect.size(); i++) {
@@ -76,14 +81,18 @@ public class Parametre extends AppCompatActivity  {
             boolean res = resultat.getBoolean("resultat", false);
             Log.d("eeee","res =  "+res);
             if(res){
-                boolean deleted = DB.deleteElect(listElect.get(i).getCinElect());
-                if(deleted){
-                    result = true;
-                    Toast toast = Toast.makeText(c, "Electeur enregistrer!", Toast.LENGTH_LONG);
-                    toast.show();
+                us.setNbSaisi(us.getNbSaisi()+1);
+                boolean compteElecteurEnregistrer = DB.UpdateUser(us);
+                if(compteElecteurEnregistrer) {
+                    boolean deleted = DB.deleteElect(listElect.get(i).getCinElect());
+                    if (deleted) {
+                        result = true;
+                        Toast toast = Toast.makeText(c, "Electeur enregistré!", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
                 }
             }else{
-                Toast toast = Toast.makeText(c, "Misy probleme ny webservice!", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(c, "Problème serveur!", Toast.LENGTH_LONG);
                 toast.show();
             }
         }
