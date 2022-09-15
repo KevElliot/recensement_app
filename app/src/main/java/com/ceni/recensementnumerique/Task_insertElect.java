@@ -51,38 +51,18 @@ public class Task_insertElect extends AsyncTask<Void, Void, Void> {
         List<Electeur> listElect = params.getListElect();
         SharedPreferences resultat = params.getResultat();
         for (int i = 0; i < listElect.size(); i++) {
-            API.addNewElecteur(c, ip, port, listElect.get(i), resultat);
-            boolean res = resultat.getBoolean("resultat", false);
-            Log.d("eeee", "res =  " + res);
-            if (res) {
-                result = true;
-                us.setNbSaisi(us.getNbSaisi() + 1);
-                boolean compteElecteurEnregistrer = DB.UpdateUser(us);
-                if (compteElecteurEnregistrer) {
-                    boolean deleted = true;
-                    // boolean deleted = DB.deleteElect(listElect.get(i).getCinElect());
-                }
-            }
+            API.addNewElecteur(DB,c, ip, port, listElect.get(i), resultat,tab,us);
+//            boolean res = resultat.getBoolean("resultat", false);
+//            Log.d("eeee", "res =  " + res);
+//            if (res) {
+//                result = true;
+//
+//            }
         }
         return null;
     }
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        if(result){
-            Toast toast = Toast.makeText(c, "Electeur enregistré!", Toast.LENGTH_LONG);
-            toast.show();
-            Intent i = new Intent(c, MenuActivity.class);
-            String configTab = gson.toJson(tab);
-            i.putExtra("configTab", configTab);
-            String myJson = gson.toJson(us);
-            i.putExtra("user", myJson);
-            c.startActivity(i);
-            ListeFokontanyActivity.getInstance().finish();
-            //ParametreActivity.getInstance().finish();
-        }else {
-            Toast toast = Toast.makeText(c, "Problème serveur!", Toast.LENGTH_LONG);
-            toast.show();
-        }
     }
 }

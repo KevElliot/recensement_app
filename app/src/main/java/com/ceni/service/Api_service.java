@@ -3,14 +3,21 @@ package com.ceni.service;
 import static android.content.ContentValues.TAG;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.ceni.model.Electeur;
+import com.ceni.model.Tablette;
+import com.ceni.model.User;
+import com.ceni.recensementnumerique.ListeFokontanyActivity;
+import com.ceni.recensementnumerique.MenuActivity;
+import com.google.gson.Gson;
 
 
 import org.json.JSONException;
@@ -20,11 +27,9 @@ import java.text.SimpleDateFormat;
 
 
 public class Api_service {
-    public static void addNewElecteur(Context context, String ip, String port, Electeur electeur, SharedPreferences resultat) {
+    public static void addNewElecteur(Db_sqLite DB,Context context, String ip, String port, Electeur electeur, SharedPreferences resultat, Tablette tab, User us) {
         String base_url = "http://"+ip+":"+port+"/";
         try {
-            SharedPreferences.Editor editor = resultat.edit();
-            editor.remove("resultat").commit();
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code_bv", electeur.getCode_bv());
             jsonObject.put("num_feuillet", electeur.getnFiche());
@@ -58,13 +63,31 @@ public class Api_service {
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            Toast toast = Toast.makeText(context, "Electeur enregistré!", Toast.LENGTH_LONG);
+                            toast.show();
                             SharedPreferences.Editor editor = resultat.edit();
                             editor.putBoolean("resultat",true).commit();
                             editor.apply();
                             Log.d(TAG, "Reponse Insert : " + response);
+                            Intent i = new Intent(context, MenuActivity.class);
+                            Gson gson = new Gson();
+                            String configTab = gson.toJson(tab);
+                            i.putExtra("configTab", configTab);
+                            String myJson = gson.toJson(us);
+                            i.putExtra("user", myJson);
+                            us.setNbSaisi(us.getNbSaisi() + 1);
+                            boolean compteElecteurEnregistrer = DB.UpdateUser(us);
+                            if (compteElecteurEnregistrer) {
+                                boolean deleted = true;
+                                // boolean deleted = DB.deleteElect(listElect.get(i).getCinElect());
+                            }
+                            context.startActivity(i);
+                            ListeFokontanyActivity.getInstance().finish();
                         }
                         @Override
                         public void onError(ANError error) {
+                            Toast toast = Toast.makeText(context, "Problème serveur!", Toast.LENGTH_LONG);
+                            toast.show();
                             SharedPreferences.Editor editor = resultat.edit();
                             editor.putBoolean("resultat",false).commit();
                             editor.apply();
