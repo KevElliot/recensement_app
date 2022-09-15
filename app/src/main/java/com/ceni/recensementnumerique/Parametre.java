@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ceni.model.Electeur;
+import com.ceni.model.Parametre_model;
 import com.ceni.model.Tablette;
 import com.ceni.model.User;
 import com.ceni.service.Api_service;
@@ -24,7 +26,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-public class Parametre extends AppCompatActivity  {
+public class Parametre extends AppCompatActivity{
     private ImageView previous;
     private EditText adressIp,port;
     private Button enregistrer;
@@ -32,6 +34,7 @@ public class Parametre extends AppCompatActivity  {
     private Db_sqLite DB;
     private User user;
     private static SharedPreferences resultat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,17 +55,22 @@ public class Parametre extends AppCompatActivity  {
                 String ip = adressIp.getText().toString();
                 String p = port.getText().toString();
                 Log.d("ip: ",ip);
-                boolean enregistrer = Parametre.enregistrerElecteur(user,Parametre.this,ip,p,API,DB);
-                if (enregistrer) {
-                    Intent i = new Intent(getApplicationContext(), MenuActivity.class);
-                    String configTab = gson.toJson(tab);
-                    i.putExtra("configTab", configTab);
-                    String myJson = gson.toJson(user);
-                    i.putExtra("user", myJson);
-                    startActivity(i);
-                    ListeFokontanyActivity.getInstance().finish();
-                    finish();
-                }
+                //boolean enregistrer = Parametre.enregistrerElecteur(user,Parametre.this,ip,p,API,DB);
+
+                List<Electeur> listElect = DB.selectElecteur();
+                Parametre_model params = new Parametre_model(Parametre.this,ip,p,listElect,resultat);
+                new Task_insertElect(Parametre.this,params,user,tab).execute();
+
+//                if (enregistrer) {
+//                    Intent i = new Intent(getApplicationContext(), MenuActivity.class);
+//                    String configTab = gson.toJson(tab);
+//                    i.putExtra("configTab", configTab);
+//                    String myJson = gson.toJson(user);
+//                    i.putExtra("user", myJson);
+//                    startActivity(i);
+//                    ListeFokontanyActivity.getInstance().finish();
+//                    finish();
+//                }
             }
         });
 
@@ -73,30 +81,34 @@ public class Parametre extends AppCompatActivity  {
             }
         });
     }
-    private static boolean enregistrerElecteur(User us, Context c, String ip, String port, Api_service API, Db_sqLite DB){
-        boolean result = false;
+    private static void enregistrerElecteur(User us, Context c, String ip, String port,Tablette tab, Api_service API, Db_sqLite DB){
+        //boolean result = false;
         List<Electeur> listElect = DB.selectElecteur();
-        for (int i = 0; i < listElect.size(); i++) {
-            API.addNewElecteur(c,ip,port, listElect.get(i),resultat);
-            boolean res = resultat.getBoolean("resultat", false);
-            Log.d("eeee","res =  "+res);
-            if(res){
-                us.setNbSaisi(us.getNbSaisi()+1);
-                boolean compteElecteurEnregistrer = DB.UpdateUser(us);
-                if(compteElecteurEnregistrer) {
-                    boolean deleted = DB.deleteElect(listElect.get(i).getCinElect());
-                    if (deleted) {
-                        result = true;
-                        Toast toast = Toast.makeText(c, "Electeur enregistré!", Toast.LENGTH_LONG);
-                        toast.show();
-                    }
-                }
-            }else{
-                Toast toast = Toast.makeText(c, "Problème serveur!", Toast.LENGTH_LONG);
-                toast.show();
-            }
-        }
+        Parametre_model params = new Parametre_model(c,ip,port,listElect,resultat);
+        new Task_insertElect(c,params,us,tab).execute();
+//        for (int i = 0; i < listElect.size(); i++) {
+//            //API.addNewElecteur(c,ip,port, listElect.get(i),resultat);
+////            //boolean res = resultat.getBoolean("resultat",false);
+////            //Log.d("eeee","res =  "+res);
+////            if(res){
+////                us.setNbSaisi(us.getNbSaisi()+1);
+////                boolean compteElecteurEnregistrer = DB.UpdateUser(us);
+////                if(compteElecteurEnregistrer) {
+////                    boolean deleted = true;
+////                   // boolean deleted = DB.deleteElect(listElect.get(i).getCinElect());
+////                    if (deleted) {
+////                        result = true;
+////                        Toast toast = Toast.makeText(c, "Electeur enregistré!", Toast.LENGTH_LONG);
+////                        toast.show();
+////                    }
+////
+////                }
+////            }else{
+////                Toast toast = Toast.makeText(c, "Problème serveur!", Toast.LENGTH_LONG);
+////                toast.show();
+////            }
+//        }
 
-        return result;
+        //return result;
     }
 }
