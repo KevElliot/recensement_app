@@ -158,6 +158,24 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
         return result;
     }
+    public Boolean isSamePerson(String nom,String prenom,String dateNaiss) {
+        boolean result = false;
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        String sql = "Select * from electeur where (nom ='"+nom+"' and prenom ='"+prenom+"' and dateNaiss = '"+dateNaiss+"') or (nom='"+nom+"' and prenom ='"+prenom+"' and dateNaiss = '"+dateNaiss+"')";
+        Cursor cursor = MyDB.rawQuery(sql,new String []{});
+        try {
+            long nbElect = this.countElecteur();
+            if (nbElect != 0 && cursor.getCount() != 0) {
+                result = true;
+            }
+        } catch (Exception e) {
+            Log.e("ERROR isSamePerson", " " + e);
+        } finally {
+            cursor.close();
+            MyDB.close();
+        }
+        return result;
+    }
 
     public Boolean isMemeDoc(String docRef) {
         boolean result = false;

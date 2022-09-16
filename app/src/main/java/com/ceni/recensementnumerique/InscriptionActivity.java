@@ -53,8 +53,8 @@ public class InscriptionActivity extends AppCompatActivity {
     private String sexe, dateNaiss;
     private EditText nFiche, nom, prenom, lieuNaiss, profession, adresse, nomMere, nomPere, editNevers;
     private int countFormValide;
-    private boolean isMemeFiche, isNevers, feuMereSelected, feuPereSelected;
-    private String msg,user;
+    private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected;
+    private String msg, user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,9 +135,9 @@ public class InscriptionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String np = nomPere.getText().toString();
                 if (feuPere.isChecked()) {
-                    nomPere.setText(np+"(Feu)");
+                    nomPere.setText(np + "(Feu)");
                 } else {
-                    String newnp = np.replace("(Feu)","");
+                    String newnp = np.replace("(Feu)", "");
                     nomPere.setText(newnp);
                 }
             }
@@ -147,9 +147,9 @@ public class InscriptionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String nm = nomMere.getText().toString();
                 if (feuMere.isChecked()) {
-                    nomMere.setText(nm+"(Feu)");
+                    nomMere.setText(nm + "(Feu)");
                 } else {
-                    String newnm = nm.replace("(Feu)","");
+                    String newnm = nm.replace("(Feu)", "");
                     nomMere.setText(newnm);
                 }
             }
@@ -195,17 +195,6 @@ public class InscriptionActivity extends AppCompatActivity {
                 countFormValide = 0;
                 Gson gson = new Gson();
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
-                if (nFiche.getText().toString().length() == 12) {
-                    isMemeFiche = DB.isMemeFiche(nFiche.getText().toString());
-                    if (isMemeFiche) {
-                        msg = "Takelaka efa voasoratra!";
-                    } else {
-                        electeur.setnFiche(nFiche.getText().toString());
-                        countFormValide += 1;
-                    }
-                } else {
-                    nFiche.setError("Misy diso");
-                }
                 if (nom.getText().toString().length() != 0) {
                     electeur.setNom(nom.getText().toString());
                     countFormValide += 1;
@@ -254,18 +243,18 @@ public class InscriptionActivity extends AppCompatActivity {
                 if (isNevers) {
                     int anneeNevers = Integer.parseInt(editNevers.getText().toString());
                     if (editNevers.getText().toString().length() == 4) {
-                        if(anneeNevers<anneeMajor && anneeNevers>anneeDead){
+                        if (anneeNevers < anneeMajor && anneeNevers > anneeDead) {
                             countFormValide += 1;
                             electeur.setNevers(editNevers.getText().toString());
                             electeur.setDateNaiss("");
-                        }else{
+                        } else {
                             editNevers.setError("Tsy ao anatiny taona");
                         }
                     } else {
                         editNevers.setError("Diso");
                     }
                 } else {
-                    if (dateNaiss !=null) {
+                    if (dateNaiss != null) {
                         countFormValide += 1;
                         electeur.setDateNaiss(dateNaiss);
                         electeur.setNevers("");
@@ -274,10 +263,28 @@ public class InscriptionActivity extends AppCompatActivity {
                         mShowSelectedDateText.setText("Mila apetraka ny daty nahaterahana");
                     }
                 }
-                if(docReference[0]!=""){
+                if (nFiche.getText().toString().length() == 12) {
+                    isMemeFiche = DB.isMemeFiche(nFiche.getText().toString());
+                    if (isMemeFiche) {
+                        msg = "Takelaka efa voasoratra!";
+                    } else {
+                        String nomElect = nom.getText().toString();
+                        String prenomElect = prenom.getText().toString();
+                        isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss);
+                        if (isSamePers) {
+                            msg = "mpifidy efa voasoratra!";
+                        } else {
+                            electeur.setnFiche(nFiche.getText().toString());
+                            countFormValide += 1;
+                        }
+                    }
+                } else {
+                    nFiche.setError("Misy diso");
+                }
+                if (docReference[0] != "") {
                     electeur.setDocreference(docReference[0]);
-                    countFormValide+=1;
-                }else{
+                    countFormValide += 1;
+                } else {
                     Toast toast = Toast.makeText(InscriptionActivity.this, "Selectionner un carnet!", Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -316,9 +323,9 @@ public class InscriptionActivity extends AppCompatActivity {
 
         CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
         Calendar max = Calendar.getInstance();
-        max.set(Calendar.YEAR,anneeMajor);
-        max.set(Calendar.MONTH,Calendar.JUNE);
-        max.set(Calendar.DAY_OF_MONTH,11);
+        max.set(Calendar.YEAR, anneeMajor);
+        max.set(Calendar.MONTH, Calendar.JUNE);
+        max.set(Calendar.DAY_OF_MONTH, 11);
 
         CalendarConstraints.DateValidator dateValidatorMax = DateValidatorPointBackward.before(max.getTimeInMillis());
         ArrayList<CalendarConstraints.DateValidator> listValidators = new ArrayList<CalendarConstraints.DateValidator>();
