@@ -174,7 +174,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:text="Teraka taminy" />
+                    android:text="Teraka tamin'ny" />
 
             </LinearLayout>
 

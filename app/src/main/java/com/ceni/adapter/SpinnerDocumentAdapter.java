@@ -54,7 +54,7 @@ public class SpinnerDocumentAdapter extends BaseAdapter {
         TextView textViewItemName = (TextView) rowView.findViewById(this.textViewLabelId);
 //        Log.i("xxx", "textview : "+textViewItemName);
 //        Log.i("xxx", "commune : "+commune.getLabel_commune());
-        textViewItemName.setText(doc.getDocreference());
+        textViewItemName.setText(doc.getNumdocreference());
 
         return rowView;
     }

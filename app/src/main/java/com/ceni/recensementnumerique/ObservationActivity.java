@@ -23,6 +23,7 @@ import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.gson.Gson;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -135,7 +136,7 @@ public class ObservationActivity extends AppCompatActivity {
         calendar.clear();
 
         calendar.set(Calendar.YEAR, anneeMajor);
-        calendar.set(Calendar.MONTH, Calendar.JULY);
+        calendar.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH)+1);
         Long anneeFin = calendar.getTimeInMillis();
 
         calendar.set(Calendar.YEAR, anneeDead);

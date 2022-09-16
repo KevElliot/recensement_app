@@ -62,7 +62,7 @@ public class ListDocumentAdapter extends ArrayAdapter<Document> {
             }
         });
 
-        docreference.setText(document.getDocreference());
+        docreference.setText(document.getNumdocreference());
         return convertView;
     }
 }

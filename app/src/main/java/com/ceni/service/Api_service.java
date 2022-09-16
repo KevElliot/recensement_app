@@ -78,8 +78,8 @@ public class Api_service {
                             us.setNbSaisi(us.getNbSaisi() + 1);
                             boolean compteElecteurEnregistrer = DB.UpdateUser(us);
                             if (compteElecteurEnregistrer) {
-                                //boolean deleted = true;
-                                boolean deleted = DB.deleteElect(electeur.getCinElect());
+                                boolean deleted = true;
+                                //boolean deleted = DB.deleteElect(electeur.getCinElect());
                             }
                             context.startActivity(i);
                             ListeFokontanyActivity.getInstance().finish();

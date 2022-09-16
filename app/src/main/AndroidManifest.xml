@@ -25,6 +25,9 @@
         android:theme="@style/Theme.RecensementNumerique"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".DoclocalisationActivity"
+            android:exported="false" />
+        <activity
             android:name=".RecensementTablette"
             android:exported="false" />
         <activity

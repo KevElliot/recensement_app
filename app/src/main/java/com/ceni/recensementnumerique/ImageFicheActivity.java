@@ -65,7 +65,7 @@ public class ImageFicheActivity extends AppCompatActivity {
                 }else{
                     new AlertDialog.Builder(ImageFicheActivity.this)
                             .setTitle("Fahadisoana?")
-                            .setMessage("Iangaviana enao mba anisy sary azafady.")
+                            .setMessage("Iangaviana ianao mba haka sary azafady.")
                             .setCancelable(false)
                             .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                                 @Override

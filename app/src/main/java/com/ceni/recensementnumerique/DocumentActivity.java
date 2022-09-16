@@ -49,13 +49,13 @@ public class DocumentActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Document doc = new Document();
-                doc.setDocreference(listDoc.get(position).getDocreference());
+                doc.setNumdocreference(listDoc.get(position).getNumdocreference ());
             }
         });
         ajouter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), AddDocumentActivity.class);
+                Intent i = new Intent(getApplicationContext(), DoclocalisationActivity.class);
                 startActivity(i);
                 finish();
             }

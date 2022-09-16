@@ -28,7 +28,7 @@ import java.util.List;
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-    private static final int DB_VERSION = 14;
+    private static final int DB_VERSION = 15;
     /*---------------------------------------------------------------------------------------
                                            TABLE ELECTEUR
     ----------------------------------------------------------------------------------------*/
@@ -98,7 +98,12 @@ public class Db_sqLite extends SQLiteOpenHelper {
     /*---------------------------------------------------------------------------------------
                                             TABLE Documents
     ----------------------------------------------------------------------------------------*/
-    private static final String docreference = "docreference";
+    private static final String idfdocreference = "idfdocreference";
+    private static final String doccode_bv = "code_bv";
+    private static final String numdocreference = "numdocreference";
+    private static final String datedocreference = "datedocreference";
+    private static final String nbfeuillet = "nbfeuillet";
+
     public static final String TABLE_Document = "documents";
 
     public Db_sqLite(@Nullable Context context) {
@@ -124,7 +129,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 PRENOMUSER + " TEXT, " + ROLE + " TEXT, " + PSEUDO + " TEXT, " + MOTDEPASSE + " TEXT, " + REGIONUSER + " TEXT, " +
                 USER_CODEREGION + " TEXT, " + DISTRICTUSER + " TEXT, " + USER_CODEDISTRICT + " TEXT, " + COMMUNEUSER + " TEXT, " + USER_CODECOMMUNE + " TEXT, " + NBSAISI + " INT)";
 
-        String query4 = "CREATE TABLE " + TABLE_Document + "(" + COLUMN_DOCREFERENCE + " TEXT)";
+        String query4 = "CREATE TABLE " + TABLE_Document + "(" + idfdocreference + " INTEGER primary key AUTOINCREMENT, "+doccode_bv+" TEXT,"+numdocreference+" TEXT,"+datedocreference+" TEXT, "+nbfeuillet+" TEXT)";
 
         db.execSQL(query1);
         db.execSQL(query2);
@@ -161,7 +166,8 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public Boolean isSamePerson(String nom,String prenom,String dateNaiss) {
         boolean result = false;
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql = "Select * from electeur where (nom ='"+nom+"' and prenom ='"+prenom+"' and dateNaiss = '"+dateNaiss+"') or (nom='"+nom+"' and prenom ='"+prenom+"' and dateNaiss = '"+dateNaiss+"')";
+        String sql = "Select upper(nom),upper(prenom),dateNaiss from electeur where (upper(nom) =upper('"+nom+"') and upper(prenom) = upper('"+prenom+"') and dateNaiss = '"+dateNaiss+"') or (upper(nom)= upper('"+prenom+"') and upper(prenom) = upper('"+nom+"') and dateNaiss = '"+dateNaiss+"')";
+       Log.d("isSame",sql);
         Cursor cursor = MyDB.rawQuery(sql,new String []{});
         try {
             long nbElect = this.countElecteur();
@@ -177,10 +183,10 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return result;
     }
 
-    public Boolean isMemeDoc(String docRef) {
+    public Boolean isMemeDoc(String numdoc) {
         boolean result = false;
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select " + COLUMN_DOCREFERENCE + " from documents where " + COLUMN_DOCREFERENCE + " =?", new String[]{docRef});
+        Cursor cursor = MyDB.rawQuery("Select " + numdocreference  + " from documents where " + numdocreference + " =?", new String[]{numdoc});
         try {
             if (cursor.getCount() != 0) {
                 result = true;
@@ -195,13 +201,16 @@ public class Db_sqLite extends SQLiteOpenHelper {
     }
 
     public Boolean insertDocument(Document doc) {
-        boolean ismemedoc = isMemeDoc(doc.getDocreference());
+        boolean ismemedoc = isMemeDoc(doc.getNumdocreference());
         SQLiteDatabase MyDB = this.getWritableDatabase();
         boolean res = false;
         if (!ismemedoc) {
             try {
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(COLUMN_DOCREFERENCE, doc.getDocreference());
+                contentValues.put(doccode_bv , doc.getDoccode_bv());
+                contentValues.put(numdocreference , doc.getNumdocreference());
+                contentValues.put(datedocreference  , doc.getDatedocreference());
+                contentValues.put(nbfeuillet  , doc.getNbfeuillet());
                 long result = MyDB.insert(TABLE_Document, null, contentValues);
                 if (result == -1) {
                     res = false;
@@ -226,7 +235,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         try {
             while (cursor.moveToNext()) {
                 Document d = new Document();
-                d.setDocreference(cursor.getString(0));
+                d.setNumdocreference(cursor.getString(0));
                 listdoc.add(d);
             }
         } catch (Exception e) {

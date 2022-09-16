@@ -87,6 +87,7 @@ public class Inscription2Activity extends AppCompatActivity {
         int anneeDead = anneeNow - 101+18;
 
         calendar.set(Calendar.YEAR,anneeMajor);
+        calendar.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH)+1);
         Long anneeFin = calendar.getTimeInMillis();
 
         calendar.set(Calendar.YEAR,anneeDead);

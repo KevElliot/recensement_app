@@ -92,7 +92,7 @@ public class ApercuInscriptionActivity extends AppCompatActivity {
                 Log.d("Electeur final:", "Electeur : " + electeur.toString());
                 boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), electeur.getDateinscription());
                 if (result) {
-                    Toast toast = Toast.makeText(ApercuInscriptionActivity.this, "Electeur enregistrer!", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(ApercuInscriptionActivity.this, "Electeur enregistré!", Toast.LENGTH_LONG);
                     toast.show();
                     LocalisationActivity.getInstance().finish();
                     ImageFicheActivity.getInstance().finish();

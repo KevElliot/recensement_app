@@ -104,7 +104,7 @@ public class InscriptionActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Document docSelected = (Document) spinnerDocument.getSelectedItem();
-                docReference[0] = docSelected.getDocreference().toString();
+                docReference[0] = docSelected.getNumdocreference().toString();
             }
 
             @Override
