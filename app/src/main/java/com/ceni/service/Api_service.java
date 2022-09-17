@@ -12,6 +12,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.model.Tablette;
 import com.ceni.model.User;
@@ -27,6 +28,35 @@ import java.text.SimpleDateFormat;
 
 
 public class Api_service {
+    public static void addNewDoc(String ip, String port, Document doc){
+        String base_url = "http://"+ip+":"+port+"/";
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("idfdocreference", doc.getIdfdocreference());
+            jsonObject.put("code_bv", doc.getDoccode_bv());
+            jsonObject.put("numdocrefence", doc.getNumdocreference());
+            jsonObject.put("datedocreference", doc.getDatedocreference());
+            AndroidNetworking.post(base_url + "api/document")
+                    .setTag("test")
+                    .addHeaders("Accept", "application/json")
+                    .setPriority(Priority.HIGH)
+                    .addJSONObjectBody(jsonObject)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                        }
+                        @Override
+                        public void onError(ANError error) {
+
+                        }
+                    });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void addNewElecteur(Db_sqLite DB,Context context, String ip, String port, Electeur electeur, SharedPreferences resultat, Tablette tab, User us) {
         String base_url = "http://"+ip+":"+port+"/";
         try {
