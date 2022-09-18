@@ -14,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ceni.model.Document;
 import com.ceni.model.Electeur;
+import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
@@ -100,9 +102,15 @@ public class DetailElecteurActivity extends AppCompatActivity {
                 Db_sqLite DB = new Db_sqLite(DetailElecteurActivity.this);
                 Boolean deleted = DB.deleteElect(electeur.getCinElect());
                 if(deleted){
+                    Document doc = DB.selectDocumentbyid(electeur.getDocreference());
+                    User user = MenuActivity.getCurrent_user();
+                    User users = DB.selectUser(user.getPseudo(),user.getMotdepasse());
+                    String myjson = gson.toJson(users);
+                    DB.counterStat(doc,users,-1);
                     ListeFokontanyActivity.getInstance().finish();
                     RechercheElecteur.getInstance().finish();
                     Intent i = new Intent(getApplicationContext(), ListeFokontanyActivity.class);
+                    i.putExtra("user",myjson);
                     startActivity(i);
                     finish();
 

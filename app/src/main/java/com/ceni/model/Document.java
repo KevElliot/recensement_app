@@ -1,6 +1,7 @@
 package com.ceni.model;
 
 public class Document {
+    private String idDoc;
     private String idfdocreference;
     private String doccode_bv;
     private String numdocreference;
@@ -10,11 +11,20 @@ public class Document {
     public Document() {
     }
 
-    public Document(String doccode_bv, String numdocreference, String datedocreference, int nbfeuillet) {
+    public Document(String idfdocreference,String doccode_bv, String numdocreference, String datedocreference, int nbfeuillet) {
+        this.idfdocreference = idfdocreference;
         this.doccode_bv = doccode_bv;
         this.numdocreference = numdocreference;
         this.datedocreference = datedocreference;
         this.nbfeuillet = nbfeuillet;
+    }
+
+    public String getIdDoc() {
+        return idDoc;
+    }
+
+    public void setIdDoc(String idDoc) {
+        this.idDoc = idDoc;
     }
 
     public String getIdfdocreference() {
@@ -55,5 +65,17 @@ public class Document {
 
     public void setNbfeuillet(int nbfeuillet) {
         this.nbfeuillet = nbfeuillet;
+    }
+
+    @Override
+    public String toString() {
+        return "Document{" +
+                "idDoc='" + idDoc + '\'' +
+                ", idfdocreference='" + idfdocreference + '\'' +
+                ", doccode_bv='" + doccode_bv + '\'' +
+                ", numdocreference='" + numdocreference + '\'' +
+                ", datedocreference='" + datedocreference + '\'' +
+                ", nbfeuillet=" + nbfeuillet +
+                '}';
     }
 }

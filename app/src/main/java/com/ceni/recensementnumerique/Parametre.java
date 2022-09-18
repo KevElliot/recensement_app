@@ -29,7 +29,7 @@ import java.util.List;
 public class Parametre extends AppCompatActivity{
     private ImageView previous;
     private EditText adressIp,port;
-    private Button enregistrer;
+    public Button enregistrer;
     private Api_service API;
     private Db_sqLite DB;
     private User user;
@@ -43,6 +43,7 @@ public class Parametre extends AppCompatActivity{
         this.adressIp = this.findViewById(R.id.adressIp);
         this.port = this.findViewById(R.id.port);
         this.enregistrer = this.findViewById(R.id.enregistrerToutBtn);
+        enregistrer.setVisibility(View.VISIBLE);
         this.DB = new Db_sqLite(Parametre.this);
         this.API = new Api_service();
         Gson gson = new Gson();
@@ -52,25 +53,12 @@ public class Parametre extends AppCompatActivity{
         enregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                enregistrer.setVisibility(View.GONE);
                 String ip = adressIp.getText().toString();
                 String p = port.getText().toString();
-                Log.d("ip: ",ip);
-                //boolean enregistrer = Parametre.enregistrerElecteur(user,Parametre.this,ip,p,API,DB);
-
                 List<Electeur> listElect = DB.selectElecteur();
                 Parametre_model params = new Parametre_model(Parametre.this,ip,p,listElect,resultat);
-                new Task_insertElect(Parametre.this,params,user,tab).execute();
-
-//                if (enregistrer) {
-//                    Intent i = new Intent(getApplicationContext(), MenuActivity.class);
-//                    String configTab = gson.toJson(tab);
-//                    i.putExtra("configTab", configTab);
-//                    String myJson = gson.toJson(user);
-//                    i.putExtra("user", myJson);
-//                    startActivity(i);
-//                    ListeFokontanyActivity.getInstance().finish();
-//                    finish();
-//                }
+                new Task_insertElect(Parametre.this,params,enregistrer,user,tab).execute();
             }
         });
 
@@ -80,35 +68,5 @@ public class Parametre extends AppCompatActivity{
                 onBackPressed();
             }
         });
-    }
-    private static void enregistrerElecteur(User us, Context c, String ip, String port,Tablette tab, Api_service API, Db_sqLite DB){
-        //boolean result = false;
-        List<Electeur> listElect = DB.selectElecteur();
-        Parametre_model params = new Parametre_model(c,ip,port,listElect,resultat);
-        new Task_insertElect(c,params,us,tab).execute();
-//        for (int i = 0; i < listElect.size(); i++) {
-//            //API.addNewElecteur(c,ip,port, listElect.get(i),resultat);
-////            //boolean res = resultat.getBoolean("resultat",false);
-////            //Log.d("eeee","res =  "+res);
-////            if(res){
-////                us.setNbSaisi(us.getNbSaisi()+1);
-////                boolean compteElecteurEnregistrer = DB.UpdateUser(us);
-////                if(compteElecteurEnregistrer) {
-////                    boolean deleted = true;
-////                   // boolean deleted = DB.deleteElect(listElect.get(i).getCinElect());
-////                    if (deleted) {
-////                        result = true;
-////                        Toast toast = Toast.makeText(c, "Electeur enregistré!", Toast.LENGTH_LONG);
-////                        toast.show();
-////                    }
-////
-////                }
-////            }else{
-////                Toast toast = Toast.makeText(c, "Problème serveur!", Toast.LENGTH_LONG);
-////                toast.show();
-////            }
-//        }
-
-        //return result;
     }
 }

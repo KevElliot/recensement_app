@@ -12,6 +12,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.model.Tablette;
@@ -28,14 +29,63 @@ import java.text.SimpleDateFormat;
 
 
 public class Api_service {
-    public static void addNewDoc(String ip, String port, Document doc){
-        String base_url = "http://"+ip+":"+port+"/";
+
+    public static void checkBack(String ip, String port) {
+        String base_url = "http://" + ip + ":" + port + "/";
         try {
+            AndroidNetworking.post(base_url + "api/back")
+                    .setTag("test")
+                    .addHeaders("Accept", "application/json")
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("checkBack", "true");
+                        }
+
+                        @Override
+                        public void onError(ANError error) {
+                            Log.d("checkBack", "false");
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //select doc if doc exist, insert elect else, insert doc
+
+    public static void getDocumentById(String ip, String port, String idfDoc) {
+        String base_url = "http://" + ip + ":" + port + "/";
+        AndroidNetworking.get(base_url + "api/document/" + idfDoc)
+                .setPriority(Priority.LOW)
+                .build()
+                .getAsObject(Document.class, new ParsedRequestListener<Document>() {
+                    @Override
+                    public void onResponse(Document response) {
+                        Document doc = response;
+                        Log.d("getDocumentById", doc.toString());
+                        Log.d("getDocumentById", "true");
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d("getDocumentById", "false");
+                    }
+                });
+    }
+
+    public static void addNewDoc(Db_sqLite DB, Context context, String ip, String port, Electeur electeur, Tablette tab, User us, Document doc) {
+        String base_url = "http://" + ip + ":" + port + "/";
+        try {
+            Log.d("APIII --- ", doc.getNumdocreference());
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("idfdocreference", doc.getIdfdocreference());
             jsonObject.put("code_bv", doc.getDoccode_bv());
-            jsonObject.put("numdocrefence", doc.getNumdocreference());
+            jsonObject.put("numdocreference", doc.getNumdocreference());
             jsonObject.put("datedocreference", doc.getDatedocreference());
+            Log.d("APIII --- ", jsonObject.toString());
             AndroidNetworking.post(base_url + "api/document")
                     .setTag("test")
                     .addHeaders("Accept", "application/json")
@@ -45,11 +95,13 @@ public class Api_service {
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
-
+                            Log.d("addNewDoc", "true " + response.toString());
+                            addNewElecteur(DB, context, ip, port, electeur, tab, us);
                         }
                         @Override
                         public void onError(ANError error) {
-
+                            Toast toast = Toast.makeText(context, "Problème serveur!", Toast.LENGTH_LONG);
+                            toast.show();
                         }
                     });
         } catch (JSONException e) {
@@ -57,8 +109,8 @@ public class Api_service {
         }
     }
 
-    public static void addNewElecteur(Db_sqLite DB,Context context, String ip, String port, Electeur electeur, SharedPreferences resultat, Tablette tab, User us) {
-        String base_url = "http://"+ip+":"+port+"/";
+    public static void addNewElecteur(Db_sqLite DB, Context context, String ip, String port, Electeur electeur, Tablette tab, User us) {
+        String base_url = "http://" + ip + ":" + port + "/";
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("code_bv", electeur.getCode_bv());
@@ -81,7 +133,7 @@ public class Api_service {
             jsonObject.put("cinrecto", electeur.getCinRecto());
             jsonObject.put("cinverso", electeur.getCinVerso());
             jsonObject.put("observation", electeur.getObservation());
-            jsonObject.put("docreference", electeur.getDocreference());
+            jsonObject.put("idfdocreference", electeur.getDocreference());
             jsonObject.put("num_userinfo", electeur.getNum_userinfo());
             jsonObject.put("drecensement", electeur.getDateinscription());
             AndroidNetworking.post(base_url + "api/electeur")
@@ -95,9 +147,6 @@ public class Api_service {
                         public void onResponse(JSONObject response) {
                             Toast toast = Toast.makeText(context, "Electeur enregistré!", Toast.LENGTH_LONG);
                             toast.show();
-                            SharedPreferences.Editor editor = resultat.edit();
-                            editor.putBoolean("resultat",true).commit();
-                            editor.apply();
                             Log.d(TAG, "Reponse Insert : " + response);
                             Intent i = new Intent(context, MenuActivity.class);
                             Gson gson = new Gson();
@@ -105,23 +154,19 @@ public class Api_service {
                             i.putExtra("configTab", configTab);
                             String myJson = gson.toJson(us);
                             i.putExtra("user", myJson);
-                            us.setNbSaisi(us.getNbSaisi() + 1);
-                            boolean compteElecteurEnregistrer = DB.UpdateUser(us);
-                            if (compteElecteurEnregistrer) {
-                                boolean deleted = true;
-                                //boolean deleted = DB.deleteElect(electeur.getCinElect());
+                            boolean deleted = true;
+                            //boolean deleted = DB.deleteElect(electeur.getCinElect());
+                            if (deleted) {
+                                context.startActivity(i);
+                                ListeFokontanyActivity.getInstance().finish();
                             }
-                            context.startActivity(i);
-                            ListeFokontanyActivity.getInstance().finish();
                         }
+
                         @Override
                         public void onError(ANError error) {
                             Toast toast = Toast.makeText(context, "Problème serveur!", Toast.LENGTH_LONG);
                             toast.show();
-                            SharedPreferences.Editor editor = resultat.edit();
-                            editor.putBoolean("resultat",false).commit();
-                            editor.apply();
-                            Log.d("onError ",""+error);
+                            Log.d("onError ", "" + error);
 //                            if (error.getErrorCode() != 0) {
 //                                Log.d(TAG, "onError errorCode : " + error.getErrorCode());
 //                                Log.d(TAG, "onError errorBody : " + error.getErrorBody());

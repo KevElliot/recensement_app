@@ -14,7 +14,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ceni.model.Document;
 import com.ceni.model.Electeur;
+import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
@@ -90,8 +92,12 @@ public class ApercuInscriptionActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
                 Log.d("Electeur final:", "Electeur : " + electeur.toString());
+                Log.d("Aperçu ACTIVITY", "id DOC REF:  " + electeur.getDocreference());
                 boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), electeur.getDateinscription());
                 if (result) {
+                    Document doc = DB.selectDocumentbyid(electeur.getDocreference());
+                    User us = gson.fromJson(user, User.class);
+                    DB.counterStat(doc,us,1);
                     Toast toast = Toast.makeText(ApercuInscriptionActivity.this, "Electeur enregistré!", Toast.LENGTH_LONG);
                     toast.show();
                     LocalisationActivity.getInstance().finish();

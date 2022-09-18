@@ -40,8 +40,17 @@ public class ListDocumentAdapter extends ArrayAdapter<Document> {
         if (convertView == null){
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_document,parent,false);
         }
+
         ImageView delete = convertView.findViewById(R.id.delete);
         TextView docreference = convertView.findViewById(R.id.docreference);
+        TextView nbdoc = convertView.findViewById(R.id.nbDoc);
+        TextView datedoc = convertView.findViewById(R.id.dateDoc);
+        TextView idfdoc = convertView.findViewById(R.id.idDoc);
+
+        if(document.getNbfeuillet()>0){
+            delete.setVisibility(View.GONE);
+        }
+
         delete.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,6 +72,9 @@ public class ListDocumentAdapter extends ArrayAdapter<Document> {
         });
 
         docreference.setText(document.getNumdocreference());
+        nbdoc.setText(""+document.getNbfeuillet());
+        datedoc.setText("date: "+document.getDatedocreference());
+        idfdoc.setText("id: "+document.getIdfdocreference());
         return convertView;
     }
 }

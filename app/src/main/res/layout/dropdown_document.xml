@@ -7,9 +7,10 @@
     android:padding="10dp">
 
     <TextView
-        android:id="@+id/textViewLabel"
+        android:id="@+id/numdocreference"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="label" />
+        android:text="num carnet" />
+
 </LinearLayout>
