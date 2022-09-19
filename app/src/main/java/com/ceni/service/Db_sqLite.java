@@ -436,7 +436,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public boolean deleteDocument(String docref) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         return MyDB.delete(TABLE_Document, numdocreference + "=?", new String[]{docref}) > 0;
-    } 
+    }
 
     public boolean deleteAllElecteur() {
         SQLiteDatabase MyDB = this.getWritableDatabase();
