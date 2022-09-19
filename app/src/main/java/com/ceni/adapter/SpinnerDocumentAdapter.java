@@ -52,8 +52,6 @@ public class SpinnerDocumentAdapter extends BaseAdapter {
         Document doc = (Document) this.getItem(position);
         View rowView = this.flater.inflate(this.listItemLayoutResource, null,true);
         TextView textViewItemName = (TextView) rowView.findViewById(this.textViewLabelId);
-//        Log.i("xxx", "textview : "+textViewItemName);
-//        Log.i("xxx", "commune : "+commune.getLabel_commune());
         textViewItemName.setText(doc.getNumdocreference());
 
         return rowView;

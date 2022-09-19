@@ -46,7 +46,7 @@ public class InscriptionActivity extends AppCompatActivity {
     private List<Document> document;
     private Spinner spinnerDocument;
     private Button mPickDateButton;
-    private TextView mShowSelectedDateText;
+    private TextView mShowSelectedDateText,infoCarnet;
     private ImageView next;
     private ImageView previous;
     private CheckBox sexeHomme, sexeFemme, feuPere, feuMere, nevers;
@@ -68,6 +68,7 @@ public class InscriptionActivity extends AppCompatActivity {
         sexeFemme = findViewById(R.id.sexeFemme);
         previous = findViewById(R.id.imageViewPrevious);
         next = findViewById(R.id.imageViewNext);
+        infoCarnet = findViewById(R.id.infoCarnet);
         mPickDateButton = findViewById(R.id.pick_date_button);
         mShowSelectedDateText = findViewById(R.id.selected_Date);
         nFiche = findViewById(R.id.editTextnFiche);
@@ -92,11 +93,12 @@ public class InscriptionActivity extends AppCompatActivity {
         feuMereSelected = false;
         feuPereSelected = false;
         final String[] docReference = {""};
+        final String[] idFdocReference = {""};
 
         // Adapter Document
         SpinnerDocumentAdapter adapterDocument = new SpinnerDocumentAdapter(InscriptionActivity.this,
                 R.layout.dropdown_document,
-                R.id.textViewLabel,
+                R.id.numdocreference,
                 this.document);
         this.spinnerDocument.setAdapter(adapterDocument);
         this.spinnerDocument.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -105,6 +107,7 @@ public class InscriptionActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Document docSelected = (Document) spinnerDocument.getSelectedItem();
                 docReference[0] = docSelected.getNumdocreference().toString();
+                idFdocReference[0] = docSelected.getIdfdocreference();
             }
 
             @Override
@@ -282,7 +285,7 @@ public class InscriptionActivity extends AppCompatActivity {
                     nFiche.setError("Misy diso");
                 }
                 if (docReference[0] != "") {
-                    electeur.setDocreference(docReference[0]);
+                    electeur.setDocreference(idFdocReference[0]);
                     countFormValide += 1;
                 } else {
                     Toast toast = Toast.makeText(InscriptionActivity.this, "Selectionner un carnet!", Toast.LENGTH_LONG);
@@ -303,6 +306,7 @@ public class InscriptionActivity extends AppCompatActivity {
                 } else {
                     String myJson = gson.toJson(electeur);
                     Log.d("INSCRIPTION ACTIVITY", "JSON:  " + myJson);
+                    Log.d("INSCRIPTION ACTIVITY", "id DOC REF:  " + electeur.getDocreference());
                     Intent i = new Intent(getApplicationContext(), Inscription2Activity.class);
                     i.putExtra("user", user);
                     i.putExtra("newElect", myJson);

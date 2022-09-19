@@ -31,6 +31,7 @@ import com.google.gson.Gson;
 
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -45,6 +46,7 @@ public class MenuActivity extends AppCompatActivity {
     private static Tablette tab;
     private static User current_user;
     private ImageView profil,deco;
+    private Db_sqLite DB;
     private String user;
 
     @Override
@@ -60,6 +62,7 @@ public class MenuActivity extends AppCompatActivity {
         profil = findViewById(R.id.imageViewProfil);
         deco = findViewById(R.id.imageViewDeco);
         user = getIntent().getStringExtra("user");
+        DB = new Db_sqLite(MenuActivity.this);
         Gson gson = new Gson();
         tab = gson.fromJson(getIntent().getStringExtra("configTab"), Tablette.class);
         current_user = gson.fromJson(user, User.class);
@@ -110,7 +113,10 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), InfoUserActivity.class);
-                i.putExtra("user", user);
+                User us = gson.fromJson(user, User.class);
+                User users = DB.selectUser(us.getPseudo(),us.getMotdepasse());
+                String alefa = gson.toJson(users);
+                i.putExtra("user", alefa);
                 startActivity(i);
             }
         });
@@ -118,6 +124,10 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 documents.setEnabled(false);
+//                int i = 100;
+//                DecimalFormat dec = new DecimalFormat("000000");
+//                String format = dec.format(i);
+//                Log.d("eee",format);
                 Intent i = new Intent(getApplicationContext(), DocumentActivity.class);
                 startActivity(i);
             }
@@ -125,7 +135,7 @@ public class MenuActivity extends AppCompatActivity {
         deco.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),LoginActivity.class);
+                Intent i = new Intent(getApplicationContext(),MainActivity.class);
                 startActivity(i);
                 finish();
             }

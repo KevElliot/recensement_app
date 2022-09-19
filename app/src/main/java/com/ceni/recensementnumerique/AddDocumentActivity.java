@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -31,14 +32,14 @@ import java.util.List;
 import java.util.TimeZone;
 
 public class AddDocumentActivity extends AppCompatActivity {
-    private Button ajouter,mPickDateButton;
+    private Button ajouter, mPickDateButton;
     private List<Document> document;
     private ImageView previous;
     private EditText numdocref;
     private TextView mShowSelectedDateText;
     private TextView erreur;
     private Db_sqLite DB;
-    private String datedocument ="";
+    private String datedocument = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class AddDocumentActivity extends AppCompatActivity {
         Document document = gson.fromJson(getIntent().getStringExtra("document"), Document.class);
 
         int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
-        int anneeMajor = anneeNow ;
+        int anneeMajor = anneeNow;
         int anneeDead = anneeNow - 1;
 
 
@@ -64,19 +65,25 @@ public class AddDocumentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String docref = numdocref.getText().toString();
-
-                Document doc = new Document(document.getDoccode_bv(),docref, datedocument, 0);
-                boolean result = DB.insertDocument(doc);
-                if (result) {
-                    Toast toast = Toast.makeText(AddDocumentActivity.this, "Doc reference enregistrer!", Toast.LENGTH_LONG);
+                if (numdocref.getText().length() == 0 || datedocument.length() == 0) {
+                    numdocref.setError("Mila fenoina");
+                    Toast toast = Toast.makeText(AddDocumentActivity.this, "Misy diso!", Toast.LENGTH_LONG);
                     toast.show();
-                    Intent i = new Intent(getApplicationContext(), DocumentActivity.class);
-                    startActivity(i);
-                    finish();
                 } else {
-                    erreur.setText("Carnet efa voasoratra");
-                    Toast toast = Toast.makeText(AddDocumentActivity.this, "Erreur à l'enregistrement!", Toast.LENGTH_LONG);
-                    toast.show();
+                    Document doc = new Document("0",document.getDoccode_bv(), docref, datedocument, 0);
+                    boolean result = DB.insertDocument(doc);
+                    if (result) {
+                        Toast toast = Toast.makeText(AddDocumentActivity.this, "Doc reference enregistrer!", Toast.LENGTH_LONG);
+                        toast.show();
+                        Intent i = new Intent(getApplicationContext(), DocumentActivity.class);
+                        startActivity(i);
+                        DoclocalisationActivity.getInstance().finish();
+                        finish();
+                    } else {
+                        erreur.setText("Carnet efa voasoratra");
+                        Toast toast = Toast.makeText(AddDocumentActivity.this, "Erreur à l'enregistrement!", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
                 }
             }
         });
@@ -93,7 +100,7 @@ public class AddDocumentActivity extends AppCompatActivity {
         calendar.clear();
 
         calendar.set(Calendar.YEAR, anneeMajor);
-        calendar.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH)+1);
+        calendar.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + 1);
         Long anneeFin = calendar.getTimeInMillis();
 
         calendar.set(Calendar.YEAR, anneeDead);

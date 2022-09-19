@@ -22,13 +22,14 @@ import com.ceni.model.User;
 import com.ceni.recensementnumerique.R;
 
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-    private static final int DB_VERSION = 15;
+    private static final int DB_VERSION = 17;
     /*---------------------------------------------------------------------------------------
                                            TABLE ELECTEUR
     ----------------------------------------------------------------------------------------*/
@@ -98,6 +99,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
     /*---------------------------------------------------------------------------------------
                                             TABLE Documents
     ----------------------------------------------------------------------------------------*/
+    private static final String idDoc = "id";
     private static final String idfdocreference = "idfdocreference";
     private static final String doccode_bv = "code_bv";
     private static final String numdocreference = "numdocreference";
@@ -129,7 +131,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 PRENOMUSER + " TEXT, " + ROLE + " TEXT, " + PSEUDO + " TEXT, " + MOTDEPASSE + " TEXT, " + REGIONUSER + " TEXT, " +
                 USER_CODEREGION + " TEXT, " + DISTRICTUSER + " TEXT, " + USER_CODEDISTRICT + " TEXT, " + COMMUNEUSER + " TEXT, " + USER_CODECOMMUNE + " TEXT, " + NBSAISI + " INT)";
 
-        String query4 = "CREATE TABLE " + TABLE_Document + "(" + idfdocreference + " INTEGER primary key AUTOINCREMENT, "+doccode_bv+" TEXT,"+numdocreference+" TEXT,"+datedocreference+" TEXT, "+nbfeuillet+" TEXT)";
+        String query4 = "CREATE TABLE " + TABLE_Document + "("+idDoc +" INTEGER primary key AUTOINCREMENT," + idfdocreference + " TEXT, " + doccode_bv + " TEXT," + numdocreference + " TEXT," + datedocreference + " TEXT, " + nbfeuillet + " TEXT)";
 
         db.execSQL(query1);
         db.execSQL(query2);
@@ -163,12 +165,13 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
         return result;
     }
-    public Boolean isSamePerson(String nom,String prenom,String dateNaiss) {
+
+    public Boolean isSamePerson(String nom, String prenom, String dateNaiss) {
         boolean result = false;
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql = "Select upper(nom),upper(prenom),dateNaiss from electeur where (upper(nom) =upper('"+nom+"') and upper(prenom) = upper('"+prenom+"') and dateNaiss = '"+dateNaiss+"') or (upper(nom)= upper('"+prenom+"') and upper(prenom) = upper('"+nom+"') and dateNaiss = '"+dateNaiss+"')";
-       Log.d("isSame",sql);
-        Cursor cursor = MyDB.rawQuery(sql,new String []{});
+        String sql = "Select upper(nom),upper(prenom),dateNaiss from electeur where (upper(nom) =upper('" + nom + "') and upper(prenom) = upper('" + prenom + "') and dateNaiss = '" + dateNaiss + "') or (upper(nom)= upper('" + prenom + "') and upper(prenom) = upper('" + nom + "') and dateNaiss = '" + dateNaiss + "')";
+        Log.d("isSame", sql);
+        Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
             long nbElect = this.countElecteur();
             if (nbElect != 0 && cursor.getCount() != 0) {
@@ -186,8 +189,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public Boolean isMemeDoc(String numdoc) {
         boolean result = false;
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select " + numdocreference  + " from documents where " + numdocreference + " =?", new String[]{numdoc});
+        Cursor cursor = MyDB.rawQuery("Select " + numdocreference + " from documents where " + numdocreference + " =?", new String[]{numdoc});
         try {
+            Log.d("MM DOCUMENT",""+cursor.getCount());
             if (cursor.getCount() != 0) {
                 result = true;
             }
@@ -207,18 +211,28 @@ public class Db_sqLite extends SQLiteOpenHelper {
         if (!ismemedoc) {
             try {
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(doccode_bv , doc.getDoccode_bv());
-                contentValues.put(numdocreference , doc.getNumdocreference());
-                contentValues.put(datedocreference  , doc.getDatedocreference());
-                contentValues.put(nbfeuillet  , doc.getNbfeuillet());
+                contentValues.put(idfdocreference, "0");
+                contentValues.put(doccode_bv, doc.getDoccode_bv());
+                contentValues.put(numdocreference, doc.getNumdocreference());
+                contentValues.put(datedocreference, doc.getDatedocreference());
+                contentValues.put(nbfeuillet, doc.getNbfeuillet());
                 long result = MyDB.insert(TABLE_Document, null, contentValues);
                 if (result == -1) {
                     res = false;
                 } else {
-                    res = true;
+                    Document newDoc = selectDocumentbyid(doc.getIdfdocreference());
+                    Log.d("INSERT NEW DOC",newDoc.toString());
+                    int i = Integer.parseInt(newDoc.getIdDoc());
+                    DecimalFormat dec = new DecimalFormat("000000");
+                    String format = dec.format(i);
+                    newDoc.setIdfdocreference(""+newDoc.getDoccode_bv()+""+format);
+                    boolean repons = this.updateDocument(newDoc);
+                    if(repons){
+                        res = true;
+                    }
                 }
             } catch (Exception e) {
-                Log.e("ERROR isMemeDoc", " " + e);
+                Log.e("ERROR INSERT DOC", " " + e);
             } finally {
                 MyDB.close();
             }
@@ -235,7 +249,12 @@ public class Db_sqLite extends SQLiteOpenHelper {
         try {
             while (cursor.moveToNext()) {
                 Document d = new Document();
-                d.setNumdocreference(cursor.getString(0));
+                d.setIdDoc(cursor.getString(0));
+                d.setIdfdocreference(cursor.getString(1));
+                d.setDoccode_bv(cursor.getString(2));
+                d.setNumdocreference(cursor.getString(3));
+                d.setDatedocreference(cursor.getString(4));
+                d.setNbfeuillet(cursor.getInt(5));
                 listdoc.add(d);
             }
         } catch (Exception e) {
@@ -245,6 +264,30 @@ public class Db_sqLite extends SQLiteOpenHelper {
             MyDB.close();
         }
         return listdoc;
+    }
+
+    public Document selectDocumentbyid(String id) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from documents where idfdocreference= '" + id + "'", null);
+        List<Document> listdoc = new ArrayList<>();
+        try {
+            while (cursor.moveToNext()) {
+                Document d = new Document();
+                d.setIdDoc(cursor.getString(0));
+                d.setIdfdocreference(cursor.getString(1));
+                d.setDoccode_bv(cursor.getString(2));
+                d.setNumdocreference(cursor.getString(3));
+                d.setDatedocreference(cursor.getString(4));
+                d.setNbfeuillet(cursor.getInt(5));
+                listdoc.add(d);
+            }
+        } catch (Exception e) {
+            Log.e("error Select SQLITE", "ERROR SELECT DOCUMENTS BY id");
+        } finally {
+            cursor.close();
+            MyDB.close();
+        }
+        return listdoc.get(0);
     }
 
     public Boolean insertElecteurData(String code_bv, String nfiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss, String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String imageElect, String cinRecto, String cinVerso, String observation, String docreference, String dateinscription) {
@@ -279,8 +322,41 @@ public class Db_sqLite extends SQLiteOpenHelper {
             return true;
         }
     }
-    public boolean updateElect(Electeur elect){
-        String id = ""+elect.getIdElect();
+
+    // STAT PAR ELECTEUR INSERER OU SUPPRIMER
+    public void counterStat(Document doc, User user, int var) {
+        doc.setNbfeuillet(doc.getNbfeuillet()+var);
+        user.setNbSaisi(user.getNbSaisi()+var);
+        this.updateDocument(doc);
+        this.updateUser(user);
+        Log.d("user",user.toString());
+    }
+
+    public boolean updateDocument(Document doc) {
+        String id = "" + doc.getIdDoc();
+        boolean result = false;
+        try {
+            SQLiteDatabase MyDB = this.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(idfdocreference, doc.getIdfdocreference());
+            contentValues.put(doccode_bv, doc.getDoccode_bv());
+            contentValues.put(numdocreference, doc.getNumdocreference());
+            contentValues.put(datedocreference, doc.getDatedocreference());
+            contentValues.put(nbfeuillet, doc.getNbfeuillet());
+            long res = MyDB.update(TABLE_Document, contentValues, "id = ?", new String[]{id});
+            if (res == -1) {
+                result = false;
+            } else {
+                result = true;
+            }
+        } catch (Exception e) {
+            Log.e("error Update DOCUMENT", "error Update DOCUMENT " + e);
+        }
+        return result;
+    }
+
+    public boolean updateElect(Electeur elect) {
+        String id = "" + elect.getIdElect();
         boolean result = false;
         try {
             SQLiteDatabase MyDB = this.getWritableDatabase();
@@ -313,8 +389,8 @@ public class Db_sqLite extends SQLiteOpenHelper {
             } else {
                 result = true;
             }
-        }catch(Exception e){
-            Log.e("error Updqte Electeur", "error Updqte Electeur "+e);
+        } catch (Exception e) {
+            Log.e("error Updqte Electeur", "error Updqte Electeur " + e);
         }
         return result;
     }
@@ -361,9 +437,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return listElect;
     }
 
-    public List<Electeur> selectElecteurbycodeFokontany(String codefokontany,int skip,int limit) {
+    public List<Electeur> selectElecteurbycodeFokontany(String codefokontany, int skip, int limit) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql = "Select * from Electeur where code_bv like '" + codefokontany + "%' order by dateInscription asc LIMIT "+skip+","+limit ;
+        String sql = "Select * from Electeur where code_bv like '" + codefokontany + "%' order by dateInscription asc LIMIT " + skip + "," + limit;
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<Electeur> listElect = new ArrayList<>();
         try {
@@ -614,8 +690,8 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
     }
 
-    public boolean UpdateUser(User user){
-        String id = ""+user.getIdUser();
+    public boolean updateUser(User user) {
+        String id = "" + user.getIdUser();
         boolean result = false;
         try {
             SQLiteDatabase MyDB = this.getWritableDatabase();
@@ -638,8 +714,8 @@ public class Db_sqLite extends SQLiteOpenHelper {
             } else {
                 result = true;
             }
-        }catch(Exception e){
-            Log.e("error Update User", "error Update User "+e);
+        } catch (Exception e) {
+            Log.e("error Update User", "error Update User " + e);
         }
         return result;
     }

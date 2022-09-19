@@ -184,7 +184,8 @@ public class Inscription2Activity extends AppCompatActivity {
 
                 }else {
                     String myjson = gson.toJson(electeur);
-                    Log.i("Electeur", myjson);
+                    Log.i("INSCRIPTION2 ACTIVITY", myjson);
+                    Log.d("INSCRIPTION2 ACTIVITY", "id DOC REF:  " + electeur.getDocreference());
                     Intent i = new Intent(getApplicationContext(), ImageFicheActivity.class);
                     i.putExtra("newElect", myjson);
                     i.putExtra("user", user);
