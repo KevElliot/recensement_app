@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ceni.adapter.ListElecteurAdapter;
+import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
@@ -108,7 +109,9 @@ public class RechercheElecteur extends AppCompatActivity {
             public void onClick(View view) {
                 String rech = inputRecherche.getText().toString();
                 if(rech.length()!=0) {
-                    elect = DB.Recherche(valeurSearch, rech);
+                    Document doc = DB.selectDocumentbyNum(rech);
+                    Log.d("RECHERCHE_ELECT",doc.toString());
+                    elect = DB.Recherche(valeurSearch, doc.getIdfdocreference());
                     if (elect.size() != 0) {
                         Log.d("Elect", "... " + elect.get(0).toString());
                         listElecteurAdapter = new ListElecteurAdapter(RechercheElecteur.this, elect);

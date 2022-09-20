@@ -79,13 +79,13 @@ public class Api_service {
     public static void addNewDoc(Db_sqLite DB, Context context, String ip, String port, Electeur electeur, Tablette tab, User us, Document doc) {
         String base_url = "http://" + ip + ":" + port + "/";
         try {
-            Log.d("APIII --- ", doc.getNumdocreference());
+            //Log.d("APIII --- ", doc.getNumdocreference());
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("idfdocreference", doc.getIdfdocreference());
             jsonObject.put("code_bv", doc.getDoccode_bv());
             jsonObject.put("numdocreference", doc.getNumdocreference());
             jsonObject.put("datedocreference", doc.getDatedocreference());
-            Log.d("APIII --- ", jsonObject.toString());
+            //Log.d("APIII --- ", jsonObject.toString());
             AndroidNetworking.post(base_url + "api/document")
                     .setTag("test")
                     .addHeaders("Accept", "application/json")
@@ -154,8 +154,8 @@ public class Api_service {
                             i.putExtra("configTab", configTab);
                             String myJson = gson.toJson(us);
                             i.putExtra("user", myJson);
-                            boolean deleted = true;
-                            //boolean deleted = DB.deleteElect(electeur.getCinElect());
+                            //boolean deleted = true;
+                            boolean deleted = DB.deleteElect(electeur.getCinElect());
                             if (deleted) {
                                 context.startActivity(i);
                                 ListeFokontanyActivity.getInstance().finish();

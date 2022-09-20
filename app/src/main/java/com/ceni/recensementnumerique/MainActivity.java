@@ -44,9 +44,11 @@ public class MainActivity extends AppCompatActivity {
         //DB.deleteAllUser();
         //DB.deleteAllElecteur();
         nbuser = DB.countUser();
-        String imei = getDeviceUniqueID();
+        //String imei = getDeviceUniqueID();
+        //String wifi = getMacAddress("wlan0");
+        String imei = "355531090371894";
+        String wifi = "00:00:00:00:00:00";
         Log.d("Imei device: ",imei);
-        String wifi = getMacAddress("wlan0");
         Log.d("adressMac wifi: ",wifi);
         if (nbuser > 0) {
             new Handler().postDelayed(new Runnable() {

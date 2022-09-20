@@ -29,7 +29,7 @@ import java.util.List;
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-    private static final int DB_VERSION = 17;
+    private static final int DB_VERSION = 25;
     /*---------------------------------------------------------------------------------------
                                            TABLE ELECTEUR
     ----------------------------------------------------------------------------------------*/
@@ -264,6 +264,30 @@ public class Db_sqLite extends SQLiteOpenHelper {
             MyDB.close();
         }
         return listdoc;
+    }
+
+    public Document selectDocumentbyNum(String num) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from documents where numdocreference= '" + num + "'", null);
+        List<Document> listdoc = new ArrayList<>();
+        try {
+            while (cursor.moveToNext()) {
+                Document d = new Document();
+                d.setIdDoc(cursor.getString(0));
+                d.setIdfdocreference(cursor.getString(1));
+                d.setDoccode_bv(cursor.getString(2));
+                d.setNumdocreference(cursor.getString(3));
+                d.setDatedocreference(cursor.getString(4));
+                d.setNbfeuillet(cursor.getInt(5));
+                listdoc.add(d);
+            }
+        } catch (Exception e) {
+            Log.e("error Select SQLITE", "ERROR SELECT DOCUMENTS BY id");
+        } finally {
+            cursor.close();
+            MyDB.close();
+        }
+        return listdoc.get(0);
     }
 
     public Document selectDocumentbyid(String id) {
@@ -628,7 +652,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public List<Electeur> Recherche(String champ, String recherche) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         List<Electeur> listElect = new ArrayList<>();
-        Cursor cursor = MyDB.rawQuery("Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "';", null);
+        String sql = "Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "'";
+        Log.d("RECHERCHE",sql);
+        Cursor cursor = MyDB.rawQuery(sql, null);
         try {
             while (cursor.moveToNext()) {
                 Electeur e = new Electeur();
