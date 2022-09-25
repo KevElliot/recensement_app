@@ -24,7 +24,7 @@ public class MenuActivity extends AppCompatActivity {
     private static Button parametre;
     private static Tablette tab;
     private static User current_user;
-    private ImageView profil,deco;
+    private ImageView profil, deco;
     private Db_sqLite DB;
     private String user;
 
@@ -48,7 +48,12 @@ public class MenuActivity extends AppCompatActivity {
         current_user = gson.fromJson(user, User.class);
         this.setTab(tab);
         this.setCurrent_user(current_user);
-        Log.d("xx",tab.toString());
+        Log.d("xx", tab.toString());
+
+        if (current_user.getRole().equals("AR")) {
+            listeElect.setText("Lisitry ny mpifidy");
+            tablette.setVisibility(View.GONE);
+        }
 
         tablette.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +65,7 @@ public class MenuActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
         newElect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,7 +109,7 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), InfoUserActivity.class);
                 User us = gson.fromJson(user, User.class);
-                User users = DB.selectUser(us.getPseudo(),us.getMotdepasse());
+                User users = DB.selectUser(us.getPseudo(), us.getMotdepasse());
                 String alefa = gson.toJson(users);
                 i.putExtra("user", alefa);
                 startActivity(i);
@@ -120,7 +126,7 @@ public class MenuActivity extends AppCompatActivity {
         deco.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),MainActivity.class);
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
                 finish();
             }
