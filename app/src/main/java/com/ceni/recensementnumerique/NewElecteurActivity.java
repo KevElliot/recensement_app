@@ -4,8 +4,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -109,9 +111,12 @@ public class NewElecteurActivity extends AppCompatActivity {
         int anneeMajor = anneeNow - 18;
         int anneeDead = anneeNow - 150;
         countFormValide = 0;
-
+        SharedPreferences params_localisation = this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
+        //if tsisy dia paramettre
         // FOKONTANY
-        fokontany = DB.selectFokotanyFromCommune("510121");
+        String commune_pref = params_localisation.getString("code_commune","");
+        Log.d("shared",commune_pref);
+        fokontany = DB.selectFokotanyFromCommune(commune_pref);
         spinnerFokontany = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_fokontany);
         SpinerFokontanyAdapter adapterFokontany = new SpinerFokontanyAdapter(NewElecteurActivity.this,
                 R.layout.dropdown_localisation,
@@ -119,6 +124,8 @@ public class NewElecteurActivity extends AppCompatActivity {
                 R.id.textViewCode,
                 fokontany);
         spinnerFokontany.setAdapter(adapterFokontany);
+        int fokontany_pref = params_localisation.getInt("position_fokontany",0);
+        spinnerFokontany.setSelection(fokontany_pref);
         spinnerFokontany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -157,6 +164,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 toast.show();
                 cv = DB.selectCvFromFokontany(fokontanySelected.getCode_fokontany());
                 spinnerCv = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_cv);
+                spinnerCv.setEnabled(false);
                 // Adapter Cv
                 SpinerCvAdapter adapterCv = new SpinerCvAdapter(NewElecteurActivity.this,
                         R.layout.dropdown_localisation,
@@ -172,6 +180,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                         toast.show();
                         bv = DB.selectBvFromCv(cvSelected.getCode_cv());
                         spinnerBv = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_bv);
+                        spinnerBv.setEnabled(false);
                         // Adapter Bv
                         SpinerBvAdapter adapterBv = new SpinerBvAdapter(NewElecteurActivity.this,
                                 R.layout.dropdown_localisation,

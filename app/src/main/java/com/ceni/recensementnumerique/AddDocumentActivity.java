@@ -2,8 +2,10 @@ package com.ceni.recensementnumerique;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,7 +39,7 @@ public class AddDocumentActivity extends AppCompatActivity {
     private ImageView previous;
     private EditText numdocref;
     private TextView mShowSelectedDateText;
-    private TextView erreur;
+    private TextView erreur,communeLabel,fokontanyLabel,bvLabel;
     private Db_sqLite DB;
     private String datedocument = "";
 
@@ -47,11 +49,25 @@ public class AddDocumentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_document);
         ajouter = findViewById(R.id.btnAjouter);
         mPickDateButton = findViewById(R.id.pick_date_button);
+        communeLabel = findViewById(R.id.communeLabel);
+        fokontanyLabel = findViewById(R.id.fokontanyLabel);
+        bvLabel = findViewById(R.id.bvLabel);
         mShowSelectedDateText = findViewById(R.id.selected_Date);
         previous = findViewById(R.id.imageViewPrevious);
         numdocref = findViewById(R.id.numdocref);
         erreur = findViewById(R.id.erreur);
         DB = new Db_sqLite(this);
+        SharedPreferences params_localisation = this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
+        String commune_pref = params_localisation.getString("label_commune","");
+        String codecommune_pref = params_localisation.getString("code_commune","");
+        String fokontany_pref = params_localisation.getString("label_fokontany","");
+        String codefokontany_pref = params_localisation.getString("code_fokontany","");
+        String bv_pref = params_localisation.getString("label_bv","");
+        String codebv_pref = params_localisation.getString("code_bv","");
+
+        communeLabel.setText("Commune : "+commune_pref+" | "+codecommune_pref);
+        fokontanyLabel.setText("Fokontany : "+fokontany_pref+" | "+codefokontany_pref);
+        bvLabel.setText("bv : "+bv_pref+" | "+codebv_pref);
 
         Gson gson = new Gson();
         Document document = gson.fromJson(getIntent().getStringExtra("document"), Document.class);
@@ -70,14 +86,13 @@ public class AddDocumentActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(AddDocumentActivity.this, "Misy diso!", Toast.LENGTH_LONG);
                     toast.show();
                 } else {
-                    Document doc = new Document("0",document.getDoccode_fokontany(),document.getDoccode_bv(), docref, datedocument, 0);
+                    Document doc = new Document("0",codefokontany_pref,codebv_pref, docref, datedocument, 0);
                     boolean result = DB.insertDocument(doc);
                     if (result) {
                         Toast toast = Toast.makeText(AddDocumentActivity.this, "Doc reference enregistré!", Toast.LENGTH_LONG);
                         toast.show();
                         Intent i = new Intent(getApplicationContext(), DocumentActivity.class);
                         startActivity(i);
-                        DoclocalisationActivity.getInstance().finish();
                         finish();
                     } else {
                         erreur.setText("Karine efa voasoratra");

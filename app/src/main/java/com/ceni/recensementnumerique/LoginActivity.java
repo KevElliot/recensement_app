@@ -41,16 +41,17 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DB = new Db_sqLite(LoginActivity.this);
-//                String pseudo = txtpseudo.getText().toString();
-//                String motdepass=txtmdp.getText().toString();
-                String pseudo = "AMBATONDRAZAKA";
-                String motdepass = "AMBATONDRAZAKA";
+                String pseudo = txtpseudo.getText().toString();
+                String motdepass=txtmdp.getText().toString();
+//                String pseudo = "AMBATONDRAZAKA";
+//                String motdepass = "AMBATONDRAZAKA";
 
                 // check IMEI
                 String checkIMEI = tab.getImei();
 
                 user = DB.selectUser(pseudo,motdepass);
-                Boolean checkResult = DB.findIMEI(checkIMEI);
+                //Boolean checkResult = DB.findIMEI(checkIMEI);
+                boolean checkResult = true;
                 if(user.getCode_district()!=null && checkResult){
 
                     String myjson = gson.toJson(user);

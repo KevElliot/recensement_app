@@ -135,6 +135,7 @@
                 android:minHeight="40dp"
                 android:spinnerMode="dialog"
                 android:background="#6FFFFFFF"
+
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -160,6 +161,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.963"
         app:srcCompat="@drawable/buton_back" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
