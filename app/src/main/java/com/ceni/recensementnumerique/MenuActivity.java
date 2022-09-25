@@ -1,40 +1,18 @@
 package com.ceni.recensementnumerique;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.provider.SyncStateContract;
-import android.telephony.TelephonyManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.ScrollView;
 
 import com.ceni.model.Tablette;
 import com.ceni.model.User;
-import com.ceni.service.Api_service;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
-
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.text.DecimalFormat;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -43,6 +21,7 @@ public class MenuActivity extends AppCompatActivity {
     private static Button documents;
     private static Button recherche;
     private static Button tablette;
+    private static Button parametre;
     private static Tablette tab;
     private static User current_user;
     private ImageView profil,deco;
@@ -59,6 +38,7 @@ public class MenuActivity extends AppCompatActivity {
         listeElect = findViewById(R.id.listeSqLite);
         documents = findViewById(R.id.documents);
         recherche = findViewById(R.id.recherche);
+        parametre = findViewById(R.id.parametre);
         profil = findViewById(R.id.imageViewProfil);
         deco = findViewById(R.id.imageViewDeco);
         user = getIntent().getStringExtra("user");
@@ -84,7 +64,7 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 newElect.setEnabled(false);
-                Intent i = new Intent(getApplicationContext(), LocalisationActivity.class);
+                Intent i = new Intent(getApplicationContext(), NewElecteurActivity.class);
                 i.putExtra("user", user);
                 startActivity(i);
             }
@@ -109,6 +89,15 @@ public class MenuActivity extends AppCompatActivity {
 
             }
         });
+        parametre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                parametre.setEnabled(false);
+                Intent i = new Intent(getApplicationContext(), ParametreActivity.class);
+                i.putExtra("user", user);
+                startActivity(i);
+            }
+        });
         profil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,10 +113,6 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 documents.setEnabled(false);
-//                int i = 100;
-//                DecimalFormat dec = new DecimalFormat("000000");
-//                String format = dec.format(i);
-//                Log.d("eee",format);
                 Intent i = new Intent(getApplicationContext(), DocumentActivity.class);
                 startActivity(i);
             }
@@ -140,6 +125,10 @@ public class MenuActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    public static void setParametre(boolean x) {
+        parametre.setEnabled(x);
     }
 
     public static void setListeElect(boolean x) {

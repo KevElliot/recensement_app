@@ -62,7 +62,7 @@ public class InscriptionActivity extends AppCompatActivity {
         inscriptionActivity = this;
         setContentView(R.layout.activity_inscription);
         Db_sqLite DB = new Db_sqLite(this);
-        sexe = "Homme";
+        sexe = "Masculin";
         msg = "Iangaviana enao mba ameno ireo banga na ny diso azafady.";
         sexeHomme = findViewById(R.id.sexeHomme);
         sexeFemme = findViewById(R.id.sexeFemme);
@@ -161,11 +161,11 @@ public class InscriptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (sexeHomme.isChecked()) {
-                    sexe = "Homme";
+                    sexe = "Masculin";
                     sexeHomme.setChecked(true);
                     sexeFemme.setChecked(false);
                 } else {
-                    sexe = "Femme";
+                    sexe = "Feminin";
                     sexeHomme.setChecked(false);
                     sexeFemme.setChecked(true);
                 }
@@ -175,11 +175,11 @@ public class InscriptionActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (sexeFemme.isChecked()) {
-                    sexe = "Femme";
+                    sexe = "Masculin";
                     sexeFemme.setChecked(true);
                     sexeHomme.setChecked(false);
                 } else {
-                    sexe = "Homme";
+                    sexe = "Feminin";
                     sexeFemme.setChecked(false);
                     sexeHomme.setChecked(true);
                 }
@@ -239,7 +239,7 @@ public class InscriptionActivity extends AppCompatActivity {
                 } else {
                     nomMere.setError("Mila fenoina");
                 }
-                if (sexe == "Homme" || sexe == "Femme") {
+                if (sexe == "Masculin" || sexe == "Feminin") {
                     electeur.setSexe(sexe);
                     countFormValide += 1;
                 }

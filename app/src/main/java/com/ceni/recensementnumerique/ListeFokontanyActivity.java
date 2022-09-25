@@ -2,7 +2,6 @@ package com.ceni.recensementnumerique;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,10 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ceni.adapter.ListFokontanyAdapter;
-import com.ceni.model.Electeur;
 import com.ceni.model.ListFokontany;
 import com.ceni.model.User;
-import com.ceni.service.Api_service;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
@@ -86,7 +83,7 @@ public class ListeFokontanyActivity extends AppCompatActivity {
         enregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), Parametre.class);
+                Intent i = new Intent(getApplicationContext(), Configuration.class);
                 startActivity(i);
             }
         });

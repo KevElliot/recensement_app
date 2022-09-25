@@ -76,6 +76,7 @@
         <entry key="..\:/ceni/Recensement/app/src/main/res/layout/activity_register_user.xml" value="0.20416666666666666" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_add_document.xml" value="0.20416666666666666" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_apercu_inscription.xml" value="0.20416666666666666" />
+        <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_configuration.xml" value="0.20416666666666666" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_detailelecteur.xml" value="0.20416666666666666" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_display_electeur.xml" value="0.1" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_document.xml" value="0.20416666666666666" />
@@ -86,10 +87,11 @@
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_inscription2.xml" value="0.2" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_liste_electeur.xml" value="0.20416666666666666" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_liste_fokontany.xml" value="0.20416666666666666" />
-        <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_localisation.xml" value="0.20416666666666666" />
+        <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_localisation.xml" value="0.22" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_login.xml" value="0.2" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_menu.xml" value="0.20416666666666666" />
+        <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_new_electeur.xml" value="0.20480668756530826" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_observation.xml" value="0.20416666666666666" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_parametre.xml" value="0.20416666666666666" />
         <entry key="..\:/ceni/Refonte/recensement_app/app/src/main/res/layout/activity_recherche_electeur.xml" value="0.20416666666666666" />

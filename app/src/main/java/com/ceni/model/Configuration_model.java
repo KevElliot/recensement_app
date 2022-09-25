@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import java.util.List;
 
-public class Parametre_model {
+public class Configuration_model {
     private Context context;
     private String ip;
     private String port;
@@ -14,14 +14,14 @@ public class Parametre_model {
 
 
 
-    public Parametre_model(Context context, String ip, String port, List<Electeur> listElect, SharedPreferences resultat) {
+    public Configuration_model(Context context, String ip, String port, List<Electeur> listElect, SharedPreferences resultat) {
         this.context = context;
         this.ip = ip;
         this.port = port;
         this.listElect = listElect;
         this.resultat = resultat;
     }
-    public Parametre_model() {
+    public Configuration_model() {
     }
 
     public Context getContext() {

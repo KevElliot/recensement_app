@@ -25,6 +25,12 @@
         android:theme="@style/Theme.RecensementNumerique"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ParametreActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NewElecteurActivity"
+            android:exported="false" />
+        <activity
             android:name=".DoclocalisationActivity"
             android:exported="false" />
         <activity
@@ -37,7 +43,7 @@
             android:name=".Display_electeur"
             android:exported="false" />
         <activity
-            android:name=".Parametre"
+            android:name=".Configuration"
             android:exported="false" />
         <activity
             android:name=".ListeElecteurActivity"

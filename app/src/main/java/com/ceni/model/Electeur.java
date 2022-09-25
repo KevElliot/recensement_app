@@ -29,32 +29,6 @@ public class Electeur {
 
     public Electeur(){}
 
-    public Electeur(String code_bv,String nFiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss,String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String ficheElect, String cinRecto, String cinVerso,String observation,String docreference,String num_userinfo,String dateinscription) {
-        this.code_bv = code_bv;
-        this.nFiche = nFiche;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.sexe = sexe;
-        this.profession = profession;
-        this.adresse = adresse;
-        this.dateNaiss = dateNaiss;
-        this.nevers = nevers;
-        this.lieuNaiss = lieuNaiss;
-        this.nomPere = nomPere;
-        this.nomMere = nomMere;
-        this.cinElect = cinElect;
-        this.nserieCin = nserieCin;
-        this.dateDeliv = dateDeliv;
-        this.lieuDeliv = lieuDeliv;
-        this.ficheElect = ficheElect;
-        this.cinRecto = cinRecto;
-        this.cinVerso = cinVerso;
-        this.observation = observation;
-        this.docreference = docreference;
-        this.num_userinfo = num_userinfo;
-        this.dateinscription=dateinscription;
-    }
-
     public Electeur(int idElect, String code_bv, String numelect, String nFiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss, String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String ficheElect, String cinRecto, String cinVerso,String observation,String docreference,String num_userinfo, String dateinscription) {
         this.idElect = idElect;
         this.code_bv = code_bv;
@@ -82,6 +56,33 @@ public class Electeur {
         this.num_userinfo = num_userinfo;
         this.dateinscription = dateinscription;
     }
+
+    public Electeur(String code_bv,String nFiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss,String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String ficheElect, String cinRecto, String cinVerso,String observation,String docreference,String num_userinfo,String dateinscription) {
+        this.code_bv = code_bv;
+        this.nFiche = nFiche;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.sexe = sexe;
+        this.profession = profession;
+        this.adresse = adresse;
+        this.dateNaiss = dateNaiss;
+        this.nevers = nevers;
+        this.lieuNaiss = lieuNaiss;
+        this.nomPere = nomPere;
+        this.nomMere = nomMere;
+        this.cinElect = cinElect;
+        this.nserieCin = nserieCin;
+        this.dateDeliv = dateDeliv;
+        this.lieuDeliv = lieuDeliv;
+        this.ficheElect = ficheElect;
+        this.cinRecto = cinRecto;
+        this.cinVerso = cinVerso;
+        this.observation = observation;
+        this.docreference = docreference;
+        this.num_userinfo = num_userinfo;
+        this.dateinscription=dateinscription;
+    }
+
 
     public String toString(){
         return new String ( "idElect = " +idElect+" code_bv = " +code_bv+" numelect= " +numelect+
