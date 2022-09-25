@@ -109,6 +109,32 @@ public class Api_service {
         }
     }
 
+    // Add information Tablette |MAC and IMEI| to oracle
+    public static void addNewInformationTabs(Db_sqLite DB, Context context, String ip, String port, Tablette tab, User us) {
+        String base_url = "http://" + ip + ":" + port + "/";
+        try {
+            // URL api recensement node to change
+            AndroidNetworking.post(base_url + "api/document")
+                    .setTag("test")
+                    .addHeaders("Accept", "application/json")
+                    .setPriority(Priority.HIGH)
+                    .build()
+                    .getAsJSONObject(new JSONObjectRequestListener() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("Add new INFO tablette", "true " + response.toString());
+                        }
+                        @Override
+                        public void onError(ANError error) {
+                            Toast toast = Toast.makeText(context, "Problème serveur!", Toast.LENGTH_LONG);
+                            toast.show();
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void addNewElecteur(Db_sqLite DB, Context context, String ip, String port, Electeur electeur, Tablette tab, User us) {
         String base_url = "http://" + ip + ":" + port + "/";
         try {

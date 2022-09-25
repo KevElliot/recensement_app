@@ -25,6 +25,9 @@
         android:theme="@style/Theme.RecensementNumerique"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ConfigurationMac"
+            android:exported="false" />
+        <activity
             android:name=".ParametreActivity"
             android:exported="false" />
         <activity

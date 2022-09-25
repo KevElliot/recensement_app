@@ -45,8 +45,14 @@ public class LoginActivity extends AppCompatActivity {
 //                String motdepass=txtmdp.getText().toString();
                 String pseudo = "AMBATONDRAZAKA";
                 String motdepass = "AMBATONDRAZAKA";
+
+                // check IMEI
+                String checkIMEI = tab.getImei();
+
                 user = DB.selectUser(pseudo,motdepass);
-                if(user.getCode_district()!=null){
+                Boolean checkResult = DB.findIMEI(checkIMEI);
+                if(user.getCode_district()!=null && checkResult){
+
                     String myjson = gson.toJson(user);
                     String configTab = gson.toJson(tab);
                     Intent i = new Intent(getApplicationContext(),MenuActivity.class);

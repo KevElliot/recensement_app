@@ -18,6 +18,7 @@ import com.ceni.adapter.SpinerCommuneAdapter;
 import com.ceni.adapter.SpinerFokontanyAdapter;
 import com.ceni.model.Bv;
 import com.ceni.model.Commune;
+import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.model.Fokontany;
 import com.ceni.model.Tablette;
@@ -116,6 +117,17 @@ public class RecensementTablette extends AppCompatActivity {
                     tab.setImei(tablette.getImei());
                     tab.setMacWifi(tablette.getMacWifi());
                     Log.d("tag",tab.toString());
+
+                    boolean result = DB.insertInformationTablette(tab);
+                    if (result) {
+                        Intent intent = new Intent(getApplicationContext(), ConfigurationMac.class);
+                        startActivity(intent);
+                        finish();
+                    } else {
+                        Toast toast = Toast.makeText(RecensementTablette.this, "Erreur à l'enregistrement de l'information tablette", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+
                 }else{
                     responsable.setError("Mila fenoina");
                 }

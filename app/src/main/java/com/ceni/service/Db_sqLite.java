@@ -18,6 +18,7 @@ import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.model.Fokontany;
 import com.ceni.model.ListFokontany;
+import com.ceni.model.Tablette;
 import com.ceni.model.User;
 import com.ceni.recensementnumerique.R;
 
@@ -108,6 +109,24 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public static final String TABLE_Document = "documents";
 
+    /*---------------------------------------------------------------------------------------
+                                            TABLE Tablette
+    ----------------------------------------------------------------------------------------*/
+    private static final String COLUMN_idTab = "id";
+    private static final String COLUMN_region = "region";
+    private static final String COLUMN_code_region = "code_region";
+    private static final String COLUMN_district = "district";
+    private static final String COLUMN_code_district = "code_district";
+    private static final String COLUMN_commune = "commune";
+    private static final String COLUMN_code_commune = "code_commune";
+    private static final String COLUMN_fokontany = "fokontany";
+    private static final String COLUMN_code_fokontany = "code_fokontany";
+    private static final String COLUMN_responsable = "responsable";
+    private static final String COLUMN_imei = "imei";
+    private static final String COLUMN_macWifi = "macWifi";
+
+    public static final String TABLE_Tablette = "Tablette";
+
     public Db_sqLite(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
@@ -133,10 +152,14 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
         String query4 = "CREATE TABLE " + TABLE_Document + "("+idDoc +" INTEGER primary key AUTOINCREMENT," + idfdocreference + " TEXT, " + doccode_bv + " TEXT," + numdocreference + " TEXT," + datedocreference + " TEXT, " + nbfeuillet + " TEXT)";
 
+        String query5 = "CREATE TABLE " + TABLE_Tablette + "("+COLUMN_idTab +" INTEGER primary key AUTOINCREMENT," + COLUMN_region + " TEXT, " + COLUMN_code_region + " TEXT," + COLUMN_district + " TEXT," + COLUMN_code_district + " TEXT, " + COLUMN_commune + " TEXT," + COLUMN_code_commune + " TEXT," + COLUMN_fokontany + " TEXT," + COLUMN_code_fokontany + " TEXT," + COLUMN_responsable + " TEXT," + COLUMN_imei + " TEXT," + COLUMN_macWifi + " TEXT)";
+
+
         db.execSQL(query1);
         db.execSQL(query2);
         db.execSQL(query3);
         db.execSQL(query4);
+        db.execSQL(query5);
     }
 
     @Override
@@ -145,6 +168,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LOCALISATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_User);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_Document);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Tablette);
         onCreate(db);
     }
 
@@ -839,6 +863,48 @@ public class Db_sqLite extends SQLiteOpenHelper {
         } finally {
             MyDB.close();
         }
+    }
+
+    public Boolean insertInformationTablette(Tablette tablette) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(COLUMN_region, tablette.getRegion());
+        contentValues.put(COLUMN_code_region, tablette.getCode_region());
+        contentValues.put(COLUMN_district, tablette.getDistrict());
+        contentValues.put(COLUMN_code_district, tablette.getCode_district());
+        contentValues.put(COLUMN_commune, tablette.getCommune());
+        contentValues.put(COLUMN_code_commune, tablette.getCode_commune());
+        contentValues.put(COLUMN_fokontany, tablette.getFokontany());
+        contentValues.put(COLUMN_code_fokontany, tablette.getCode_fokontany());
+        contentValues.put(COLUMN_responsable, tablette.getResponsable());
+        contentValues.put(COLUMN_imei, tablette.getImei());
+        contentValues.put(COLUMN_macWifi, tablette.getMacWifi());
+
+        long result = MyDB.insert(TABLE_Tablette, null, contentValues);
+        if (result == -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public Boolean findIMEI (String toIMEI) {
+        boolean result = false;
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select " + COLUMN_imei + " from Tablette where " + COLUMN_imei + " =?", new String[]{toIMEI});
+        try {
+            Log.d("MM IMEI"," "+cursor.getCount());
+            if (cursor.getCount() != 0) {
+                result = true;
+            }
+        } catch (Exception e) {
+            Log.e("ERROR find IMEI", " " + e);
+        } finally {
+            cursor.close();
+            MyDB.close();
+        }
+        return result;
     }
 
 }
