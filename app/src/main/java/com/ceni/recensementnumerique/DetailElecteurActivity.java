@@ -74,11 +74,21 @@ public class DetailElecteurActivity extends AppCompatActivity {
         dateDeliv.setText(electeur.getDateDeliv());
         lieuDeliv.setText(electeur.getLieuDeliv());
         Bitmap imgFiche = this.decodeImage(electeur.getFicheElect());
-        Bitmap imgCinRecto = this.decodeImage(electeur.getCinRecto());
-        Bitmap imgCinVerso = this.decodeImage(electeur.getCinVerso());
+        if(electeur.getCinRecto()!=null){
+            cinRecto.setVisibility(View.VISIBLE);
+            Bitmap imgCinRecto = this.decodeImage(electeur.getCinRecto());
+            cinRecto.setImageBitmap(imgCinRecto);
+        }else{
+            cinRecto.setVisibility(View.GONE);
+        }
+        if(electeur.getCinVerso()!=null){
+            cinVerso.setVisibility(View.VISIBLE);
+            Bitmap imgCinVerso = this.decodeImage(electeur.getCinVerso());
+            cinVerso.setImageBitmap(imgCinVerso);
+        }else{
+            cinVerso.setVisibility(View.GONE);
+        }
         ficheElect.setImageBitmap(imgFiche);
-        cinRecto.setImageBitmap(imgCinRecto);
-        cinVerso.setImageBitmap(imgCinVerso);
         //observation.setText(electeur.getObservation());
 
         retour.setOnClickListener(new View.OnClickListener() {

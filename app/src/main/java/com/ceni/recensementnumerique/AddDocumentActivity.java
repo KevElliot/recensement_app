@@ -65,22 +65,22 @@ public class AddDocumentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String docref = numdocref.getText().toString();
-                if (numdocref.getText().length() == 0 || datedocument.length() == 0) {
+                if (numdocref.getText().length() != 6 || datedocument.length() == 0) {
                     numdocref.setError("Mila fenoina");
                     Toast toast = Toast.makeText(AddDocumentActivity.this, "Misy diso!", Toast.LENGTH_LONG);
                     toast.show();
                 } else {
-                    Document doc = new Document("0",document.getDoccode_bv(), docref, datedocument, 0);
+                    Document doc = new Document("0",document.getDoccode_fokontany(),document.getDoccode_bv(), docref, datedocument, 0);
                     boolean result = DB.insertDocument(doc);
                     if (result) {
-                        Toast toast = Toast.makeText(AddDocumentActivity.this, "Doc reference enregistrer!", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(AddDocumentActivity.this, "Doc reference enregistré!", Toast.LENGTH_LONG);
                         toast.show();
                         Intent i = new Intent(getApplicationContext(), DocumentActivity.class);
                         startActivity(i);
                         DoclocalisationActivity.getInstance().finish();
                         finish();
                     } else {
-                        erreur.setText("Carnet efa voasoratra");
+                        erreur.setText("Karine efa voasoratra");
                         Toast toast = Toast.makeText(AddDocumentActivity.this, "Erreur à l'enregistrement!", Toast.LENGTH_LONG);
                         toast.show();
                     }

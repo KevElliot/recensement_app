@@ -129,8 +129,10 @@ public class DoclocalisationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
+                Fokontany fokontanySelect = (Fokontany) spinnerFokontany.getSelectedItem();
                 Document doc = new Document();
                 doc.setDoccode_bv(bvSelected.getCode_bv());
+                doc.setDoccode_fokontany(fokontanySelect.getCode_fokontany());
                 Gson gson = new Gson();
                 String myJson = gson.toJson(doc);
                 Intent i = new Intent(getApplicationContext(),AddDocumentActivity.class);

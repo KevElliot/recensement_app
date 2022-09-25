@@ -108,57 +108,59 @@ public class RechercheElecteur extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String rech = inputRecherche.getText().toString();
-                if(rech.length()!=0) {
+                if (rech.length() != 0) {
                     Document doc = DB.selectDocumentbyNum(rech);
-                    Log.d("RECHERCHE_ELECT",doc.toString());
-                    elect = DB.Recherche(valeurSearch, doc.getIdfdocreference());
-                    if (elect.size() != 0) {
-                        Log.d("Elect", "... " + elect.get(0).toString());
-                        listElecteurAdapter = new ListElecteurAdapter(RechercheElecteur.this, elect);
-                        listElecteur.setAdapter(listElecteurAdapter);
-                        listElecteur.setClickable(true);
-                        listElecteur.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                                Electeur electeur = new Electeur();
-                                electeur.setCode_bv(elect.get(position).getCode_bv());
-                                electeur.setIdElect(elect.get(position).getIdElect());
-                                electeur.setnFiche(elect.get(position).getnFiche());
-                                electeur.setNom(elect.get(position).getNom());
-                                electeur.setPrenom(elect.get(position).getPrenom());
-                                electeur.setSexe(elect.get(position).getSexe());
-                                electeur.setProfession(elect.get(position).getProfession());
-                                electeur.setAdresse(elect.get(position).getAdresse());
-                                electeur.setDateNaiss(elect.get(position).getDateNaiss());
-                                electeur.setNevers(elect.get(position).getNevers());
-                                electeur.setLieuNaiss(elect.get(position).getLieuNaiss());
-                                electeur.setNomPere(elect.get(position).getNomPere());
-                                electeur.setNomMere(elect.get(position).getNomMere());
-                                electeur.setCinElect(elect.get(position).getCinElect());
-                                electeur.setNserieCin(elect.get(position).getNserieCin());
-                                electeur.setDateDeliv(elect.get(position).getDateDeliv());
-                                electeur.setLieuDeliv(elect.get(position).getLieuDeliv());
-                                electeur.setFicheElect(elect.get(position).getFicheElect());
-                                electeur.setCinRecto(elect.get(position).getCinRecto());
-                                electeur.setCinVerso(elect.get(position).getCinVerso());
-                                electeur.setObservation(elect.get(position).getObservation());
-                                electeur.setDocreference(elect.get(position).getDocreference());
-                                electeur.setDateinscription(elect.get(position).getDateinscription());
-                                Gson gson = new Gson();
-                                String myjson = gson.toJson(electeur);
-                                Log.i("Recherche activity", myjson);
-                                Intent i = new Intent(getApplicationContext(), DetailElecteurActivity.class);
-                                i.putExtra("electeur", myjson);
-                                startActivity(i);
-                            }
-                        });
-                    }else{
+                    if (doc.getIdfdocreference()!=null) {
+                        elect = DB.Recherche(valeurSearch, doc.getIdfdocreference());
+                        if (elect.size() != 0) {
+                            Log.d("Elect", "... " + elect.get(0).toString());
+                            listElecteurAdapter = new ListElecteurAdapter(RechercheElecteur.this, elect);
+                            listElecteur.setAdapter(listElecteurAdapter);
+                            listElecteur.setClickable(true);
+                            listElecteur.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                                    Electeur electeur = new Electeur();
+                                    electeur.setCode_bv(elect.get(position).getCode_bv());
+                                    electeur.setIdElect(elect.get(position).getIdElect());
+                                    electeur.setnFiche(elect.get(position).getnFiche());
+                                    electeur.setNom(elect.get(position).getNom());
+                                    electeur.setPrenom(elect.get(position).getPrenom());
+                                    electeur.setSexe(elect.get(position).getSexe());
+                                    electeur.setProfession(elect.get(position).getProfession());
+                                    electeur.setAdresse(elect.get(position).getAdresse());
+                                    electeur.setDateNaiss(elect.get(position).getDateNaiss());
+                                    electeur.setNevers(elect.get(position).getNevers());
+                                    electeur.setLieuNaiss(elect.get(position).getLieuNaiss());
+                                    electeur.setNomPere(elect.get(position).getNomPere());
+                                    electeur.setNomMere(elect.get(position).getNomMere());
+                                    electeur.setCinElect(elect.get(position).getCinElect());
+                                    electeur.setNserieCin(elect.get(position).getNserieCin());
+                                    electeur.setDateDeliv(elect.get(position).getDateDeliv());
+                                    electeur.setLieuDeliv(elect.get(position).getLieuDeliv());
+                                    electeur.setFicheElect(elect.get(position).getFicheElect());
+                                    electeur.setCinRecto(elect.get(position).getCinRecto());
+                                    electeur.setCinVerso(elect.get(position).getCinVerso());
+                                    electeur.setObservation(elect.get(position).getObservation());
+                                    electeur.setDocreference(elect.get(position).getDocreference());
+                                    electeur.setDateinscription(elect.get(position).getDateinscription());
+                                    Gson gson = new Gson();
+                                    String myjson = gson.toJson(electeur);
+                                    Log.i("Recherche activity", myjson);
+                                    Intent i = new Intent(getApplicationContext(), DetailElecteurActivity.class);
+                                    i.putExtra("electeur", myjson);
+                                    startActivity(i);
+                                }
+                            });
+                        }
+                    } else {
                         listElecteur.setAdapter(null);
-                        Log.d("null","... Tsy misy mpifidy");
-                        Toast toast = Toast.makeText(RechercheElecteur.this, "Tsy misy ilay mpifidy tediavina!", Toast.LENGTH_LONG);
+                        Log.d("null", "... Tsy misy mpifidy");
+                        Toast toast = Toast.makeText(RechercheElecteur.this, "Tsy misy ilay mpifidy tadiavina!", Toast.LENGTH_LONG);
                         toast.show();
                     }
-                }else{
+
+                } else {
                     inputRecherche.setError("Mila fenoina");
                 }
             }
@@ -170,7 +172,8 @@ public class RechercheElecteur extends AppCompatActivity {
             }
         });
     }
-    public static RechercheElecteur getInstance(){
+
+    public static RechercheElecteur getInstance() {
         return rechercheElecteur;
     }
 }

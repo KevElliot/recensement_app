@@ -72,7 +72,8 @@
             <Button
                 android:id="@+id/tablette"
                 android:layout_width="277dp"
-                android:layout_height="49dp"
+                android:layout_height="wrap_content"
+                android:minHeight="49dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="26dp"
                 android:background="@drawable/input_field"
@@ -83,7 +84,8 @@
             <Button
                 android:id="@+id/documents"
                 android:layout_width="277dp"
-                android:layout_height="49dp"
+                android:layout_height="wrap_content"
+                android:minHeight="49dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="26dp"
                 android:background="@drawable/input_field"
@@ -94,7 +96,8 @@
             <Button
                 android:id="@+id/newInscription"
                 android:layout_width="277dp"
-                android:layout_height="49dp"
+                android:layout_height="wrap_content"
+                android:minHeight="49dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="26dp"
                 android:background="@drawable/input_field"
@@ -105,12 +108,13 @@
             <Button
                 android:id="@+id/listeSqLite"
                 android:layout_width="277dp"
-                android:layout_height="49dp"
+                android:layout_height="wrap_content"
+                android:minHeight="49dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="26dp"
                 android:background="@drawable/input_field"
                 android:fontFamily="@font/bangers"
-                android:text="Listry ny mpifidy"
+                android:text="Lisitry ny mpifidy"
                 android:textSize="18sp" />
 
 
@@ -118,7 +122,8 @@
             <Button
                 android:id="@+id/recherche"
                 android:layout_width="277dp"
-                android:layout_height="49dp"
+                android:layout_height="wrap_content"
+                android:minHeight="49dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="26dp"
                 android:background="@drawable/input_field"
@@ -129,7 +134,8 @@
             <Button
                 android:id="@+id/parametre"
                 android:layout_width="277dp"
-                android:layout_height="49dp"
+                android:layout_height="wrap_content"
+                android:minHeight="49dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="26dp"
                 android:background="@drawable/input_field"

@@ -3,6 +3,7 @@ package com.ceni.recensementnumerique;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -32,7 +33,9 @@ import com.ceni.model.Cv;
 import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.model.Fokontany;
+import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
+import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
@@ -50,9 +53,11 @@ public class NewElecteurActivity extends AppCompatActivity {
     private String sexe;
     private EditText nFiche, nom, prenom, lieuNaiss, profession, adresse, nomMere, nomPere, datedeNaissance, editNevers;
     private EditText cin, nserie, nserie2, lieuCin, dateCin, datederecensement;
+    private TextView infoCarnet;
     private int countFormValide;
-    private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected;
+    private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected, fichefull;
     private String msg, user, format, imageRecto, imageVerso, dataFicheElect;
+    private Fokontany fokontanySelected;
     private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
 
     @Override
@@ -62,10 +67,11 @@ public class NewElecteurActivity extends AppCompatActivity {
         MenuActivity.setNewElect(true);
         Db_sqLite DB = new Db_sqLite(this);
         sexe = "Masculin";
-        msg = "Iangaviana enao mba ameno ireo banga na ny diso azafady.";
+        msg = "Iangaviana ianao mba ameno ireo banga na ny diso azafady.";
         sexeHomme = findViewById(R.id.sexeHomme);
         sexeFemme = findViewById(R.id.sexeFemme);
         nFiche = findViewById(R.id.editTextnFiche);
+        infoCarnet = findViewById(R.id.textView31);
         nom = findViewById(R.id.editTextNom);
         prenom = findViewById(R.id.editTextPrenom);
         lieuNaiss = findViewById(R.id.editTextLieuNaissance);
@@ -91,8 +97,10 @@ public class NewElecteurActivity extends AppCompatActivity {
         imageView = (ImageView) this.findViewById(R.id.imageView);
         datederecensement = this.findViewById(R.id.datederecensement);
         enregistrer = this.findViewById(R.id.enregistrer);
+        spinnerDocument = this.findViewById(R.id.spinner_document);
         user = getIntent().getStringExtra("user");
         isNevers = false;
+        fichefull = false;
         feuMereSelected = false;
         feuPereSelected = false;
         final String[] docReference = {""};
@@ -100,9 +108,10 @@ public class NewElecteurActivity extends AppCompatActivity {
         int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
         int anneeMajor = anneeNow - 18;
         int anneeDead = anneeNow - 150;
+        countFormValide = 0;
 
         // FOKONTANY
-        fokontany = DB.selectFokotanyFromCommune("111301");
+        fokontany = DB.selectFokotanyFromCommune("510121");
         spinnerFokontany = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_fokontany);
         SpinerFokontanyAdapter adapterFokontany = new SpinerFokontanyAdapter(NewElecteurActivity.this,
                 R.layout.dropdown_localisation,
@@ -113,7 +122,37 @@ public class NewElecteurActivity extends AppCompatActivity {
         spinnerFokontany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Fokontany fokontanySelected = (Fokontany) spinnerFokontany.getSelectedItem();
+                fokontanySelected = (Fokontany) spinnerFokontany.getSelectedItem();
+                document = DB.selectDocument(fokontanySelected.getCode_fokontany());
+                //DOCUMENT
+                // Adapter Document
+                SpinnerDocumentAdapter adapterDocument = new SpinnerDocumentAdapter(NewElecteurActivity.this,
+                        R.layout.dropdown_document,
+                        R.id.numdocreference,
+                        document);
+                spinnerDocument.setAdapter(adapterDocument);
+                spinnerDocument.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        Document docSelected = (Document) spinnerDocument.getSelectedItem();
+                        docReference[0] = docSelected.getNumdocreference().toString();
+                        idFdocReference[0] = docSelected.getIdfdocreference();
+                        if (docSelected.getNbfeuillet() == 25) {
+                            fichefull = true;
+                            infoCarnet.setTextColor(Color.RED);
+                            infoCarnet.setText("Karine efa feno 25 takelaka voasoratra");
+                        } else {
+                            infoCarnet.setTextColor(Color.BLACK);
+                            infoCarnet.setText("Karine voasoratra: " + docSelected.getNbfeuillet() + "/25");
+                        }
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
+
+                    }
+                });
                 Toast toast = Toast.makeText(NewElecteurActivity.this, "FOKONTANY: " + fokontanySelected.getLabel_fokontany(), Toast.LENGTH_LONG);
                 toast.show();
                 cv = DB.selectCvFromFokontany(fokontanySelected.getCode_fokontany());
@@ -154,30 +193,6 @@ public class NewElecteurActivity extends AppCompatActivity {
             }
         });
 
-        this.document = DB.selectDocument();
-        this.spinnerDocument = this.findViewById(R.id.spinner_document);
-
-        //DOCUMENT
-        // Adapter Document
-        SpinnerDocumentAdapter adapterDocument = new SpinnerDocumentAdapter(NewElecteurActivity.this,
-                R.layout.dropdown_document,
-                R.id.numdocreference,
-                this.document);
-        this.spinnerDocument.setAdapter(adapterDocument);
-        this.spinnerDocument.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Document docSelected = (Document) spinnerDocument.getSelectedItem();
-                docReference[0] = docSelected.getNumdocreference().toString();
-                idFdocReference[0] = docSelected.getIdfdocreference();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 
         nevers.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -290,14 +305,55 @@ public class NewElecteurActivity extends AppCompatActivity {
             }
         });
 
+        nFiche.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                isMemeFiche = DB.isMemeFiche(nFiche.getText().toString());
+                if (isMemeFiche) {
+                    nFiche.setError("Takelaka efa voasoratra!");
+                }
+            }
+        });
+
+        datedeNaissance.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String nomElect = nom.getText().toString();
+                String prenomElect = prenom.getText().toString();
+                String dateNaiss = datedeNaissance.getText().toString();
+                isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss);
+                if (isSamePers) {
+                    datedeNaissance.setError("mpifidy efa voasoratra!");
+                    prenom.setError("mpifidy efa voasoratra!");
+                    nom.setError("mpifidy efa voasoratra!");
+                }
+            }
+        });
+
         this.enregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Document doc = DB.selectDocumentbyid(idFdocReference[0]);
-//                Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
-//                String serialCin = nserie.getText().toString()+"/"+nserie2.getText().toString();
-//                //Electeur e = new Electeur(bvSelected.getCode_bv(),nFiche.getText().toString(),nom.getText().toString(),prenom.getText().toString(), sexe, profession.getText().toString(), adresse.getText().toString(), datedeNaissance.getText().toString(),editNevers.getText().toString(),lieuNaiss.getText().toString(),nomPere.getText().toString(), nomMere.getText().toString(), cin.getText().toString(),serialCin, dateCin.getText().toString(), lieuCin.getText().toString(), dataFicheElect, imageRecto, imageVerso, "null", docReference[0],"info",datederecensement.getText().toString());
-//                //Log.d("MAMPIDITRA MPIFIDY",e.toString());
                 countFormValide = 0;
                 Electeur electeur = new Electeur();
                 if (nom.getText().toString().length() != 0) {
@@ -307,7 +363,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                     nom.setError("Mila fenoina");
                 }
                 if (prenom.getText().toString().length() != 0) {
-                    countFormValide+=1;
+                    countFormValide += 1;
                     electeur.setPrenom(prenom.getText().toString());
                 } else {
                     electeur.setPrenom("");
@@ -369,7 +425,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                     }
                 }
 
-                if (nFiche.getText().toString().length() == 12) {
+                if (nFiche.getText().toString().length() == 8) {
                     electeur.setnFiche(nFiche.getText().toString());
                     countFormValide += 1;
                 } else {
@@ -382,35 +438,47 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(NewElecteurActivity.this, "Misafidiana Karine!", Toast.LENGTH_LONG);
                     toast.show();
                 }
-                if(cin.getText().toString().length()==12) {
+                if (cin.getText().toString().length() == 12) {
                     electeur.setCinElect(cin.getText().toString());
-                    countFormValide+=1;
-                }else{
+                    countFormValide += 1;
+                } else {
                     cin.setError("Diso");
                 }
-                if(nserie.getText().toString().length()==7 && nserie2.getText().toString().length()==1) {
-                    String serial = nserie.getText().toString()+"/"+nserie2.getText().toString();
+                if (nserie.getText().toString().length() == 7 && nserie2.getText().toString().length() == 1) {
+                    String serial = nserie.getText().toString() + "/" + nserie2.getText().toString();
                     electeur.setNserieCin(serial);
-                    countFormValide+=1;
-                }else{
+                    countFormValide += 1;
+                } else {
                     nserie.setError("Diso");
                 }
-                if(lieuCin.getText().toString().length()!=0) {
+                if (lieuCin.getText().toString().length() != 0) {
                     electeur.setLieuDeliv(lieuCin.getText().toString());
-                    countFormValide+=1;
-                }else{
+                    countFormValide += 1;
+                } else {
                     lieuCin.setError("Mila fenoina");
                 }
-                if(dateCin.getText().length()!=0) {
+                if (dateCin.getText().length() != 0) {
                     electeur.setDateDeliv(dateCin.getText().toString());
-                    countFormValide+=1;
-                }else{
+                    countFormValide += 1;
+                } else {
                     dateCin.setError("Mila apetraka ny daty nahazahona ny karatra");
                 }
-                if(dataFicheElect!=null) {
-                    countFormValide+=1;
+                if (datederecensement.getText().length() != 0) {
+                    electeur.setDateinscription(datederecensement.getText().toString());
+                    countFormValide += 1;
+                } else {
+                    datederecensement.setError("Mila fenoina");
+                }
+                if (imageRecto != null) {
+                    electeur.setCinRecto(imageRecto);
+                }
+                if (imageVerso != null) {
+                    electeur.setCinVerso(imageVerso);
+                }
+                if (dataFicheElect != null) {
+                    countFormValide += 1;
                     electeur.setFicheElect(dataFicheElect);
-                }else{
+                } else {
                     new AlertDialog.Builder(NewElecteurActivity.this)
                             .setTitle("Fahadisoana?")
                             .setMessage("Iangaviana ianao mba haka sarin'ny takelaka!.")
@@ -423,10 +491,10 @@ public class NewElecteurActivity extends AppCompatActivity {
                             }).show();
                 }
 
-                if (countFormValide != 16) {
-                    Log.d("COUNT",""+countFormValide);
+                if (countFormValide != 17) {
+                    Log.d("COUNT", "" + countFormValide);
                     new AlertDialog.Builder(NewElecteurActivity.this)
-                            .setTitle("Fahadisoana?")
+                            .setTitle("Fahadisoana")
                             .setMessage(msg)
                             .setCancelable(false)
                             .setPositiveButton("ok", new DialogInterface.OnClickListener() {
@@ -437,8 +505,61 @@ public class NewElecteurActivity extends AppCompatActivity {
                             }).show();
 
                 } else {
-                    Log.d("NEW ELECT",electeur.toString());
-                    //go vers cette page meme fa tazomina ny fokontany
+                    Log.d("NEW ELECT", electeur.toString());
+                    if (!fichefull) {
+                        if (!isSamePers) {
+                            if (!isMemeFiche) {
+                                Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
+                                electeur.setCode_bv(bvSelected.getCode_bv());
+                                boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), electeur.getDateinscription());
+                                if (result) {
+                                    Document doc = DB.selectDocumentbyid(electeur.getDocreference());
+                                    Gson gson = new Gson();
+                                    User us = gson.fromJson(user, User.class);
+                                    DB.counterStat(doc, us, 1);
+                                    Toast toast = Toast.makeText(NewElecteurActivity.this, "Electeur enregistré!", Toast.LENGTH_LONG);
+                                    toast.show();
+                                    Intent i = new Intent(getApplicationContext(), NewElecteurActivity.class);
+                                    i.putExtra("user", user);
+                                    startActivity(i);
+                                    finish();
+                                }
+                            } else {
+                                new AlertDialog.Builder(NewElecteurActivity.this)
+                                        .setTitle("Fahadisoana")
+                                        .setMessage("Takelaka efa voasoratra!")
+                                        .setCancelable(false)
+                                        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // tsisy
+                                            }
+                                        }).show();
+                            }
+                        } else {
+                            new AlertDialog.Builder(NewElecteurActivity.this)
+                                    .setTitle("Fahadisoana")
+                                    .setMessage("Mpifidy efa voasoratra!")
+                                    .setCancelable(false)
+                                    .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // tsisy
+                                        }
+                                    }).show();
+                        }
+                    }else {
+                        new AlertDialog.Builder(NewElecteurActivity.this)
+                                .setTitle("Fahadisoana")
+                                .setMessage("Karine efa feno! Manamboara vaovao!")
+                                .setCancelable(false)
+                                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // tsisy
+                                    }
+                                }).show();
+                    }
                 }
             }
         });

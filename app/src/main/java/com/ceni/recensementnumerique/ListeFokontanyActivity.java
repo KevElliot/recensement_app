@@ -54,7 +54,7 @@ public class ListeFokontanyActivity extends AppCompatActivity {
         listFokontany = DB.selectElecteurGroupByFokontany();
         if (listFokontany.size() <= 0) {
             nbElecteur.setText("isa ny mpifidy: 0");
-            Toast toast = Toast.makeText(ListeFokontanyActivity.this, "Tsy misy pifidy voasoratra!", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(ListeFokontanyActivity.this, "Tsy misy mpifidy voasoratra!", Toast.LENGTH_LONG);
             toast.show();
         } else {
             for (int i = 0; i < listFokontany.size(); i++) {
