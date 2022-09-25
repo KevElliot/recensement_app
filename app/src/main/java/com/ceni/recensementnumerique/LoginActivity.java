@@ -41,10 +41,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 DB = new Db_sqLite(LoginActivity.this);
-//                String pseudo = txtpseudo.getText().toString();
-//                String motdepass=txtmdp.getText().toString();
-                String pseudo = "AMBATONDRAZAKA";
-                String motdepass = "AMBATONDRAZAKA";
+                String pseudo = txtpseudo.getText().toString();
+                String motdepass=txtmdp.getText().toString();
+//                String pseudo = "AMBATONDRAZAKA";
+//                String motdepass = "AMBATONDRAZAKA";
 
                 // check IMEI Phone
                 String checkIMEI = tab.getImei();

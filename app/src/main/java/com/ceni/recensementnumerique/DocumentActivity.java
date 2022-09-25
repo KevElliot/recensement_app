@@ -55,7 +55,7 @@ public class DocumentActivity extends AppCompatActivity {
         ajouter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), DoclocalisationActivity.class);
+                Intent i = new Intent(getApplicationContext(), AddDocumentActivity.class);
                 startActivity(i);
                 finish();
             }
