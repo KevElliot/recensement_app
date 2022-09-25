@@ -50,11 +50,39 @@ public class MainActivity extends AppCompatActivity {
 //        String wifi = "00:00:00:00:00:00";
         Log.d("Imei device: ",imei);
         Log.d("adressMac wifi: ",wifi);
+
+        // DB.insertTablettes(this);
+        // Log.d("Insert tabs : ", "DONE");
+
+        /*
+        Tablette tab = new Tablette();
+        tab.setRegion("ANALAMANGA");
+        tab.setCode_region("11");
+        tab.setDistrict("AMBOHIDRATRIMO");
+        tab.setCode_district("1101");
+        tab.setCommune("MAHITSY");
+        tab.setCode_commune("110121");
+        tab.setCode_fokontany("11012127");
+        tab.setFokontany("MIADAMPAHONINA");
+        tab.setResponsable("NANDIHIZANA");
+        tab.setImei("358240051222220");
+        tab.setMacWifi("00:00:00:00:00");
+
+        Log.d("tag",tab.toString());
+        boolean result = DB.insertInformationTablette(tab);
+
+        Boolean checkResult = DB.findIMEI("358240051222220");
+        Log.d("IMEI CHECK LOGIN","Bool "+checkResult);
+        
+        DB.insertTablettes(this);
+         */
+
+
         if (nbuser > 0) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(MainActivity.this, "Utilisateur trouver - LOGIN", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Chargement ... ", Toast.LENGTH_LONG).show();
                     Gson gson = new Gson();
                     String myjson = gson.toJson(nbuser);
                     Intent i = new Intent(MainActivity.this, LoginActivity.class);

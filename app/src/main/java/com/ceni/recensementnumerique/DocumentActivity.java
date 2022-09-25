@@ -39,7 +39,7 @@ public class DocumentActivity extends AppCompatActivity {
         this.DB = new Db_sqLite(DocumentActivity.this);
         List<Document> listDoc = DB.selectAllDocument();
         if (listDoc.size() <= 0) {
-            Toast toast = Toast.makeText(DocumentActivity.this, "Tsy misy carnet tafiditra!", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(DocumentActivity.this, "Tsy misy karine tafiditra!", Toast.LENGTH_LONG);
             toast.show();
         }
         ListDocumentAdapter listDocumentAdapter = new ListDocumentAdapter(DocumentActivity.this, listDoc);

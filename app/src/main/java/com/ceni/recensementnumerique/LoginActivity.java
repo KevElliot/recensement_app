@@ -46,11 +46,18 @@ public class LoginActivity extends AppCompatActivity {
                 String pseudo = "AMBATONDRAZAKA";
                 String motdepass = "AMBATONDRAZAKA";
 
-                // check IMEI
+                // check IMEI Phone
                 String checkIMEI = tab.getImei();
 
                 user = DB.selectUser(pseudo,motdepass);
+                // check emei on sqlite
                 Boolean checkResult = DB.findIMEI(checkIMEI);
+                Log.d("IMEI CHECK LOGIN","Bool "+checkResult);
+
+                // get one tablette element
+                Tablette tbs = DB.selectImei(checkIMEI);
+                Log.d("IMEI CHECK FROM BASE","BASE :  "+tbs.getImei());
+
                 if(user.getCode_district()!=null && checkResult){
 
                     String myjson = gson.toJson(user);

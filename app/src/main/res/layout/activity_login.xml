@@ -77,7 +77,7 @@
                 android:id="@+id/connecterBtn"
                 android:layout_width="152dp"
                 android:layout_height="48dp"
-                android:background="@drawable/button_custom"
+
                 android:fontFamily="@font/bangers"
                 android:text="Connecter"
                 android:textColor="#FFFFFF"
