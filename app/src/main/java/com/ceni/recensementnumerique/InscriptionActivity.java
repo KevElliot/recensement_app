@@ -84,7 +84,7 @@ public class InscriptionActivity extends AppCompatActivity {
         nevers = findViewById(R.id.nevers);
         editNevers = findViewById(R.id.editTextNevers);
         user = getIntent().getStringExtra("user");
-        this.document = DB.selectDocument();
+        //this.document = DB.selectDocument();
         this.spinnerDocument = this.findViewById(R.id.spinner_document);
         int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
         int anneeMajor = anneeNow - 18;

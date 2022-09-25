@@ -37,7 +37,7 @@ public class DocumentActivity extends AppCompatActivity {
         ajouter = findViewById(R.id.ajouter);
         retour = findViewById(R.id.imageViewPrevious);
         this.DB = new Db_sqLite(DocumentActivity.this);
-        List<Document> listDoc = DB.selectDocument();
+        List<Document> listDoc = DB.selectAllDocument();
         if (listDoc.size() <= 0) {
             Toast toast = Toast.makeText(DocumentActivity.this, "Tsy misy carnet tafiditra!", Toast.LENGTH_LONG);
             toast.show();

@@ -29,7 +29,7 @@ import java.util.List;
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-    private static final int DB_VERSION = 25;
+    private static final int DB_VERSION = 26;
     /*---------------------------------------------------------------------------------------
                                            TABLE ELECTEUR
     ----------------------------------------------------------------------------------------*/
@@ -101,12 +101,15 @@ public class Db_sqLite extends SQLiteOpenHelper {
     ----------------------------------------------------------------------------------------*/
     private static final String idDoc = "id";
     private static final String idfdocreference = "idfdocreference";
+    private static final String doccode_fokontany = "code_fokontany";
     private static final String doccode_bv = "code_bv";
     private static final String numdocreference = "numdocreference";
     private static final String datedocreference = "datedocreference";
     private static final String nbfeuillet = "nbfeuillet";
 
     public static final String TABLE_Document = "documents";
+
+
 
     public Db_sqLite(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -131,7 +134,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 PRENOMUSER + " TEXT, " + ROLE + " TEXT, " + PSEUDO + " TEXT, " + MOTDEPASSE + " TEXT, " + REGIONUSER + " TEXT, " +
                 USER_CODEREGION + " TEXT, " + DISTRICTUSER + " TEXT, " + USER_CODEDISTRICT + " TEXT, " + COMMUNEUSER + " TEXT, " + USER_CODECOMMUNE + " TEXT, " + NBSAISI + " INT)";
 
-        String query4 = "CREATE TABLE " + TABLE_Document + "("+idDoc +" INTEGER primary key AUTOINCREMENT," + idfdocreference + " TEXT, " + doccode_bv + " TEXT," + numdocreference + " TEXT," + datedocreference + " TEXT, " + nbfeuillet + " TEXT)";
+        String query4 = "CREATE TABLE " + TABLE_Document + "(" + idDoc + " INTEGER primary key AUTOINCREMENT," + idfdocreference + " TEXT, " + doccode_fokontany + " TEXT," + doccode_bv + " TEXT," + numdocreference + " TEXT," + datedocreference + " TEXT, " + nbfeuillet + " TEXT)";
 
         db.execSQL(query1);
         db.execSQL(query2);
@@ -191,7 +194,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         Cursor cursor = MyDB.rawQuery("Select " + numdocreference + " from documents where " + numdocreference + " =?", new String[]{numdoc});
         try {
-            Log.d("MM DOCUMENT",""+cursor.getCount());
+            Log.d("MM DOCUMENT", "" + cursor.getCount());
             if (cursor.getCount() != 0) {
                 result = true;
             }
@@ -212,6 +215,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
             try {
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(idfdocreference, "0");
+                contentValues.put(doccode_fokontany, doc.getDoccode_fokontany());
                 contentValues.put(doccode_bv, doc.getDoccode_bv());
                 contentValues.put(numdocreference, doc.getNumdocreference());
                 contentValues.put(datedocreference, doc.getDatedocreference());
@@ -221,13 +225,13 @@ public class Db_sqLite extends SQLiteOpenHelper {
                     res = false;
                 } else {
                     Document newDoc = selectDocumentbyid(doc.getIdfdocreference());
-                    Log.d("INSERT NEW DOC",newDoc.toString());
+                    Log.d("INSERT NEW DOC", newDoc.toString());
                     int i = Integer.parseInt(newDoc.getIdDoc());
                     DecimalFormat dec = new DecimalFormat("000000");
                     String format = dec.format(i);
-                    newDoc.setIdfdocreference(""+newDoc.getDoccode_bv()+""+format);
+                    newDoc.setIdfdocreference("" + newDoc.getDoccode_bv() + "" + format);
                     boolean repons = this.updateDocument(newDoc);
-                    if(repons){
+                    if (repons) {
                         res = true;
                     }
                 }
@@ -242,7 +246,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return res;
     }
 
-    public List<Document> selectDocument() {
+    public List<Document> selectAllDocument() {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         Cursor cursor = MyDB.rawQuery("Select * from documents", null);
         List<Document> listdoc = new ArrayList<>();
@@ -251,10 +255,36 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 Document d = new Document();
                 d.setIdDoc(cursor.getString(0));
                 d.setIdfdocreference(cursor.getString(1));
-                d.setDoccode_bv(cursor.getString(2));
-                d.setNumdocreference(cursor.getString(3));
-                d.setDatedocreference(cursor.getString(4));
-                d.setNbfeuillet(cursor.getInt(5));
+                d.setDoccode_fokontany(cursor.getString(2));
+                d.setDoccode_bv(cursor.getString(3));
+                d.setNumdocreference(cursor.getString(4));
+                d.setDatedocreference(cursor.getString(5));
+                d.setNbfeuillet(cursor.getInt(6));
+                listdoc.add(d);
+            }
+        } catch (Exception e) {
+            Log.e("error Select SQLITE", "ERROR SELECT DOCUMENTS ");
+        } finally {
+            cursor.close();
+            MyDB.close();
+        }
+        return listdoc;
+    }
+
+    public List<Document> selectDocument(String code_fokontany) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from documents where code_fokontany = '" + code_fokontany + "'", null);
+        List<Document> listdoc = new ArrayList<>();
+        try {
+            while (cursor.moveToNext()) {
+                Document d = new Document();
+                d.setIdDoc(cursor.getString(0));
+                d.setIdfdocreference(cursor.getString(1));
+                d.setDoccode_fokontany(cursor.getString(2));
+                d.setDoccode_bv(cursor.getString(3));
+                d.setNumdocreference(cursor.getString(4));
+                d.setDatedocreference(cursor.getString(5));
+                d.setNbfeuillet(cursor.getInt(6));
                 listdoc.add(d);
             }
         } catch (Exception e) {
@@ -267,6 +297,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
     }
 
     public Document selectDocumentbyNum(String num) {
+        Document res = new Document();
         SQLiteDatabase MyDB = this.getWritableDatabase();
         Cursor cursor = MyDB.rawQuery("Select * from documents where numdocreference= '" + num + "'", null);
         List<Document> listdoc = new ArrayList<>();
@@ -276,10 +307,14 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 d.setIdDoc(cursor.getString(0));
                 d.setIdfdocreference(cursor.getString(1));
                 d.setDoccode_bv(cursor.getString(2));
-                d.setNumdocreference(cursor.getString(3));
-                d.setDatedocreference(cursor.getString(4));
-                d.setNbfeuillet(cursor.getInt(5));
+                d.setDoccode_fokontany(cursor.getString(3));
+                d.setNumdocreference(cursor.getString(4));
+                d.setDatedocreference(cursor.getString(5));
+                d.setNbfeuillet(cursor.getInt(6));
                 listdoc.add(d);
+            }
+            if (listdoc.size() > 0) {
+                res = listdoc.get(0);
             }
         } catch (Exception e) {
             Log.e("error Select SQLITE", "ERROR SELECT DOCUMENTS BY id");
@@ -287,7 +322,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
             cursor.close();
             MyDB.close();
         }
-        return listdoc.get(0);
+        return res;
     }
 
     public Document selectDocumentbyid(String id) {
@@ -299,10 +334,11 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 Document d = new Document();
                 d.setIdDoc(cursor.getString(0));
                 d.setIdfdocreference(cursor.getString(1));
-                d.setDoccode_bv(cursor.getString(2));
-                d.setNumdocreference(cursor.getString(3));
-                d.setDatedocreference(cursor.getString(4));
-                d.setNbfeuillet(cursor.getInt(5));
+                d.setDoccode_fokontany(cursor.getString(2));
+                d.setDoccode_bv(cursor.getString(3));
+                d.setNumdocreference(cursor.getString(4));
+                d.setDatedocreference(cursor.getString(5));
+                d.setNbfeuillet(cursor.getInt(6));
                 listdoc.add(d);
             }
         } catch (Exception e) {
@@ -349,11 +385,11 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     // STAT PAR ELECTEUR INSERER OU SUPPRIMER
     public void counterStat(Document doc, User user, int var) {
-        doc.setNbfeuillet(doc.getNbfeuillet()+var);
-        user.setNbSaisi(user.getNbSaisi()+var);
+        doc.setNbfeuillet(doc.getNbfeuillet() + var);
+        user.setNbSaisi(user.getNbSaisi() + var);
         this.updateDocument(doc);
         this.updateUser(user);
-        Log.d("user",user.toString());
+        Log.d("user", user.toString());
     }
 
     public boolean updateDocument(Document doc) {
@@ -363,6 +399,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
             SQLiteDatabase MyDB = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put(idfdocreference, doc.getIdfdocreference());
+            contentValues.put(doccode_fokontany, doc.getDoccode_fokontany());
             contentValues.put(doccode_bv, doc.getDoccode_bv());
             contentValues.put(numdocreference, doc.getNumdocreference());
             contentValues.put(datedocreference, doc.getDatedocreference());
@@ -519,6 +556,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 e.setNbElecteur(cursor.getInt(2));
                 listElect.add(e);
             }
+            Log.d("SELECT",""+listElect.size());
         } catch (Exception e) {
             Log.e("error Select SQLITE", "ERROR SELECT Electeur group by fokontany  " + e);
         } finally {
@@ -653,7 +691,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         List<Electeur> listElect = new ArrayList<>();
         String sql = "Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "'";
-        Log.d("RECHERCHE",sql);
+        Log.d("RECHERCHE", sql);
         Cursor cursor = MyDB.rawQuery(sql, null);
         try {
             while (cursor.moveToNext()) {

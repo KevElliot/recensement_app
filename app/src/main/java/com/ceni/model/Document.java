@@ -3,6 +3,7 @@ package com.ceni.model;
 public class Document {
     private String idDoc;
     private String idfdocreference;
+    private String doccode_fokontany;
     private String doccode_bv;
     private String numdocreference;
     private String datedocreference;
@@ -11,12 +12,21 @@ public class Document {
     public Document() {
     }
 
-    public Document(String idfdocreference,String doccode_bv, String numdocreference, String datedocreference, int nbfeuillet) {
+    public Document(String idfdocreference,String doccode_fokontany,String doccode_bv, String numdocreference, String datedocreference, int nbfeuillet) {
         this.idfdocreference = idfdocreference;
+        this.doccode_fokontany = doccode_fokontany;
         this.doccode_bv = doccode_bv;
         this.numdocreference = numdocreference;
         this.datedocreference = datedocreference;
         this.nbfeuillet = nbfeuillet;
+    }
+
+    public String getDoccode_fokontany() {
+        return doccode_fokontany;
+    }
+
+    public void setDoccode_fokontany(String doccode_fokontany) {
+        this.doccode_fokontany = doccode_fokontany;
     }
 
     public String getIdDoc() {
