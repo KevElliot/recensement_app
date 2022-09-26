@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,6 +49,8 @@ public class ConfigurationMac extends AppCompatActivity {
                 enregistrer.setVisibility(View.GONE);
                 String ip = adressIp.getText().toString();
                 String p = port.getText().toString();
+
+                Log.d("INFO TABS : ", "" + tab.toString());
 
                 // insert tablette information |mac wifi and imei| attribute to ORACLE
                 ConfigurationMac_model params = new ConfigurationMac_model(ConfigurationMac.this, ip, p, tab, resultat);

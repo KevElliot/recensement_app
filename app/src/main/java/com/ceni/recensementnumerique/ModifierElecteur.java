@@ -119,7 +119,6 @@ public class ModifierElecteur extends AppCompatActivity {
         if(electeur.getCinRecto()!=null){
             cin_recto.setVisibility(View.VISIBLE);
             Bitmap imgCinRecto = this.decodeImage(electeur.getCinRecto());
-
             cin_recto.setImageBitmap(imgCinRecto);
 
         }else{
@@ -127,7 +126,6 @@ public class ModifierElecteur extends AppCompatActivity {
         }
         if(electeur.getCinVerso()!=null){
             cin_verso.setVisibility(View.VISIBLE);
-
             Bitmap imgCinVerso = this.decodeImage(electeur.getCinVerso());
             cin_verso.setImageBitmap(imgCinVerso);
         }else{
