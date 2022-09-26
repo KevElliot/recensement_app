@@ -58,6 +58,8 @@ public class LoginActivity extends AppCompatActivity {
                 Tablette tbs = DB.selectImei(checkIMEI);
                 Log.d("IMEI CHECK FROM BASE","BASE :  "+tbs.getImei());
 
+
+
                 if(user.getCode_district()!=null && checkResult){
 
                     String myjson = gson.toJson(user);

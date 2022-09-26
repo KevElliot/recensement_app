@@ -51,7 +51,7 @@ public class AddDocumentActivity extends AppCompatActivity {
         mPickDateButton = findViewById(R.id.pick_date_button);
         communeLabel = findViewById(R.id.communeLabel);
         fokontanyLabel = findViewById(R.id.fokontanyLabel);
-        bvLabel = findViewById(R.id.bvLabel);
+        // bvLabel = findViewById(R.id.bvLabel);
         mShowSelectedDateText = findViewById(R.id.selected_Date);
         previous = findViewById(R.id.imageViewPrevious);
         numdocref = findViewById(R.id.numdocref);
@@ -67,7 +67,7 @@ public class AddDocumentActivity extends AppCompatActivity {
 
         communeLabel.setText("Commune : "+commune_pref+" | "+codecommune_pref);
         fokontanyLabel.setText("Fokontany : "+fokontany_pref+" | "+codefokontany_pref);
-        bvLabel.setText("bv : "+bv_pref+" | "+codebv_pref);
+        // bvLabel.setText("bv : "+bv_pref+" | "+codebv_pref);
 
         Gson gson = new Gson();
         Document document = gson.fromJson(getIntent().getStringExtra("document"), Document.class);

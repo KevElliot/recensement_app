@@ -23,6 +23,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -44,11 +45,11 @@ public class MainActivity extends AppCompatActivity {
         //DB.deleteAllUser();
         //DB.deleteAllElecteur();
         nbuser = DB.countUser();
-        String imei = getDeviceUniqueID();
+        // String imei = getDeviceUniqueID();
         String wifi = getMacAddress("wlan0");
-//        String imei = "355531090371894";
+        String imei = "351151256131273";
 //        String wifi = "00:00:00:00:00:00";
-        Log.d("Imei device: ",imei);
+        // Log.d("Imei device: ",imei);
         Log.d("adressMac wifi: ",wifi);
 
         // DB.insertTablettes(this);
@@ -75,8 +76,18 @@ public class MainActivity extends AppCompatActivity {
         Log.d("IMEI CHECK LOGIN","Bool "+checkResult);
         
         DB.insertTablettes(this);
+
+        List<Tablette> listeTablette;
+        listeTablette = DB.selectInformationAllTabs();
+        Log.d("IMEI liste SIZE : ", String.valueOf(listeTablette.size()));
          */
 
+        // check emei on sqlite
+        Boolean checkResult = DB.findIMEI(imei);
+        Log.d("IMEI CHECK LOGIN","Bool "+checkResult);
+        if(!checkResult){
+            DB.insertTablettes(this);
+        }
 
         if (nbuser > 0) {
             new Handler().postDelayed(new Runnable() {

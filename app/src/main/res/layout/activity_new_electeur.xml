@@ -466,6 +466,34 @@
                 android:inputType="text"
                 android:minHeight="40dp" />
 
+            <TextView
+                android:id="@+id/labelTakelaka"
+                android:layout_marginTop="19dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/courgette"
+                android:gravity="center"
+                android:text="Sarin'ny takelaka:"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="311dp"
+                android:layout_height="282dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:srcCompat="@drawable/cadre_photo"
+                tools:ignore="VectorDrawableCompat" />
+
+            <Button
+                android:id="@+id/button_fiche"
+                android:layout_width="188dp"
+                android:layout_height="49dp"
+                android:background="@drawable/input_field"
+                android:fontFamily="@font/bangers"
+                android:text="Maka sary" />
 
             <TextView
                 android:id="@+id/label2"
@@ -523,34 +551,7 @@
                 android:text="Maka sary" />
 
 
-            <TextView
-                android:id="@+id/labelTakelaka"
-                android:layout_marginTop="19dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/courgette"
-                android:gravity="center"
-                android:text="Sarin'ny takelaka:"
-                android:textColor="#000000"
-                android:textSize="20sp" />
 
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="311dp"
-                android:layout_height="282dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:srcCompat="@drawable/cadre_photo"
-                tools:ignore="VectorDrawableCompat" />
-
-            <Button
-                android:id="@+id/button_fiche"
-                android:layout_width="188dp"
-                android:layout_height="49dp"
-                android:background="@drawable/input_field"
-                android:fontFamily="@font/bangers"
-                android:text="Maka sary" />
 
             <TextView
                 android:id="@+id/labeldaterecensement"
