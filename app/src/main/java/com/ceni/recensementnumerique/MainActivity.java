@@ -45,49 +45,15 @@ public class MainActivity extends AppCompatActivity {
         //DB.deleteAllUser();
         //DB.deleteAllElecteur();
         nbuser = DB.countUser();
-        // String imei = getDeviceUniqueID();
+         String imei = getDeviceUniqueID();
         String wifi = getMacAddress("wlan0");
-        String imei = "351151256131273";
+//        String imei = "351151256131273";
 //        String wifi = "00:00:00:00:00:00";
         // Log.d("Imei device: ",imei);
         Log.d("adressMac wifi: ",wifi);
 
         // DB.insertTablettes(this);
         // Log.d("Insert tabs : ", "DONE");
-
-        /*
-        Tablette tab = new Tablette();
-        tab.setRegion("ANALAMANGA");
-        tab.setCode_region("11");
-        tab.setDistrict("AMBOHIDRATRIMO");
-        tab.setCode_district("1101");
-        tab.setCommune("MAHITSY");
-        tab.setCode_commune("110121");
-        tab.setCode_fokontany("11012127");
-        tab.setFokontany("MIADAMPAHONINA");
-        tab.setResponsable("NANDIHIZANA");
-        tab.setImei("358240051222220");
-        tab.setMacWifi("00:00:00:00:00");
-
-        Log.d("tag",tab.toString());
-        boolean result = DB.insertInformationTablette(tab);
-
-        Boolean checkResult = DB.findIMEI("358240051222220");
-        Log.d("IMEI CHECK LOGIN","Bool "+checkResult);
-        
-        DB.insertTablettes(this);
-
-        List<Tablette> listeTablette;
-        listeTablette = DB.selectInformationAllTabs();
-        Log.d("IMEI liste SIZE : ", String.valueOf(listeTablette.size()));
-         */
-
-        // check emei on sqlite
-        Boolean checkResult = DB.findIMEI(imei);
-        Log.d("IMEI CHECK LOGIN","Bool "+checkResult);
-        if(!checkResult){
-            DB.insertTablettes(this);
-        }
 
         if (nbuser > 0) {
             new Handler().postDelayed(new Runnable() {
@@ -108,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, 5000);
         } else {
+            DB.insertTablettes(this);
             DB.insertLocalisation(this);
             DB.insertUser(this);
             new Handler().postDelayed(new Runnable() {
@@ -138,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             if (android.os.Build.VERSION.SDK_INT >= 26) {
-                imei = telephonyManager.getImei();
+                imei = telephonyManager.getDeviceId();
             } else {
                 imei = telephonyManager.getDeviceId();
             }
