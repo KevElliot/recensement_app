@@ -3,7 +3,9 @@ package com.ceni.recensementnumerique;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -52,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                 user = DB.selectUser(pseudo, motdepass);
                 // check emei on sqlite
                 Boolean checkResult = DB.findIMEI(checkIMEI);
-                Log.d("IMEI CHECK LOGIN", "Bool " + checkResult);
+                Log.d("IMEI CHECK LOGIN", "Bool " + checkIMEI);
 
                 // get one tablette element
                 Tablette tbs = DB.selectImei(checkIMEI);
@@ -64,6 +66,8 @@ public class LoginActivity extends AppCompatActivity {
 
                         String myjson = gson.toJson(user);
                         String configTab = gson.toJson(tab);
+                        //SharedPreferences params_localisation = this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
+
                         Intent i = new Intent(getApplicationContext(), MenuActivity.class);
                         i.putExtra("user", myjson);
                         i.putExtra("configTab", configTab);
@@ -77,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(LoginActivity.this, "Vous n'avez pas acces!", Toast.LENGTH_LONG);
                     toast.show();
                 }
-            } 
+            }
 
         });
     }
