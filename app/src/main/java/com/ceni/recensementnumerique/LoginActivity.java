@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         Tablette tab = gson.fromJson(getIntent().getStringExtra("configTab"), Tablette.class);
         setContentView(R.layout.activity_login);
         connecter = findViewById(R.id.connecterBtn);
-        txtpseudo =findViewById(R.id.editTextPseudo);
+        txtpseudo = findViewById(R.id.editTextPseudo);
         txtmdp = findViewById(R.id.editTextPassword);
         DB = new Db_sqLite(this);
 
@@ -42,39 +42,42 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 DB = new Db_sqLite(LoginActivity.this);
                 String pseudo = txtpseudo.getText().toString();
-                String motdepass=txtmdp.getText().toString();
+                String motdepass = txtmdp.getText().toString();
 //                String pseudo = "AMBATONDRAZAKA";
 //                String motdepass = "AMBATONDRAZAKA";
 
                 // check IMEI Phone
                 String checkIMEI = tab.getImei();
 
-                user = DB.selectUser(pseudo,motdepass);
+                user = DB.selectUser(pseudo, motdepass);
                 // check emei on sqlite
                 Boolean checkResult = DB.findIMEI(checkIMEI);
-                Log.d("IMEI CHECK LOGIN","Bool "+checkResult);
+                Log.d("IMEI CHECK LOGIN", "Bool " + checkResult);
 
                 // get one tablette element
                 Tablette tbs = DB.selectImei(checkIMEI);
-                Log.d("IMEI CHECK FROM BASE","BASE :  "+tbs.getImei());
+                Log.d("IMEI CHECK FROM BASE", "BASE :  " + tbs.getImei());
 
 
+                if (checkResult) {
+                    if (user.getCode_district() != null) {
 
-                if(user.getCode_district()!=null && checkResult){
-
-                    String myjson = gson.toJson(user);
-                    String configTab = gson.toJson(tab);
-                    Intent i = new Intent(getApplicationContext(),MenuActivity.class);
-                    i.putExtra("user", myjson);
-                    i.putExtra("configTab", configTab);
-                    startActivity(i);
-                    finish();
-                }
-                else{
-                    Toast toast = Toast.makeText(LoginActivity.this, "Identification incorrect", Toast.LENGTH_LONG);
+                        String myjson = gson.toJson(user);
+                        String configTab = gson.toJson(tab);
+                        Intent i = new Intent(getApplicationContext(), MenuActivity.class);
+                        i.putExtra("user", myjson);
+                        i.putExtra("configTab", configTab);
+                        startActivity(i);
+                        finish();
+                    } else {
+                        Toast toast = Toast.makeText(LoginActivity.this, "Identification incorrect", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }else {
+                    Toast toast = Toast.makeText(LoginActivity.this, "Vous n'avez pas acces!", Toast.LENGTH_LONG);
                     toast.show();
                 }
-            }
+            } 
 
         });
     }
