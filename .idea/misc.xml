@@ -3,19 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/drawable-v24/button_custom.xml" value="0.1875" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_add_document.xml" value="0.38697916666666665" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_apercu_inscription.xml" value="0.38697916666666665" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_configuration.xml" value="0.38697916666666665" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_configuration_mac.xml" value="0.38697916666666665" />
-        <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_detailelecteur.xml" value="0.38697916666666665" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_display_electeur.xml" value="0.38697916666666665" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_document.xml" value="0.38697916666666665" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_info_user.xml" value="0.38697916666666665" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_login.xml" value="0.21875" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_menu.xml" value="0.38697916666666665" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_modifier_electeur.xml" value="0.2836960672012218" />
-        <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_new_electeur.xml" value="0.24857811977249916" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_parametre.xml" value="0.38697916666666665" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_recensement_tablette.xml" value="0.38697916666666665" />
         <entry key="..\:/CENI/PROJECT/recensement_app/app/src/main/res/layout/activity_recherche_electeur.xml" value="0.38697916666666665" />
@@ -39,6 +36,7 @@
         <entry key="..\:/Projet/Refonte/recensement_app/app/src/main/res/layout/activity_main.xml" value="0.20416666666666666" />
         <entry key="..\:/Projet/Refonte/recensement_app/app/src/main/res/layout/activity_menu.xml" value="0.20416666666666666" />
         <entry key="..\:/Projet/Refonte/recensement_app/app/src/main/res/layout/activity_modifier_electeur.xml" value="0.20416666666666666" />
+        <entry key="..\:/Projet/Refonte/recensement_app/app/src/main/res/layout/activity_new_electeur.xml" value="0.20416666666666666" />
         <entry key="..\:/Projet/Refonte/recensement_app/app/src/main/res/layout/activity_observation.xml" value="0.14492753623188406" />
         <entry key="..\:/Projet/Refonte/recensement_app/app/src/main/res/layout/activity_parametre.xml" value="0.20416666666666666" />
         <entry key="..\:/Projet/Refonte/recensement_app/app/src/main/res/layout/activity_recensement_tablette.xml" value="0.20416666666666666" />

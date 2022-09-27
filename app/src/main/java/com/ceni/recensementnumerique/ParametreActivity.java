@@ -3,6 +3,7 @@ package com.ceni.recensementnumerique;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +24,7 @@ import com.ceni.model.Cv;
 import com.ceni.model.Fokontany;
 import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -39,9 +41,12 @@ public class ParametreActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parametre);
-        MenuActivity.setParametre(true);
+        if(MenuActivity.getInstance()!=null){
+            MenuActivity.setParametre(true);
+        }
         Db_sqLite DB = new Db_sqLite(this);
         User user = LoginActivity.getUser();
+        String tab = LoginActivity.getConfigTab();
         String codeDistrict = user.getCode_district();
         previous = this.findViewById(R.id.imageViewPrevious);
         this.communes = DB.selectCommuneFromDistrict(codeDistrict);
@@ -51,7 +56,6 @@ public class ParametreActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = params_localisation.edit();
 
         if(params_localisation!=null){
-            Log.d("pp","ATTTTTTOOOOOOO EEEEE");
             // Adapter Commune
             SpinerCommuneAdapter adapterCommune = new SpinerCommuneAdapter(ParametreActivity.this,
                     R.layout.dropdown_localisation,
@@ -255,7 +259,18 @@ public class ParametreActivity extends AppCompatActivity {
         previous.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onBackPressed();
+                if(MenuActivity.getInstance()!=null){
+                    onBackPressed();
+                }else{
+                    Gson gson = new Gson();
+                    String configTab = gson.toJson(tab);
+                    String myjson = gson.toJson(user);
+                    Intent i = new Intent(getApplicationContext(), MenuActivity.class);
+                    i.putExtra("user", myjson);
+                    i.putExtra("configTab", configTab);
+                    startActivity(i);
+                    finish();
+                }
             }
         });
     }

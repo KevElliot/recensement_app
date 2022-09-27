@@ -115,7 +115,6 @@ public class NewElecteurActivity extends AppCompatActivity {
         //if tsisy dia paramettre
         // FOKONTANY
         String commune_pref = params_localisation.getString("code_commune","");
-        Log.d("shared",commune_pref);
         fokontany = DB.selectFokotanyFromCommune(commune_pref);
         spinnerFokontany = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_fokontany);
         SpinerFokontanyAdapter adapterFokontany = new SpinerFokontanyAdapter(NewElecteurActivity.this,
