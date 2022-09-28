@@ -9,7 +9,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
@@ -40,7 +42,11 @@ import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
+// import java.util.Base64;
 import java.util.List;
 
 public class NewElecteurActivity extends AppCompatActivity {
@@ -618,5 +624,6 @@ public class NewElecteurActivity extends AppCompatActivity {
             }
         }
     }
+
 
 }
