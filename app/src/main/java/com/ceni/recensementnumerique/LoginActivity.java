@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
+    private static String configTab;
     Button connecter;
     Db_sqLite DB;
     int nbUser;
@@ -65,14 +66,23 @@ public class LoginActivity extends AppCompatActivity {
                     if (user.getCode_district() != null) {
 
                         String myjson = gson.toJson(user);
-                        String configTab = gson.toJson(tab);
-                        //SharedPreferences params_localisation = this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
-
-                        Intent i = new Intent(getApplicationContext(), MenuActivity.class);
-                        i.putExtra("user", myjson);
-                        i.putExtra("configTab", configTab);
-                        startActivity(i);
-                        finish();
+                        configTab = gson.toJson(tab);
+                        SharedPreferences params_localisation = LoginActivity.this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
+                        String commune_pref = params_localisation.getString("code_commune","");
+                        Log.d("PARAMS",""+params_localisation.toString());
+                        if(commune_pref.length()!=0){
+                            Intent i = new Intent(getApplicationContext(), MenuActivity.class);
+                            i.putExtra("user", myjson);
+                            i.putExtra("configTab", configTab);
+                            startActivity(i);
+                            finish();
+                        }else{
+                            Intent i = new Intent(getApplicationContext(), ParametreActivity.class);
+                            i.putExtra("user", myjson);
+                            i.putExtra("configTab", configTab);
+                            startActivity(i);
+                            finish();
+                        }
                     } else {
                         Toast toast = Toast.makeText(LoginActivity.this, "Identification incorrect", Toast.LENGTH_LONG);
                         toast.show();
@@ -84,6 +94,14 @@ public class LoginActivity extends AppCompatActivity {
             }
 
         });
+    }
+
+    public static String getConfigTab() {
+        return configTab;
+    }
+
+    public void setConfigTab(String configTab) {
+        this.configTab = configTab;
     }
 
     public static User getUser() {

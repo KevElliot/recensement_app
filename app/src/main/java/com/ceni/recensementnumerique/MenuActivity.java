@@ -15,7 +15,7 @@ import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 public class MenuActivity extends AppCompatActivity {
-
+    static MenuActivity menuActivity;
     private static Button newElect;
     private static Button listeElect;
     private static Button documents;
@@ -32,7 +32,7 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+        menuActivity = this;
         tablette = findViewById(R.id.tablette);
         newElect = findViewById(R.id.newInscription);
         listeElect = findViewById(R.id.listeSqLite);
@@ -167,5 +167,8 @@ public class MenuActivity extends AppCompatActivity {
 
     public static void setCurrent_user(User current_user) {
         MenuActivity.current_user = current_user;
+    }
+    public static MenuActivity getInstance(){
+        return menuActivity;
     }
 }

@@ -271,7 +271,7 @@
                 android:background="@drawable/input_field"
                 android:fontFamily="@font/courgette"
                 android:hint="Toerana nahaterahana"
-                android:inputType="textCapWords"
+                android:inputType="textCapCharacters"
                 android:maxLength="100"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
@@ -287,7 +287,7 @@
                 android:ems="10"
                 android:fontFamily="@font/courgette"
                 android:hint="Asa"
-                android:inputType="textCapWords"
+                android:inputType="textCapCharacters"
                 android:maxLength="100"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
@@ -303,7 +303,7 @@
                 android:ems="10"
                 android:fontFamily="@font/courgette"
                 android:hint="Adiresy"
-                android:inputType="text"
+                android:inputType="textCapCharacters"
                 android:maxLength="100"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
@@ -463,7 +463,7 @@
                 android:hint="Toerana nahazahona ny CNI"
                 android:textColorHint="#7A7A7A"
                 android:textColor="#7A7A7A"
-                android:inputType="text"
+                android:inputType="textCapCharacters"
                 android:minHeight="40dp" />
 
             <TextView
