@@ -45,6 +45,11 @@ import com.ceni.model.Electeur;
 import com.ceni.model.Fokontany;
 import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.CompositeDateValidator;
+import com.google.android.material.datepicker.DateValidatorPointBackward;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -52,6 +57,7 @@ import java.text.DateFormat;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 // import java.util.Base64;
 import java.text.ParseException;
@@ -63,6 +69,7 @@ import java.time.format.ResolverStyle;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,16 +79,16 @@ public class NewElecteurActivity extends AppCompatActivity {
     private List<Bv> bv;
     private Spinner spinnerFokontany, spinnerCv, spinnerBv, spinnerDocument;
     private List<Document> document;
-    private Button mPickDateButton, buttonRecto, buttonVerso, buttonImage, enregistrer;
+    private Button mPickDateButton, buttonRecto, buttonVerso, buttonImage, enregistrer,datecin,datederecensement;
     private ImageView recto, verso, imageView;
     private CheckBox sexeHomme, sexeFemme, feuPere, feuMere, nevers;
     private String sexe;
-    private EditText nFiche, nom, prenom, lieuNaiss, profession, adresse, nomMere, nomPere, datedeNaissance, editNevers;
-    private EditText cin, nserie, nserie2, lieuCin, dateCin, datederecensement;
-    private TextView infoCarnet;
+    private EditText nFiche, nom, prenom, lieuNaiss, profession, adresse, nomMere, nomPere, editNevers;
+    private EditText cin, nserie, nserie2, lieuCin;
+    private TextView infoCarnet,mShowSelectedDateText,selectedDateCin,selectedDateRecensement;
     private int countFormValide;
-    private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected, fichefull, isDateNaissValide, isDateDerecense, isDateCinValid;
-    private String msg, user, format, imageRecto, imageVerso, dataFicheElect;
+    private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected, fichefull;
+    private String msg, user, format, imageRecto, imageVerso, dataFicheElect,dateNaiss,dateCinElect,daterecensement;
     private Fokontany fokontanySelected;
 
     private Pattern pattern;
@@ -110,21 +117,30 @@ public class NewElecteurActivity extends AppCompatActivity {
         nomPere = findViewById(R.id.editTextNomPere);
         feuPere = findViewById(R.id.feuPere);
         feuMere = findViewById(R.id.feuMere);
-        datedeNaissance = findViewById(R.id.datedeNaissance);
+        mPickDateButton = findViewById(R.id.pick_date_button);
+        mShowSelectedDateText = findViewById(R.id.selected_Date);
+
+//        datedeNaissance = findViewById(R.id.datedeNaissance);
         nevers = findViewById(R.id.nevers);
         editNevers = findViewById(R.id.editTextNevers);
         cin = findViewById(R.id.editTextCin);
         nserie = findViewById(R.id.editTextNserie);
         nserie2 = findViewById(R.id.editTextNserie2);
         lieuCin = findViewById(R.id.editTextLieuCIN);
-        dateCin = findViewById(R.id.dateCIN);
+//        dateCin = findViewById(R.id.dateCIN);
+        datecin = findViewById(R.id.pick_date_button2);
+        selectedDateCin = findViewById(R.id.date_CIN);
+
         buttonRecto = this.findViewById(R.id.button_image_recto);
         recto = this.findViewById(R.id.cin_recto);
         buttonVerso = this.findViewById(R.id.button_image_verso);
         verso = this.findViewById(R.id.cin_verso);
         buttonImage = (Button) this.findViewById(R.id.button_fiche);
         imageView = (ImageView) this.findViewById(R.id.imageView);
-        datederecensement = this.findViewById(R.id.datederecensement);
+
+        datederecensement = this.findViewById(R.id.daterecensement);
+        selectedDateRecensement = this.findViewById(R.id.selected_Daterecens);
+
         enregistrer = this.findViewById(R.id.enregistrer);
         spinnerDocument = this.findViewById(R.id.spinner_document);
         user = getIntent().getStringExtra("user");
@@ -132,14 +148,9 @@ public class NewElecteurActivity extends AppCompatActivity {
         fichefull = false;
         feuMereSelected = false;
         feuPereSelected = false;
-        isDateNaissValide = false;
-        isDateDerecense = false;
-        isDateCinValid = false;
         final String[] docReference = {""};
         final String[] idFdocReference = {""};
         int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
-        int moisNow = Calendar.getInstance().get(Calendar.MONTH);
-        int dayNow = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         int anneeMajor = anneeNow - 18;
         int anneeDead = anneeNow - 150;
         countFormValide = 0;
@@ -171,83 +182,79 @@ public class NewElecteurActivity extends AppCompatActivity {
                 spinnerDocument.setAdapter(adapterDocument);
                 spinnerDocument.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-                        @Override
-                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            Document docSelected = (Document) spinnerDocument.getSelectedItem();
-                            docReference[0] = docSelected.getNumdocreference().toString();
-                            idFdocReference[0] = docSelected.getIdfdocreference();
-                            if (docSelected.getNbfeuillet() == 25) {
-                                fichefull = true;
-                                infoCarnet.setTextColor(Color.RED);
-                                infoCarnet.setText("Karine efa feno 25 takelaka voasoratra");
-                            } else {
-                                infoCarnet.setTextColor(Color.BLACK);
-                                infoCarnet.setText("Karine voasoratra: " + docSelected.getNbfeuillet() + "/25");
-                            }
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        Document docSelected = (Document) spinnerDocument.getSelectedItem();
+                        docReference[0] = docSelected.getNumdocreference().toString();
+                        idFdocReference[0] = docSelected.getIdfdocreference();
+                        if (docSelected.getNbfeuillet() == 25) {
+                            fichefull = true;
+                            infoCarnet.setTextColor(Color.RED);
+                            infoCarnet.setText("Karine efa feno 25 takelaka voasoratra");
+                        } else {
+                            infoCarnet.setTextColor(Color.BLACK);
+                            infoCarnet.setText("Karine voasoratra: " + docSelected.getNbfeuillet() + "/25");
                         }
+                    }
 
-                        @Override
-                        public void onNothingSelected(AdapterView<?> adapterView) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
 
-                        }
-                    });
-                    Toast toast = Toast.makeText(NewElecteurActivity.this, "FOKONTANY: " + fokontanySelected.getLabel_fokontany(), Toast.LENGTH_LONG);
-                    toast.show();
-                    cv = DB.selectCvFromFokontany(fokontanySelected.getCode_fokontany());
-                    spinnerCv = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_cv);
-                    spinnerCv.setEnabled(false);
-                    // Adapter Cv
-                    SpinerCvAdapter adapterCv = new SpinerCvAdapter(NewElecteurActivity.this,
-                            R.layout.dropdown_localisation,
-                            R.id.textViewLabel,
-                            R.id.textViewCode,
-                            cv);
-                    spinnerCv.setAdapter(adapterCv);
-                    spinnerCv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            Cv cvSelected = (Cv) spinnerCv.getSelectedItem();
-                            Toast toast = Toast.makeText(NewElecteurActivity.this, "CV : " + cvSelected.getLabel_cv(), Toast.LENGTH_LONG);
-                            toast.show();
-                            bv = DB.selectBvFromCv(cvSelected.getCode_cv());
-                            spinnerBv = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_bv);
-                            spinnerBv.setEnabled(false);
-                            // Adapter Bv
-                            SpinerBvAdapter adapterBv = new SpinerBvAdapter(NewElecteurActivity.this,
-                                    R.layout.dropdown_localisation,
-                                    R.id.textViewLabel,
-                                    R.id.textViewCode,
-                                    bv);
-                            spinnerBv.setAdapter(adapterBv);
-                        }
+                    }
+                });
+                Toast toast = Toast.makeText(NewElecteurActivity.this, "FOKONTANY: " + fokontanySelected.getLabel_fokontany(), Toast.LENGTH_LONG);
+                toast.show();
+                cv = DB.selectCvFromFokontany(fokontanySelected.getCode_fokontany());
+                spinnerCv = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_cv);
+                spinnerCv.setEnabled(false);
+                // Adapter Cv
+                SpinerCvAdapter adapterCv = new SpinerCvAdapter(NewElecteurActivity.this,
+                        R.layout.dropdown_localisation,
+                        R.id.textViewLabel,
+                        R.id.textViewCode,
+                        cv);
+                spinnerCv.setAdapter(adapterCv);
+                spinnerCv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                        Cv cvSelected = (Cv) spinnerCv.getSelectedItem();
+                        Toast toast = Toast.makeText(NewElecteurActivity.this, "CV : " + cvSelected.getLabel_cv(), Toast.LENGTH_LONG);
+                        toast.show();
+                        bv = DB.selectBvFromCv(cvSelected.getCode_cv());
+                        spinnerBv = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_bv);
+                        spinnerBv.setEnabled(false);
+                        // Adapter Bv
+                        SpinerBvAdapter adapterBv = new SpinerBvAdapter(NewElecteurActivity.this,
+                                R.layout.dropdown_localisation,
+                                R.id.textViewLabel,
+                                R.id.textViewCode,
+                                bv);
+                        spinnerBv.setAdapter(adapterBv);
+                    }
 
-                        @Override
-                        public void onNothingSelected(AdapterView<?> adapterView) {
+                    @Override
+                    public void onNothingSelected(AdapterView<?> adapterView) {
 
-                        }
-                    });
-                }
+                    }
+                });
+            }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {
-                }
-            });
-        }else{
-            Intent i = new Intent(getApplicationContext(), ParametreActivity.class);
-            startActivity(i);
-            finish();
-        }
-
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
         nevers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (nevers.isChecked()) {
                     isNevers = true;
-                    datedeNaissance.setVisibility(View.GONE);
+                    mShowSelectedDateText.setVisibility(View.GONE);
+                    mPickDateButton.setVisibility(View.GONE);
                     editNevers.setVisibility(View.VISIBLE);
                 } else {
                     isNevers = false;
-                    datedeNaissance.setVisibility(View.VISIBLE);
+                    mShowSelectedDateText.setVisibility(View.VISIBLE);
+                    mPickDateButton.setVisibility(View.VISIBLE);
                     editNevers.setVisibility(View.GONE);
                 }
             }
@@ -370,126 +377,288 @@ public class NewElecteurActivity extends AppCompatActivity {
             }
         });
 
-        datedeNaissance.addTextChangedListener(new TextWatcher() {
+//        datedeNaissance.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                try {
+//                    String dateDead = "10/06/" + anneeDead;
+//                    String dateLimite = "10/06/2005";
+//                    String nomElect = nom.getText().toString();
+//                    String prenomElect = prenom.getText().toString();
+//                    String naiss = datedeNaissance.getText().toString();
+//                    SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+////                    Boolean isDateValide = validateDate(naiss);
+//                    Boolean isDateValide = checkDate(naiss);
+//                    if (isDateValide) {
+//                        Date dateNaiss = format.parse(naiss);
+//                        Date dead = format.parse(dateDead);
+//                        Date limite = format.parse(dateLimite);
+//                        if (dead.getTime() < dateNaiss.getTime() && dateNaiss.getTime() < limite.getTime()) {
+//                            isSamePers = DB.isSamePerson(nomElect, prenomElect, naiss);
+//                            isDateNaissValide = true;
+//                            if (isSamePers) {
+//                                datedeNaissance.setError("mpifidy efa voasoratra!");
+//                                prenom.setError("mpifidy efa voasoratra!");
+//                                nom.setError("mpifidy efa voasoratra!");
+//                            }
+//                        } else {
+//                            datedeNaissance.setError("tsy tafiditra ny date");
+//                        }
+//                    } else {
+//                        datedeNaissance.setError("Daty tsy valide");
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar.clear();
+
+        calendar.set(Calendar.YEAR, anneeMajor);
+        calendar.set(Calendar.MONTH, Calendar.JUNE);
+        Long anneeFin = calendar.getTimeInMillis();
+
+        calendar.set(Calendar.YEAR, anneeDead);
+        Long anneeStart = calendar.getTimeInMillis();
+
+        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
+        Calendar max = Calendar.getInstance();
+        max.set(Calendar.YEAR, anneeMajor);
+        max.set(Calendar.MONTH, Calendar.JUNE);
+        max.set(Calendar.DAY_OF_MONTH, 11);
+
+        CalendarConstraints.DateValidator dateValidatorMax = DateValidatorPointBackward.before(max.getTimeInMillis());
+        ArrayList<CalendarConstraints.DateValidator> listValidators = new ArrayList<CalendarConstraints.DateValidator>();
+        listValidators.add(dateValidatorMax);
+        CalendarConstraints.DateValidator validators = CompositeDateValidator.allOf(listValidators);
+        constraintBuilder.setValidator(validators);
+        constraintBuilder.setStart(anneeStart);
+        constraintBuilder.setEnd(anneeFin);
+
+        MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
+
+        materialDateBuilder.setSelection(anneeFin);
+        materialDateBuilder.setCalendarConstraints(constraintBuilder.build());
+        materialDateBuilder.setTitleText("Daty nahaterahana:");
+        final MaterialDatePicker materialDatePicker = materialDateBuilder.build();
+
+        mPickDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                try {
-                    String dateDead = "10/06/" + anneeDead;
-                    String dateLimite = "10/06/2005";
-                    String nomElect = nom.getText().toString();
-                    String prenomElect = prenom.getText().toString();
-                    String naiss = datedeNaissance.getText().toString();
-                    SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-//                    Boolean isDateValide = validateDate(naiss);
-                    Boolean isDateValide = checkDate(naiss);
-                    if (isDateValide) {
-                        Date dateNaiss = format.parse(naiss);
-                        Date dead = format.parse(dateDead);
-                        Date limite = format.parse(dateLimite);
-                        if (dead.getTime() < dateNaiss.getTime() && dateNaiss.getTime() < limite.getTime()) {
-                            isSamePers = DB.isSamePerson(nomElect, prenomElect, naiss);
-                            isDateNaissValide = true;
-                            if (isSamePers) {
-                                datedeNaissance.setError("mpifidy efa voasoratra!");
-                                prenom.setError("mpifidy efa voasoratra!");
-                                nom.setError("mpifidy efa voasoratra!");
-                            }
-                        } else {
-                            datedeNaissance.setError("tsy tafiditra ny date");
-                        }
-                    }else {
-                        datedeNaissance.setError("Daty tsy valide");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        datederecensement.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String deb = "01/10/2022";
-                String daterecens = datederecensement.getText().toString();
-                SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-                Boolean isDateValide = checkDate(daterecens);
-                if (isDateValide) {
-                    try {
-                        Date dateRecens = format.parse(daterecens);
-                        Date datedeb = format.parse(deb);
-                        Date dateNow = Calendar.getInstance().getTime();
-                        if (datedeb.getTime() < dateRecens.getTime()) {
-                            isDateDerecense = true;
-                        } else {
-                            datederecensement.setError("Tsy ao anatiny daty");
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    datederecensement.setError("Daty tsy valide");
-                }
-
-            }
-        });
-
-        dateCin.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                Date dateNow = Calendar.getInstance().getTime();
-                String dateNaiss = datedeNaissance.getText().toString();
-                String datedeliv = dateCin.getText().toString();
-                SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-                Boolean isDateValide = checkDate(datedeliv);
-                if (isDateValide) {
-                    try {
-                        Date naiss = format.parse(dateNaiss);
-                        Date deliv = format.parse(datedeliv);
-                        if (naiss.getTime() < deliv.getTime() && deliv.getTime() < dateNow.getTime()) {
-                            isDateCinValid = true;
-                        } else {
-                            dateCin.setError("tsy tafiditra ny date");
-                        }
-
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }else {
-                    dateCin.setError("Daty tsy valide");
-                }
-
+            public void onClick(View v) {
+                mPickDateButton.setEnabled(false);
+                materialDatePicker.show(getSupportFragmentManager(), "DATY NAHATERAHANA");
             }
         });
+        materialDatePicker.addOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                mPickDateButton.setEnabled(true);
+            }
+        });
+        materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.setTimeInMillis((Long) selection);
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate = format.format(calendar.getTime());
+                mShowSelectedDateText.setTextColor(Color.WHITE);
+                mPickDateButton.setEnabled(true);
+                dateNaiss = formattedDate;
+                mShowSelectedDateText.setText("Daty nahaterahana: " + formattedDate);
+            }
+        });
+
+//        datederecensement.addTextChangedListener(new TextWatcher() {
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                String deb = "01/10/2022";
+//                String daterecens = datederecensement.getText().toString();
+//                SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+//                Boolean isDateValide = checkDate(daterecens);
+//                if (isDateValide) {
+//                    try {
+//                        Date dateRecens = format.parse(daterecens);
+//                        Date datedeb = format.parse(deb);
+//                        Date dateNow = Calendar.getInstance().getTime();
+//                        if (datedeb.getTime() < dateRecens.getTime()) {
+//                            isDateDerecense = true;
+//                        } else {
+//                            datederecensement.setError("Tsy ao anatiny daty");
+//                        }
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    datederecensement.setError("Daty tsy valide");
+//                }
+//
+//            }
+//        });
+
+//        dateCin.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                Date dateNow = Calendar.getInstance().getTime();
+//                String dateNaiss = "datedeNaissance.getText().toString()";
+//                String datedeliv = dateCin.getText().toString();
+//                SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+//                Boolean isDateValide = checkDate(datedeliv);
+//                if (isDateValide) {
+//                    try {
+//                        Date naiss = format.parse(dateNaiss);
+//                        Date deliv = format.parse(datedeliv);
+//                        if (naiss.getTime() < deliv.getTime() && deliv.getTime() < dateNow.getTime()) {
+//                            isDateCinValid = true;
+//                        } else {
+//                            dateCin.setError("tsy tafiditra ny date");
+//                        }
+//
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    dateCin.setError("Daty tsy valide");
+//                }
+//
+//            }
+//        });
+
+        Calendar calendar2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar2.clear();
+        int fin = anneeNow - 101+18;
+
+        calendar2.set(Calendar.YEAR,anneeNow);
+        calendar2.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH)+1);
+        Long anneeFinDateCin = calendar2.getTimeInMillis();
+        calendar2.set(Calendar.YEAR,fin);
+        Long anneeStartDateCin = calendar2.getTimeInMillis();
+
+        CalendarConstraints.Builder constraintBuilder2 = new CalendarConstraints.Builder();
+        constraintBuilder2.setStart(anneeStartDateCin);
+        constraintBuilder2.setEnd(anneeFinDateCin);
+
+        MaterialDatePicker.Builder materialDateBuilder2 = MaterialDatePicker.Builder.datePicker();
+        materialDateBuilder2.setSelection(anneeFinDateCin);
+        materialDateBuilder2.setCalendarConstraints(constraintBuilder2.build());
+        materialDateBuilder2.setTitleText("Datin'ny karapanondro:");
+        final MaterialDatePicker materialDatePicker2 = materialDateBuilder2.build();
+        datecin.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        datecin.setEnabled(false);
+                        materialDatePicker2.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
+                    }
+                });
+
+        materialDatePicker2.addOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                datecin.setEnabled(true);
+            }
+        });
+        materialDatePicker2.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.setTimeInMillis((Long)selection);
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate  = format.format(calendar.getTime());
+                datecin.setEnabled(true);
+                dateCinElect = formattedDate;
+                selectedDateCin.setText("Daty nahazahona ny CNI: " + formattedDate);
+            }
+        });
+
+        Calendar calendar3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        calendar3.clear();
+        int fin3 = Calendar.getInstance().get(Calendar.YEAR)-1;
+
+        calendar3.set(Calendar.YEAR,anneeNow);
+        calendar3.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH)+1);
+        Long anneeFinRecens = calendar3.getTimeInMillis();
+        calendar3.set(Calendar.YEAR,fin3);
+        Long anneeStartRecens = calendar3.getTimeInMillis();
+
+        CalendarConstraints.Builder constraintBuilder3 = new CalendarConstraints.Builder();
+        constraintBuilder3.setStart(anneeStartRecens);
+        constraintBuilder3.setEnd(anneeFinRecens);
+
+        MaterialDatePicker.Builder materialDateBuilder3 = MaterialDatePicker.Builder.datePicker();
+        materialDateBuilder3.setSelection(anneeFinRecens);
+        materialDateBuilder3.setCalendarConstraints(constraintBuilder3.build());
+        materialDateBuilder3.setTitleText("Daty:");
+        final MaterialDatePicker materialDatePicker3 = materialDateBuilder3.build();
+        datederecensement.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        datederecensement.setEnabled(false);
+                        materialDatePicker3.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
+                    }
+                });
+
+        materialDatePicker3.addOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                datederecensement.setEnabled(true);
+            }
+        });
+        materialDatePicker3.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onPositiveButtonClick(Object selection) {
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.setTimeInMillis((Long)selection);
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                String formattedDate  = format.format(calendar.getTime());
+                datederecensement.setEnabled(true);
+                daterecensement = formattedDate;
+                selectedDateRecensement.setText("Date recensement : " + formattedDate);
+            }
+        });
+
+
+
+
+
+
+
+
 
         this.enregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -556,12 +725,13 @@ public class NewElecteurActivity extends AppCompatActivity {
                         editNevers.setError("Diso");
                     }
                 } else {
-                    if (datedeNaissance.getText().length() != 0 && isDateNaissValide) {
+                    if (dateNaiss != null) {
                         countFormValide += 1;
-                        electeur.setDateNaiss(datedeNaissance.getText().toString());
+                        electeur.setDateNaiss(dateNaiss);
                         electeur.setNevers("");
                     } else {
-                        datedeNaissance.setError("Mila apetraka ny daty nahaterahana");
+                        mShowSelectedDateText.setTextColor(Color.RED);
+                        mShowSelectedDateText.setText("Mila apetraka ny daty nahaterahana");
                     }
                 }
 
@@ -585,11 +755,11 @@ public class NewElecteurActivity extends AppCompatActivity {
                     cin.setError("Diso");
                 }
                 if (nserie.getText().toString().length() == 7) {
-                    if(nserie2.getText().toString().length() == 0){
+                    if (nserie2.getText().toString().length() == 0) {
                         String serial = nserie.getText().toString();
                         electeur.setNserieCin(serial);
                         countFormValide += 1;
-                    } else{
+                    } else {
                         String serial = nserie.getText().toString() + "/" + nserie2.getText().toString();
                         electeur.setNserieCin(serial);
                         countFormValide += 1;
@@ -603,17 +773,19 @@ public class NewElecteurActivity extends AppCompatActivity {
                 } else {
                     lieuCin.setError("Mila fenoina");
                 }
-                if (dateCin.getText().length() != 0) {
-                    electeur.setDateDeliv(dateCin.getText().toString());
+                if (dateCinElect!=null) {
+                    electeur.setDateDeliv(dateCinElect);
                     countFormValide += 1;
-                } else {
-                    dateCin.setError("Mila apetraka ny daty nahazahona ny karatra");
+                } else{
+                    selectedDateCin.setTextColor(Color.RED);
+                    selectedDateCin.setText("Datin'ny CNI: ");
                 }
-                if (datederecensement.getText().length() != 0 && isDateDerecense) {
-                    electeur.setDateinscription(datederecensement.getText().toString());
+                if (daterecensement != null) {
+                    electeur.setDateinscription(daterecensement.toString());
                     countFormValide += 1;
-                } else {
-                    datederecensement.setError("Mila fenoina");
+                }  else {
+                    selectedDateRecensement.setTextColor(Color.RED);
+                    selectedDateRecensement.setText("Datin'ny recensement");
                 }
                 if (imageRecto != null) {
                     electeur.setCinRecto(imageRecto);
@@ -720,7 +892,7 @@ public class NewElecteurActivity extends AppCompatActivity {
         try {
             Date d = format.parse(date);
             cal.setTime(d);
-            Log.d("check_date",""+cal.getTime()+" date valide");
+            Log.d("check_date", "" + cal.getTime() + " date valide");
         } catch (ParseException e) {
             e.printStackTrace();
             return false;
@@ -728,55 +900,45 @@ public class NewElecteurActivity extends AppCompatActivity {
         return true;
     }
 
-    public boolean validateDate(final String date){
+    public boolean validateDate(final String date) {
 
         matcher = pattern.matcher(date);
 
-        if(matcher.matches()){
+        if (matcher.matches()) {
             matcher.reset();
 
-            if(matcher.find()){
+            if (matcher.find()) {
                 String day = matcher.group(1);
                 String month = matcher.group(2);
                 int year = Integer.parseInt(matcher.group(3));
 
                 if (day.equals("31") &&
-                        (month.equals("4") || month .equals("6") || month.equals("9") ||
-                                month.equals("11") || month.equals("04") || month .equals("06") ||
+                        (month.equals("4") || month.equals("6") || month.equals("9") ||
+                                month.equals("11") || month.equals("04") || month.equals("06") ||
                                 month.equals("09"))) {
                     return false; // only 1,3,5,7,8,10,12 has 31 days
-                }
-
-                else if (month.equals("2") || month.equals("02")) {
+                } else if (month.equals("2") || month.equals("02")) {
                     //leap year
-                    if(year % 4==0){
-                        if(day.equals("30") || day.equals("31")){
+                    if (year % 4 == 0) {
+                        if (day.equals("30") || day.equals("31")) {
                             return false;
+                        } else {
+                            return true;
                         }
-                        else{
+                    } else {
+                        if (day.equals("29") || day.equals("30") || day.equals("31")) {
+                            return false;
+                        } else {
                             return true;
                         }
                     }
-                    else{
-                        if(day.equals("29")||day.equals("30")||day.equals("31")){
-                            return false;
-                        }
-                        else{
-                            return true;
-                        }
-                    }
-                }
-
-                else{
+                } else {
                     return true;
                 }
-            }
-
-            else{
+            } else {
                 return false;
             }
-        }
-        else{
+        } else {
             return false;
         }
     }
