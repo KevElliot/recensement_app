@@ -154,7 +154,11 @@
                 android:maxLength="8"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
-                android:textColorHint="#7A7A7A" />
+                android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
 
             <EditText
@@ -171,6 +175,9 @@
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
                 android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
                 />
 
             <EditText
@@ -187,7 +194,11 @@
                 android:maxLength="100"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
-                android:textColorHint="#7A7A7A" />
+                android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -233,7 +244,11 @@
                     android:minHeight="40dp"
                     android:textColor="#7A7A7A"
                     android:textColorHint="#7A7A7A"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    />
 
                 <EditText
                     android:id="@+id/editTextNevers"
@@ -275,7 +290,11 @@
                 android:maxLength="100"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
-                android:textColorHint="#7A7A7A" />
+                android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <EditText
                 android:id="@+id/editTextProfession"
@@ -291,7 +310,11 @@
                 android:maxLength="100"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
-                android:textColorHint="#7A7A7A" />
+                android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <EditText
                 android:id="@+id/editTextAdresse"
@@ -307,7 +330,11 @@
                 android:maxLength="100"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
-                android:textColorHint="#7A7A7A" />
+                android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -328,7 +355,11 @@
                     android:maxLength="100"
                     android:minHeight="40dp"
                     android:textColor="#7A7A7A"
-                    android:textColorHint="#7A7A7A" />
+                    android:textColorHint="#7A7A7A"
+
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    />
 
                 <CheckBox
                     android:id="@+id/feuPere"
@@ -359,7 +390,11 @@
                     android:maxLength="100"
                     android:minHeight="40dp"
                     android:textColor="#7A7A7A"
-                    android:textColorHint="#7A7A7A" />
+                    android:textColorHint="#7A7A7A"
+
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    />
 
                 <CheckBox
                     android:id="@+id/feuMere"
@@ -386,7 +421,11 @@
                 android:textColor="#7A7A7A"
                 android:maxLength="12"
                 android:inputType="number"
-                android:minHeight="40dp" />
+                android:minHeight="40dp"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -407,7 +446,11 @@
                     android:maxLength="7"
                     android:minHeight="40dp"
                     android:textColor="#7A7A7A"
-                    android:textColorHint="#7A7A7A" />
+                    android:textColorHint="#7A7A7A"
+
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    />
 
                 <TextView
                     android:id="@+id/text"
@@ -434,7 +477,11 @@
                     android:maxLength="1"
                     android:minHeight="40dp"
                     android:textColor="#7A7A7A"
-                    android:textColorHint="#7A7A7A"/>
+                    android:textColorHint="#7A7A7A"
+
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    />
 
             </LinearLayout>
             <EditText
@@ -450,7 +497,11 @@
                 android:maxLength="10"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
-                android:textColorHint="#7A7A7A" />
+                android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <EditText
                 android:id="@+id/editTextLieuCIN"
@@ -464,7 +515,11 @@
                 android:textColorHint="#7A7A7A"
                 android:textColor="#7A7A7A"
                 android:inputType="textCapCharacters"
-                android:minHeight="40dp" />
+                android:minHeight="40dp"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <TextView
                 android:id="@+id/labelTakelaka"
@@ -493,7 +548,8 @@
                 android:layout_height="49dp"
                 android:background="@drawable/input_field"
                 android:fontFamily="@font/bangers"
-                android:text="Maka sary" />
+                android:text="Maka sary"
+                />
 
             <TextView
                 android:id="@+id/label2"

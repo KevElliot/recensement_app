@@ -12,11 +12,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
@@ -46,6 +49,11 @@ import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Calendar;
+// import java.util.Base64;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -437,6 +445,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 }else{
                     datederecensement.setError("Daty tsy valide");
                 }
+
             }
         });
 
@@ -571,10 +580,16 @@ public class NewElecteurActivity extends AppCompatActivity {
                 } else {
                     cin.setError("Diso");
                 }
-                if (nserie.getText().toString().length() == 7 && nserie2.getText().toString().length() == 1) {
-                    String serial = nserie.getText().toString() + "/" + nserie2.getText().toString();
-                    electeur.setNserieCin(serial);
-                    countFormValide += 1;
+                if (nserie.getText().toString().length() == 7) {
+                    if(nserie2.getText().toString().length() == 0){
+                        String serial = nserie.getText().toString();
+                        electeur.setNserieCin(serial);
+                        countFormValide += 1;
+                    } else{
+                        String serial = nserie.getText().toString() + "/" + nserie2.getText().toString();
+                        electeur.setNserieCin(serial);
+                        countFormValide += 1;
+                    }
                 } else {
                     nserie.setError("Diso");
                 }
@@ -804,5 +819,6 @@ public class NewElecteurActivity extends AppCompatActivity {
             }
         }
     }
+
 
 }
