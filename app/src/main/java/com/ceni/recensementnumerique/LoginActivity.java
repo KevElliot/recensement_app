@@ -3,7 +3,9 @@ package com.ceni.recensementnumerique;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,6 +22,7 @@ import com.google.gson.Gson;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
+    private static String configTab;
     Button connecter;
     Db_sqLite DB;
     int nbUser;
@@ -33,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         Tablette tab = gson.fromJson(getIntent().getStringExtra("configTab"), Tablette.class);
         setContentView(R.layout.activity_login);
         connecter = findViewById(R.id.connecterBtn);
-        txtpseudo =findViewById(R.id.editTextPseudo);
+        txtpseudo = findViewById(R.id.editTextPseudo);
         txtmdp = findViewById(R.id.editTextPassword);
         DB = new Db_sqLite(this);
 
@@ -42,33 +45,63 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 DB = new Db_sqLite(LoginActivity.this);
                 String pseudo = txtpseudo.getText().toString();
-                String motdepass=txtmdp.getText().toString();
+                String motdepass = txtmdp.getText().toString();
 //                String pseudo = "AMBATONDRAZAKA";
 //                String motdepass = "AMBATONDRAZAKA";
 
-                // check IMEI
+                // check IMEI Phone
                 String checkIMEI = tab.getImei();
 
-                user = DB.selectUser(pseudo,motdepass);
-                //Boolean checkResult = DB.findIMEI(checkIMEI);
-                boolean checkResult = true;
-                if(user.getCode_district()!=null && checkResult){
+                user = DB.selectUser(pseudo, motdepass);
+                // check emei on sqlite
+                Boolean checkResult = DB.findIMEI(checkIMEI);
+                Log.d("IMEI CHECK LOGIN", "Bool " + checkIMEI);
 
-                    String myjson = gson.toJson(user);
-                    String configTab = gson.toJson(tab);
-                    Intent i = new Intent(getApplicationContext(),MenuActivity.class);
-                    i.putExtra("user", myjson);
-                    i.putExtra("configTab", configTab);
-                    startActivity(i);
-                    finish();
-                }
-                else{
-                    Toast toast = Toast.makeText(LoginActivity.this, "Identification incorrect", Toast.LENGTH_LONG);
+                // get one tablette element
+                Tablette tbs = DB.selectImei(checkIMEI);
+                Log.d("IMEI CHECK FROM BASE", "BASE :  " + tbs.getImei());
+
+
+                if (checkResult) {
+                    if (user.getCode_district() != null) {
+
+                        String myjson = gson.toJson(user);
+                        configTab = gson.toJson(tab);
+                        SharedPreferences params_localisation = LoginActivity.this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
+                        String commune_pref = params_localisation.getString("code_commune","");
+                        Log.d("PARAMS",""+params_localisation.toString());
+                        if(commune_pref.length()!=0){
+                            Intent i = new Intent(getApplicationContext(), MenuActivity.class);
+                            i.putExtra("user", myjson);
+                            i.putExtra("configTab", configTab);
+                            startActivity(i);
+                            finish();
+                        }else{
+                            Intent i = new Intent(getApplicationContext(), ParametreActivity.class);
+                            i.putExtra("user", myjson);
+                            i.putExtra("configTab", configTab);
+                            startActivity(i);
+                            finish();
+                        }
+                    } else {
+                        Toast toast = Toast.makeText(LoginActivity.this, "Identification incorrect", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }else {
+                    Toast toast = Toast.makeText(LoginActivity.this, "Vous n'avez pas acces!", Toast.LENGTH_LONG);
                     toast.show();
                 }
             }
 
         });
+    }
+
+    public static String getConfigTab() {
+        return configTab;
+    }
+
+    public void setConfigTab(String configTab) {
+        this.configTab = configTab;
     }
 
     public static User getUser() {

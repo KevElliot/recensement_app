@@ -23,6 +23,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -44,17 +45,21 @@ public class MainActivity extends AppCompatActivity {
         //DB.deleteAllUser();
         //DB.deleteAllElecteur();
         nbuser = DB.countUser();
-        String imei = getDeviceUniqueID();
+         String imei = getDeviceUniqueID();
         String wifi = getMacAddress("wlan0");
-//        String imei = "355531090371894";
+//        String imei = "351151256131273";
 //        String wifi = "00:00:00:00:00:00";
-        Log.d("Imei device: ",imei);
+        // Log.d("Imei device: ",imei);
         Log.d("adressMac wifi: ",wifi);
+
+        // DB.insertTablettes(this);
+        // Log.d("Insert tabs : ", "DONE");
+
         if (nbuser > 0) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(MainActivity.this, "Utilisateur trouver - LOGIN", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Chargement ... ", Toast.LENGTH_LONG).show();
                     Gson gson = new Gson();
                     String myjson = gson.toJson(nbuser);
                     Intent i = new Intent(MainActivity.this, LoginActivity.class);
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, 5000);
         } else {
+            DB.insertTablettes(this);
             DB.insertLocalisation(this);
             DB.insertUser(this);
             new Handler().postDelayed(new Runnable() {
@@ -99,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             if (android.os.Build.VERSION.SDK_INT >= 26) {
-                imei = telephonyManager.getImei();
+                imei = telephonyManager.getDeviceId();
             } else {
                 imei = telephonyManager.getDeviceId();
             }

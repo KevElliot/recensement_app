@@ -105,6 +105,7 @@ public class RecensementTablette extends AppCompatActivity {
                     Commune communeSelected = (Commune) spinnerCommune.getSelectedItem();
                     Fokontany fokontanySelected = (Fokontany) spinnerFokontany.getSelectedItem();
                     Tablette tab = new Tablette();
+
                     tab.setRegion(user.getRegionUser());
                     tab.setCode_region(user.getCode_region());
                     tab.setDistrict(user.getDistrictUser());
@@ -116,16 +117,26 @@ public class RecensementTablette extends AppCompatActivity {
                     tab.setResponsable(nomResp);
                     tab.setImei(tablette.getImei());
                     tab.setMacWifi(tablette.getMacWifi());
-                    Log.d("tag",tab.toString());
 
-                    boolean result = DB.insertInformationTablette(tab);
-                    if (result) {
+                    boolean tmp = DB.findIMEISimilare(tab);
+
+                    if(tmp){
                         Intent intent = new Intent(getApplicationContext(), ConfigurationMac.class);
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast toast = Toast.makeText(RecensementTablette.this, "Erreur à l'enregistrement de l'information tablette", Toast.LENGTH_LONG);
-                        toast.show();
+                        Log.d("tag",tab.toString());
+                        boolean result = DB.insertInformationTablette(tab);
+                        Log.d("TO :", String.valueOf(result));
+
+                        if (result) {
+                            Intent intent = new Intent(getApplicationContext(), ConfigurationMac.class);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            Toast toast = Toast.makeText(RecensementTablette.this, "Erreur à l'enregistrement de l'information tablette", Toast.LENGTH_LONG);
+                            toast.show();
+                        }
                     }
 
                 }else{

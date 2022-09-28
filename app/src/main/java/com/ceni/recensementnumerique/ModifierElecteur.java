@@ -114,11 +114,26 @@ public class ModifierElecteur extends AppCompatActivity {
         dateCinElect.setText(electeur.getDateDeliv());
         dateCin = electeur.getDateDeliv();
         Bitmap imgFiche = this.decodeImage(electeur.getFicheElect());
-        Bitmap imgCinRecto = this.decodeImage(electeur.getCinRecto());
-        Bitmap imgCinVerso = this.decodeImage(electeur.getCinVerso());
+
         ficheElect.setImageBitmap(imgFiche);
-        cin_recto.setImageBitmap(imgCinRecto);
-        cin_verso.setImageBitmap(imgCinVerso);
+        if(electeur.getCinRecto()!=null){
+            cin_recto.setVisibility(View.VISIBLE);
+            Bitmap imgCinRecto = this.decodeImage(electeur.getCinRecto());
+            cin_recto.setImageBitmap(imgCinRecto);
+
+        }else{
+            cin_recto.setVisibility(View.GONE);
+        }
+        if(electeur.getCinVerso()!=null){
+            cin_verso.setVisibility(View.VISIBLE);
+            Bitmap imgCinVerso = this.decodeImage(electeur.getCinVerso());
+            cin_verso.setImageBitmap(imgCinVerso);
+        }else{
+            cin_verso.setVisibility(View.GONE);
+        }
+
+        // cin_recto.setImageBitmap(imgCinRecto);
+        // cin_verso.setImageBitmap(imgCinVerso);
 
         if (electSexe.equals("Homme")) {
             sexe = "Homme";

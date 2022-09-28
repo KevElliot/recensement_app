@@ -46,7 +46,11 @@ class Task_insertTabs  extends AsyncTask<Void, Void, Void> {
       Context c = params.getContext();
       String ip = params.getIp();
       String port = params.getPort();
-      API.addNewInformationTabs(DB,c,ip,port,tab,us);
+
+      String tmpImei = tab.getImei();
+      Tablette tbs = DB.selectImei(tmpImei);
+
+      API.addNewInformationTabs(DB,c,ip,port,tbs,us);
       return null;
    }
 

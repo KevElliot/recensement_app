@@ -22,6 +22,7 @@ import com.ceni.recensementnumerique.MenuActivity;
 import com.google.gson.Gson;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -86,6 +87,10 @@ public class Api_service {
             jsonObject.put("numdocreference", doc.getNumdocreference());
             jsonObject.put("datedocreference", doc.getDatedocreference());
             //Log.d("APIII --- ", jsonObject.toString());
+
+            Log.d("DOC", " " + doc.toString());
+            Log.d("DOC - insert elect", " " + electeur.toString());
+
             AndroidNetworking.post(base_url + "api/document")
                     .setTag("test")
                     .addHeaders("Accept", "application/json")
@@ -113,11 +118,26 @@ public class Api_service {
     public static void addNewInformationTabs(Db_sqLite DB, Context context, String ip, String port, Tablette tab, User us) {
         String base_url = "http://" + ip + ":" + port + "/";
         try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("region", tab.getRegion());
+            jsonObject.put("code_region", tab.getCode_region());
+            jsonObject.put("district", tab.getDistrict());
+            jsonObject.put("code_district", tab.getCode_district());
+            jsonObject.put("commune", tab.getCommune());
+            jsonObject.put("code_commune", tab.getCode_commune());
+            jsonObject.put("fokontany", tab.getFokontany());
+            jsonObject.put("code_fokontany", tab.getCode_fokontany());
+            jsonObject.put("responsable", tab.getResponsable());
+            jsonObject.put("imei", tab.getImei());
+            jsonObject.put("macWifi", tab.getMacWifi());
+            Log.d("za ", "" + tab.toString());
+
             // URL api recensement node to change
-            AndroidNetworking.post(base_url + "api/document")
+            AndroidNetworking.post(base_url + "api/tablette")
                     .setTag("test")
                     .addHeaders("Accept", "application/json")
                     .setPriority(Priority.HIGH)
+                    .addJSONObjectBody(jsonObject)
                     .build()
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
@@ -208,4 +228,8 @@ public class Api_service {
             e.printStackTrace();
         }
     }
+
+
+
+
 }

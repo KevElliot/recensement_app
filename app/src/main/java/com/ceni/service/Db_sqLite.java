@@ -30,7 +30,7 @@ import java.util.List;
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-    private static final int DB_VERSION = 28;
+    private static final int DB_VERSION = 31;
     /*---------------------------------------------------------------------------------------
                                            TABLE ELECTEUR
     ----------------------------------------------------------------------------------------*/
@@ -918,11 +918,51 @@ public class Db_sqLite extends SQLiteOpenHelper {
         contentValues.put(COLUMN_macWifi, tablette.getMacWifi());
 
         long result = MyDB.insert(TABLE_Tablette, null, contentValues);
+        Log.d("INSERTION INF TABLETTE", "TABLETTE INSERTED");
         if (result == -1) {
             return false;
         } else {
             return true;
         }
+    }
+
+    public void insertTablettes(Context c) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        try {
+            Resources res = c.getResources();
+            String[] tablette = res.getStringArray(R.array.tablettes);
+            MyDB.beginTransaction();
+            for (int i = 0; i < tablette.length; i++) {
+                String sql = "INSERT INTO Tablette (region,district,code_region,code_district,commune,code_commune,fokontany,code_fokontany,responsable,imei,macWifi) VALUES " +
+                        tablette[i];
+                MyDB.execSQL(sql);
+            }
+            MyDB.setTransactionSuccessful();
+            MyDB.endTransaction();
+            Log.d("INSERTION TABS", "DEVICES INSERTED");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            MyDB.close();
+        }
+    }
+
+    public Boolean findIMEISimilare (Tablette tmp) {
+        boolean result = false;
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from Tablette where region='" + tmp.getRegion().trim() + "' and district='" + tmp.getDistrict().trim() + "' and commune='" + tmp.getCommune().trim() + "' and fokontany='" + tmp.getFokontany().trim() + "' and imei='" + tmp.getImei().trim() + "'", null);
+        try {
+            Log.d("MM Similar IMEI"," "+cursor.getCount());
+            if (cursor.getCount() != 0) {
+                result = true;
+            }
+        } catch (Exception e) {
+            Log.e("ERROR find IMEI", " " + e);
+        } finally {
+            cursor.close();
+            MyDB.close();
+        }
+        return result;
     }
 
     public Boolean findIMEI (String toIMEI) {
@@ -941,6 +981,62 @@ public class Db_sqLite extends SQLiteOpenHelper {
             MyDB.close();
         }
         return result;
+    }
+
+    public Tablette selectImei(String tmpImei) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Tablette e = new Tablette();
+        Cursor cursor = MyDB.rawQuery("Select * from Tablette where imei='" + tmpImei.trim() + "'", null);
+        try {
+            while (cursor.moveToNext()) {
+                e.setRegion(cursor.getString(1));
+                e.setDistrict(cursor.getString(2));
+                e.setCode_region(cursor.getString(3));
+                e.setCode_district(cursor.getString(4));
+                e.setCommune(cursor.getString(5));
+                e.setCode_commune(cursor.getString(6));
+                e.setFokontany(cursor.getString(7));
+                e.setCode_fokontany(cursor.getString(8));
+                e.setResponsable(cursor.getString(9));
+                e.setImei(cursor.getString(10));
+                e.setMacWifi(cursor.getString(11));
+            }
+        } catch (Exception ex) {
+            Log.e("error Select SQLITE", "ERROR FIND IMEI");
+        } finally {
+            cursor.close();
+            MyDB.close();
+        }
+        return e;
+    }
+
+    public List<Tablette> selectInformationAllTabs() {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        Cursor cursor = MyDB.rawQuery("Select * from Tablette", null);
+        List<Tablette> listTablette = new ArrayList<>();
+        try {
+            while (cursor.moveToNext()) {
+                Tablette tab = new Tablette();
+                tab.setRegion(cursor.getString(1));
+                tab.setCode_region(cursor.getString(2));
+                tab.setDistrict(cursor.getString(3));
+                tab.setCode_district(cursor.getString(4));
+                tab.setCommune(cursor.getString(5));
+                tab.setCode_commune(cursor.getString(6));
+                tab.setCode_fokontany(cursor.getString(7));
+                tab.setFokontany(cursor.getString(8));
+                tab.setResponsable(cursor.getString(9));
+                tab.setImei(cursor.getString(10));
+                tab.setMacWifi(cursor.getString(11));
+                listTablette.add(tab);
+            }
+        } catch (Exception e) {
+            Log.e("error Select SQLITE", "ERROR SELECT INFORMATION TABLETTE");
+        } finally {
+            cursor.close();
+            MyDB.close();
+        }
+        return listTablette;
     }
 
 }

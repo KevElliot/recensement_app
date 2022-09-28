@@ -70,6 +70,18 @@
             android:paddingBottom="70dp">
 
             <Button
+                android:id="@+id/parametre"
+                android:layout_width="277dp"
+                android:layout_height="wrap_content"
+                android:minHeight="49dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="26dp"
+                android:background="@drawable/input_field"
+                android:fontFamily="@font/bangers"
+                android:text="ParametreS"
+                android:textSize="18sp" />
+
+            <Button
                 android:id="@+id/tablette"
                 android:layout_width="277dp"
                 android:layout_height="wrap_content"
@@ -130,19 +142,6 @@
                 android:fontFamily="@font/bangers"
                 android:text="Mitady mpifidy"
                 android:textSize="18sp" />
-
-            <Button
-                android:id="@+id/parametre"
-                android:layout_width="277dp"
-                android:layout_height="wrap_content"
-                android:minHeight="49dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="26dp"
-                android:background="@drawable/input_field"
-                android:fontFamily="@font/bangers"
-                android:text="Parametre"
-                android:textSize="18sp" />
-
 
             <TextView
                 android:id="@+id/espace"

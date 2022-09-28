@@ -126,6 +126,8 @@
             android:text="Fokontany:"
             android:textColor="#000000"
             android:textSize="15sp" />
+
+        <!--
         <TextView
             android:id="@+id/bvLabel"
             android:layout_width="wrap_content"
@@ -134,7 +136,7 @@
             android:fontFamily="@font/courgette"
             android:text="BV:"
             android:textColor="#000000"
-            android:textSize="15sp" />
+            android:textSize="15sp" /> -->
 
     </LinearLayout>
     </ScrollView>

@@ -1,5 +1,8 @@
 package com.ceni.recensementnumerique;
 
+import static android.provider.Settings.System.DATE_FORMAT;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,13 +12,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -40,8 +48,23 @@ import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
+// import java.util.Base64;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NewElecteurActivity extends AppCompatActivity {
     private List<Fokontany> fokontany;
@@ -57,9 +80,13 @@ public class NewElecteurActivity extends AppCompatActivity {
     private EditText cin, nserie, nserie2, lieuCin, dateCin, datederecensement;
     private TextView infoCarnet;
     private int countFormValide;
-    private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected, fichefull;
+    private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected, fichefull, isDateNaissValide, isDateDerecense, isDateCinValid;
     private String msg, user, format, imageRecto, imageVerso, dataFicheElect;
     private Fokontany fokontanySelected;
+
+    private Pattern pattern;
+    private Matcher matcher;
+
     private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
 
     @Override
@@ -105,41 +132,44 @@ public class NewElecteurActivity extends AppCompatActivity {
         fichefull = false;
         feuMereSelected = false;
         feuPereSelected = false;
+        isDateNaissValide = false;
+        isDateDerecense = false;
+        isDateCinValid = false;
         final String[] docReference = {""};
         final String[] idFdocReference = {""};
         int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
+        int moisNow = Calendar.getInstance().get(Calendar.MONTH);
+        int dayNow = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         int anneeMajor = anneeNow - 18;
         int anneeDead = anneeNow - 150;
         countFormValide = 0;
         SharedPreferences params_localisation = this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
         //if tsisy dia paramettre
-        if(params_localisation!=null) {
-            // FOKONTANY
-            String commune_pref = params_localisation.getString("code_commune", "");
-            Log.d("shared", commune_pref);
-            fokontany = DB.selectFokotanyFromCommune(commune_pref);
-            spinnerFokontany = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_fokontany);
-            SpinerFokontanyAdapter adapterFokontany = new SpinerFokontanyAdapter(NewElecteurActivity.this,
-                    R.layout.dropdown_localisation,
-                    R.id.textViewLabel,
-                    R.id.textViewCode,
-                    fokontany);
-            spinnerFokontany.setAdapter(adapterFokontany);
-            int fokontany_pref = params_localisation.getInt("position_fokontany", 0);
-            spinnerFokontany.setSelection(fokontany_pref);
-            spinnerFokontany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    fokontanySelected = (Fokontany) spinnerFokontany.getSelectedItem();
-                    document = DB.selectDocument(fokontanySelected.getCode_fokontany());
-                    //DOCUMENT
-                    // Adapter Document
-                    SpinnerDocumentAdapter adapterDocument = new SpinnerDocumentAdapter(NewElecteurActivity.this,
-                            R.layout.dropdown_document,
-                            R.id.numdocreference,
-                            document);
-                    spinnerDocument.setAdapter(adapterDocument);
-                    spinnerDocument.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        // FOKONTANY
+        String commune_pref = params_localisation.getString("code_commune", "");
+        fokontany = DB.selectFokotanyFromCommune(commune_pref);
+        spinnerFokontany = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_fokontany);
+        SpinerFokontanyAdapter adapterFokontany = new SpinerFokontanyAdapter(NewElecteurActivity.this,
+                R.layout.dropdown_localisation,
+                R.id.textViewLabel,
+                R.id.textViewCode,
+                fokontany);
+        spinnerFokontany.setAdapter(adapterFokontany);
+        int fokontany_pref = params_localisation.getInt("position_fokontany", 0);
+        spinnerFokontany.setSelection(fokontany_pref);
+        spinnerFokontany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                fokontanySelected = (Fokontany) spinnerFokontany.getSelectedItem();
+                document = DB.selectDocument(fokontanySelected.getCode_fokontany());
+                //DOCUMENT
+                // Adapter Document
+                SpinnerDocumentAdapter adapterDocument = new SpinnerDocumentAdapter(NewElecteurActivity.this,
+                        R.layout.dropdown_document,
+                        R.id.numdocreference,
+                        document);
+                spinnerDocument.setAdapter(adapterDocument);
+                spinnerDocument.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                         @Override
                         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -353,15 +383,111 @@ public class NewElecteurActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String nomElect = nom.getText().toString();
-                String prenomElect = prenom.getText().toString();
-                String dateNaiss = datedeNaissance.getText().toString();
-                isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss);
-                if (isSamePers) {
-                    datedeNaissance.setError("mpifidy efa voasoratra!");
-                    prenom.setError("mpifidy efa voasoratra!");
-                    nom.setError("mpifidy efa voasoratra!");
+                try {
+                    String dateDead = "10/06/" + anneeDead;
+                    String dateLimite = "10/06/2005";
+                    String nomElect = nom.getText().toString();
+                    String prenomElect = prenom.getText().toString();
+                    String naiss = datedeNaissance.getText().toString();
+                    SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+//                    Boolean isDateValide = validateDate(naiss);
+                    Boolean isDateValide = checkDate(naiss);
+                    if (isDateValide) {
+                        Date dateNaiss = format.parse(naiss);
+                        Date dead = format.parse(dateDead);
+                        Date limite = format.parse(dateLimite);
+                        if (dead.getTime() < dateNaiss.getTime() && dateNaiss.getTime() < limite.getTime()) {
+                            isSamePers = DB.isSamePerson(nomElect, prenomElect, naiss);
+                            isDateNaissValide = true;
+                            if (isSamePers) {
+                                datedeNaissance.setError("mpifidy efa voasoratra!");
+                                prenom.setError("mpifidy efa voasoratra!");
+                                nom.setError("mpifidy efa voasoratra!");
+                            }
+                        } else {
+                            datedeNaissance.setError("tsy tafiditra ny date");
+                        }
+                    }else {
+                        datedeNaissance.setError("Daty tsy valide");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
+            }
+        });
+        datederecensement.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String deb = "01/10/2022";
+                String daterecens = datederecensement.getText().toString();
+                SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+                Boolean isDateValide = checkDate(daterecens);
+                if (isDateValide) {
+                    try {
+                        Date dateRecens = format.parse(daterecens);
+                        Date datedeb = format.parse(deb);
+                        Date dateNow = Calendar.getInstance().getTime();
+                        if (datedeb.getTime() < dateRecens.getTime()) {
+                            isDateDerecense = true;
+                        } else {
+                            datederecensement.setError("Tsy ao anatiny daty");
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    datederecensement.setError("Daty tsy valide");
+                }
+
+            }
+        });
+
+        dateCin.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Date dateNow = Calendar.getInstance().getTime();
+                String dateNaiss = datedeNaissance.getText().toString();
+                String datedeliv = dateCin.getText().toString();
+                SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+                Boolean isDateValide = checkDate(datedeliv);
+                if (isDateValide) {
+                    try {
+                        Date naiss = format.parse(dateNaiss);
+                        Date deliv = format.parse(datedeliv);
+                        if (naiss.getTime() < deliv.getTime() && deliv.getTime() < dateNow.getTime()) {
+                            isDateCinValid = true;
+                        } else {
+                            dateCin.setError("tsy tafiditra ny date");
+                        }
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    dateCin.setError("Daty tsy valide");
+                }
+
             }
         });
 
@@ -430,7 +556,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                         editNevers.setError("Diso");
                     }
                 } else {
-                    if (datedeNaissance.getText().length() != 0) {
+                    if (datedeNaissance.getText().length() != 0 && isDateNaissValide) {
                         countFormValide += 1;
                         electeur.setDateNaiss(datedeNaissance.getText().toString());
                         electeur.setNevers("");
@@ -458,10 +584,16 @@ public class NewElecteurActivity extends AppCompatActivity {
                 } else {
                     cin.setError("Diso");
                 }
-                if (nserie.getText().toString().length() == 7 && nserie2.getText().toString().length() == 1) {
-                    String serial = nserie.getText().toString() + "/" + nserie2.getText().toString();
-                    electeur.setNserieCin(serial);
-                    countFormValide += 1;
+                if (nserie.getText().toString().length() == 7) {
+                    if(nserie2.getText().toString().length() == 0){
+                        String serial = nserie.getText().toString();
+                        electeur.setNserieCin(serial);
+                        countFormValide += 1;
+                    } else{
+                        String serial = nserie.getText().toString() + "/" + nserie2.getText().toString();
+                        electeur.setNserieCin(serial);
+                        countFormValide += 1;
+                    }
                 } else {
                     nserie.setError("Diso");
                 }
@@ -477,7 +609,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 } else {
                     dateCin.setError("Mila apetraka ny daty nahazahona ny karatra");
                 }
-                if (datederecensement.getText().length() != 0) {
+                if (datederecensement.getText().length() != 0 && isDateDerecense) {
                     electeur.setDateinscription(datederecensement.getText().toString());
                     countFormValide += 1;
                 } else {
@@ -562,7 +694,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                                         }
                                     }).show();
                         }
-                    }else {
+                    } else {
                         new AlertDialog.Builder(NewElecteurActivity.this)
                                 .setTitle("Fahadisoana")
                                 .setMessage("Karine efa feno! Manamboara vaovao!")
@@ -579,6 +711,74 @@ public class NewElecteurActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private boolean checkDate(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+        Calendar cal = Calendar.getInstance();
+        format.setLenient(false);
+        try {
+            Date d = format.parse(date);
+            cal.setTime(d);
+            Log.d("check_date",""+cal.getTime()+" date valide");
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    public boolean validateDate(final String date){
+
+        matcher = pattern.matcher(date);
+
+        if(matcher.matches()){
+            matcher.reset();
+
+            if(matcher.find()){
+                String day = matcher.group(1);
+                String month = matcher.group(2);
+                int year = Integer.parseInt(matcher.group(3));
+
+                if (day.equals("31") &&
+                        (month.equals("4") || month .equals("6") || month.equals("9") ||
+                                month.equals("11") || month.equals("04") || month .equals("06") ||
+                                month.equals("09"))) {
+                    return false; // only 1,3,5,7,8,10,12 has 31 days
+                }
+
+                else if (month.equals("2") || month.equals("02")) {
+                    //leap year
+                    if(year % 4==0){
+                        if(day.equals("30") || day.equals("31")){
+                            return false;
+                        }
+                        else{
+                            return true;
+                        }
+                    }
+                    else{
+                        if(day.equals("29")||day.equals("30")||day.equals("31")){
+                            return false;
+                        }
+                        else{
+                            return true;
+                        }
+                    }
+                }
+
+                else{
+                    return true;
+                }
+            }
+
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
     }
 
     private void capture() {
@@ -623,5 +823,6 @@ public class NewElecteurActivity extends AppCompatActivity {
             }
         }
     }
+
 
 }

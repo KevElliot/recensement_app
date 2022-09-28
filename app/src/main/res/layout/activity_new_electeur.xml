@@ -154,7 +154,11 @@
                 android:maxLength="8"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
-                android:textColorHint="#7A7A7A" />
+                android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
 
             <EditText
@@ -171,6 +175,9 @@
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
                 android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
                 />
 
             <EditText
@@ -187,7 +194,11 @@
                 android:maxLength="100"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
-                android:textColorHint="#7A7A7A" />
+                android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -233,7 +244,11 @@
                     android:minHeight="40dp"
                     android:textColor="#7A7A7A"
                     android:textColorHint="#7A7A7A"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    />
 
                 <EditText
                     android:id="@+id/editTextNevers"
@@ -271,11 +286,15 @@
                 android:background="@drawable/input_field"
                 android:fontFamily="@font/courgette"
                 android:hint="Toerana nahaterahana"
-                android:inputType="textCapWords"
+                android:inputType="textCapCharacters"
                 android:maxLength="100"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
-                android:textColorHint="#7A7A7A" />
+                android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <EditText
                 android:id="@+id/editTextProfession"
@@ -287,11 +306,15 @@
                 android:ems="10"
                 android:fontFamily="@font/courgette"
                 android:hint="Asa"
-                android:inputType="textCapWords"
+                android:inputType="textCapCharacters"
                 android:maxLength="100"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
-                android:textColorHint="#7A7A7A" />
+                android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <EditText
                 android:id="@+id/editTextAdresse"
@@ -303,11 +326,15 @@
                 android:ems="10"
                 android:fontFamily="@font/courgette"
                 android:hint="Adiresy"
-                android:inputType="text"
+                android:inputType="textCapCharacters"
                 android:maxLength="100"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
-                android:textColorHint="#7A7A7A" />
+                android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -328,7 +355,11 @@
                     android:maxLength="100"
                     android:minHeight="40dp"
                     android:textColor="#7A7A7A"
-                    android:textColorHint="#7A7A7A" />
+                    android:textColorHint="#7A7A7A"
+
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    />
 
                 <CheckBox
                     android:id="@+id/feuPere"
@@ -359,7 +390,11 @@
                     android:maxLength="100"
                     android:minHeight="40dp"
                     android:textColor="#7A7A7A"
-                    android:textColorHint="#7A7A7A" />
+                    android:textColorHint="#7A7A7A"
+
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    />
 
                 <CheckBox
                     android:id="@+id/feuMere"
@@ -386,7 +421,11 @@
                 android:textColor="#7A7A7A"
                 android:maxLength="12"
                 android:inputType="number"
-                android:minHeight="40dp" />
+                android:minHeight="40dp"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -407,7 +446,11 @@
                     android:maxLength="7"
                     android:minHeight="40dp"
                     android:textColor="#7A7A7A"
-                    android:textColorHint="#7A7A7A" />
+                    android:textColorHint="#7A7A7A"
+
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    />
 
                 <TextView
                     android:id="@+id/text"
@@ -434,7 +477,11 @@
                     android:maxLength="1"
                     android:minHeight="40dp"
                     android:textColor="#7A7A7A"
-                    android:textColorHint="#7A7A7A"/>
+                    android:textColorHint="#7A7A7A"
+
+                    android:singleLine="true"
+                    android:imeOptions="actionNext"
+                    />
 
             </LinearLayout>
             <EditText
@@ -450,7 +497,11 @@
                 android:maxLength="10"
                 android:minHeight="40dp"
                 android:textColor="#7A7A7A"
-                android:textColorHint="#7A7A7A" />
+                android:textColorHint="#7A7A7A"
+
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
 
             <EditText
                 android:id="@+id/editTextLieuCIN"
@@ -463,9 +514,42 @@
                 android:hint="Toerana nahazahona ny CNI"
                 android:textColorHint="#7A7A7A"
                 android:textColor="#7A7A7A"
-                android:inputType="text"
-                android:minHeight="40dp" />
+                android:inputType="textCapCharacters"
+                android:minHeight="40dp"
 
+                android:singleLine="true"
+                android:imeOptions="actionNext"
+                />
+
+            <TextView
+                android:id="@+id/labelTakelaka"
+                android:layout_marginTop="19dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/courgette"
+                android:gravity="center"
+                android:text="Sarin'ny takelaka:"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="311dp"
+                android:layout_height="282dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                app:srcCompat="@drawable/cadre_photo"
+                tools:ignore="VectorDrawableCompat" />
+
+            <Button
+                android:id="@+id/button_fiche"
+                android:layout_width="188dp"
+                android:layout_height="49dp"
+                android:background="@drawable/input_field"
+                android:fontFamily="@font/bangers"
+                android:text="Maka sary"
+                />
 
             <TextView
                 android:id="@+id/label2"
@@ -523,34 +607,7 @@
                 android:text="Maka sary" />
 
 
-            <TextView
-                android:id="@+id/labelTakelaka"
-                android:layout_marginTop="19dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/courgette"
-                android:gravity="center"
-                android:text="Sarin'ny takelaka:"
-                android:textColor="#000000"
-                android:textSize="20sp" />
 
-
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="311dp"
-                android:layout_height="282dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:srcCompat="@drawable/cadre_photo"
-                tools:ignore="VectorDrawableCompat" />
-
-            <Button
-                android:id="@+id/button_fiche"
-                android:layout_width="188dp"
-                android:layout_height="49dp"
-                android:background="@drawable/input_field"
-                android:fontFamily="@font/bangers"
-                android:text="Maka sary" />
 
             <TextView
                 android:id="@+id/labeldaterecensement"
