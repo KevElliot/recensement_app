@@ -50,8 +50,8 @@ public class Task_insertElect extends AsyncTask<Void, Void, Void> {
         String ip = params.getIp();
         String port = params.getPort();
         List<Electeur> listElect = params.getListElect();
-        Document doc = DB.selectDocumentbyid(listElect.get(0).getDocreference());
         for (int i = 0; i < listElect.size(); i++) {
+            Document doc = DB.selectDocumentbyid(listElect.get(i).getDocreference());
             API.addNewDoc(DB,c,ip,port,listElect.get(i),tab,us,doc);
         }
         return null;

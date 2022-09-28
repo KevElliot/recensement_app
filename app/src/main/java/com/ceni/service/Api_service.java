@@ -22,6 +22,7 @@ import com.ceni.recensementnumerique.MenuActivity;
 import com.google.gson.Gson;
 
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -129,7 +130,6 @@ public class Api_service {
             jsonObject.put("responsable", tab.getResponsable());
             jsonObject.put("imei", tab.getImei());
             jsonObject.put("macWifi", tab.getMacWifi());
-
             Log.d("za ", "" + tab.toString());
 
             // URL api recensement node to change

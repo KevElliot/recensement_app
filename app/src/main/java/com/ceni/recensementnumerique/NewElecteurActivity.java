@@ -40,7 +40,10 @@ import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class NewElecteurActivity extends AppCompatActivity {
@@ -57,7 +60,7 @@ public class NewElecteurActivity extends AppCompatActivity {
     private EditText cin, nserie, nserie2, lieuCin, dateCin, datederecensement;
     private TextView infoCarnet;
     private int countFormValide;
-    private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected, fichefull;
+    private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected, fichefull, isDateNaissValide, isDateDerecense;
     private String msg, user, format, imageRecto, imageVerso, dataFicheElect;
     private Fokontany fokontanySelected;
     private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
@@ -105,16 +108,20 @@ public class NewElecteurActivity extends AppCompatActivity {
         fichefull = false;
         feuMereSelected = false;
         feuPereSelected = false;
+        isDateNaissValide = false;
+        isDateDerecense = false;
         final String[] docReference = {""};
         final String[] idFdocReference = {""};
         int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
+        int moisNow = Calendar.getInstance().get(Calendar.MONTH);
+        int dayNow = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         int anneeMajor = anneeNow - 18;
         int anneeDead = anneeNow - 150;
         countFormValide = 0;
         SharedPreferences params_localisation = this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
         //if tsisy dia paramettre
         // FOKONTANY
-        String commune_pref = params_localisation.getString("code_commune","");
+        String commune_pref = params_localisation.getString("code_commune", "");
         fokontany = DB.selectFokotanyFromCommune(commune_pref);
         spinnerFokontany = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_fokontany);
         SpinerFokontanyAdapter adapterFokontany = new SpinerFokontanyAdapter(NewElecteurActivity.this,
@@ -123,7 +130,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 R.id.textViewCode,
                 fokontany);
         spinnerFokontany.setAdapter(adapterFokontany);
-        int fokontany_pref = params_localisation.getInt("position_fokontany",0);
+        int fokontany_pref = params_localisation.getInt("position_fokontany", 0);
         spinnerFokontany.setSelection(fokontany_pref);
         spinnerFokontany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -347,14 +354,66 @@ public class NewElecteurActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String nomElect = nom.getText().toString();
-                String prenomElect = prenom.getText().toString();
-                String dateNaiss = datedeNaissance.getText().toString();
-                isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss);
-                if (isSamePers) {
-                    datedeNaissance.setError("mpifidy efa voasoratra!");
-                    prenom.setError("mpifidy efa voasoratra!");
-                    nom.setError("mpifidy efa voasoratra!");
+                try {
+                    String dateDead = "10/06/" + anneeDead;
+                    String dateLimite = "10/06/2005";
+                    String nomElect = nom.getText().toString();
+                    String prenomElect = prenom.getText().toString();
+                    String naiss = datedeNaissance.getText().toString();
+                    SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+                    Date dateNaiss = format.parse(naiss);
+                    Boolean isDateValide = checkDate(naiss);
+                    if (isDateValide) {
+//                        Date dead = format.parse(dateDead);
+//                        Date limite = format.parse(dateLimite);
+//                        if (dead.getTime() < dateNaiss.getTime() && dateNaiss.getTime() < limite.getTime()) {
+//                            isSamePers = DB.isSamePerson(nomElect, prenomElect, naiss);
+//                            isDateNaissValide = true;
+//                            if (isSamePers) {
+//                                datedeNaissance.setError("mpifidy efa voasoratra!");
+//                                prenom.setError("mpifidy efa voasoratra!");
+//                                nom.setError("mpifidy efa voasoratra!");
+//                            }
+//                        } else {
+//                            datedeNaissance.setError("tsy tafiditra ny date");
+//                        }
+                        datedeNaissance.setError("Daty valide");
+                    }else {
+                        datedeNaissance.setError("Daty tsy valide");
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        datederecensement.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String deb = "01/10/2022";
+                String daterecens = datederecensement.getText().toString();
+                SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+                try {
+                    Date dateRecens = format.parse(daterecens);
+                    Date datedeb = format.parse(deb);
+                    Date dateNow = Calendar.getInstance().getTime();
+                    if (datedeb.getTime() < dateRecens.getTime() && dateRecens.getTime() < dateNow.getTime()) {
+                        isDateDerecense = true;
+                    } else {
+                        datederecensement.setError("Tsy ao anatiny daty");
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -424,7 +483,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                         editNevers.setError("Diso");
                     }
                 } else {
-                    if (datedeNaissance.getText().length() != 0) {
+                    if (datedeNaissance.getText().length() != 0 && isDateNaissValide) {
                         countFormValide += 1;
                         electeur.setDateNaiss(datedeNaissance.getText().toString());
                         electeur.setNevers("");
@@ -471,7 +530,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 } else {
                     dateCin.setError("Mila apetraka ny daty nahazahona ny karatra");
                 }
-                if (datederecensement.getText().length() != 0) {
+                if (datederecensement.getText().length() != 0 && isDateDerecense) {
                     electeur.setDateinscription(datederecensement.getText().toString());
                     countFormValide += 1;
                 } else {
@@ -556,7 +615,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                                         }
                                     }).show();
                         }
-                    }else {
+                    } else {
                         new AlertDialog.Builder(NewElecteurActivity.this)
                                 .setTitle("Fahadisoana")
                                 .setMessage("Karine efa feno! Manamboara vaovao!")
@@ -573,6 +632,20 @@ public class NewElecteurActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private boolean checkDate(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+        Date d = new Date();
+        try {
+            d = format.parse(date);
+            Log.d("check_date",""+d+" date valide");
+        } catch (ParseException e) {
+            Log.d("check_date",""+d+" date non valide");
+            return false;
+        }
+        // Renvoie true si la date est valide
+        return true;
     }
 
     private void capture() {

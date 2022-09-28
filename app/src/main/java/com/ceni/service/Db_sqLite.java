@@ -30,7 +30,7 @@ import java.util.List;
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-    private static final int DB_VERSION = 30;
+    private static final int DB_VERSION = 31;
     /*---------------------------------------------------------------------------------------
                                            TABLE ELECTEUR
     ----------------------------------------------------------------------------------------*/
