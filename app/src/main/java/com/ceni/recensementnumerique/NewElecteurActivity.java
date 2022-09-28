@@ -434,7 +434,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                         Date dateRecens = format.parse(daterecens);
                         Date datedeb = format.parse(deb);
                         Date dateNow = Calendar.getInstance().getTime();
-                        if (datedeb.getTime() < dateRecens.getTime() && dateRecens.getTime() < dateNow.getTime()) {
+                        if (datedeb.getTime() < dateRecens.getTime()) {
                             isDateDerecense = true;
                         } else {
                             datederecensement.setError("Tsy ao anatiny daty");
