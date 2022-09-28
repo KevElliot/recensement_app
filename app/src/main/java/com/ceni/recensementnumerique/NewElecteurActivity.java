@@ -113,95 +113,100 @@ public class NewElecteurActivity extends AppCompatActivity {
         countFormValide = 0;
         SharedPreferences params_localisation = this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
         //if tsisy dia paramettre
-        // FOKONTANY
-        String commune_pref = params_localisation.getString("code_commune","");
-        Log.d("shared",commune_pref);
-        fokontany = DB.selectFokotanyFromCommune(commune_pref);
-        spinnerFokontany = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_fokontany);
-        SpinerFokontanyAdapter adapterFokontany = new SpinerFokontanyAdapter(NewElecteurActivity.this,
-                R.layout.dropdown_localisation,
-                R.id.textViewLabel,
-                R.id.textViewCode,
-                fokontany);
-        spinnerFokontany.setAdapter(adapterFokontany);
-        int fokontany_pref = params_localisation.getInt("position_fokontany",0);
-        spinnerFokontany.setSelection(fokontany_pref);
-        spinnerFokontany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                fokontanySelected = (Fokontany) spinnerFokontany.getSelectedItem();
-                document = DB.selectDocument(fokontanySelected.getCode_fokontany());
-                //DOCUMENT
-                // Adapter Document
-                SpinnerDocumentAdapter adapterDocument = new SpinnerDocumentAdapter(NewElecteurActivity.this,
-                        R.layout.dropdown_document,
-                        R.id.numdocreference,
-                        document);
-                spinnerDocument.setAdapter(adapterDocument);
-                spinnerDocument.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        if(params_localisation!=null) {
+            // FOKONTANY
+            String commune_pref = params_localisation.getString("code_commune", "");
+            Log.d("shared", commune_pref);
+            fokontany = DB.selectFokotanyFromCommune(commune_pref);
+            spinnerFokontany = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_fokontany);
+            SpinerFokontanyAdapter adapterFokontany = new SpinerFokontanyAdapter(NewElecteurActivity.this,
+                    R.layout.dropdown_localisation,
+                    R.id.textViewLabel,
+                    R.id.textViewCode,
+                    fokontany);
+            spinnerFokontany.setAdapter(adapterFokontany);
+            int fokontany_pref = params_localisation.getInt("position_fokontany", 0);
+            spinnerFokontany.setSelection(fokontany_pref);
+            spinnerFokontany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    fokontanySelected = (Fokontany) spinnerFokontany.getSelectedItem();
+                    document = DB.selectDocument(fokontanySelected.getCode_fokontany());
+                    //DOCUMENT
+                    // Adapter Document
+                    SpinnerDocumentAdapter adapterDocument = new SpinnerDocumentAdapter(NewElecteurActivity.this,
+                            R.layout.dropdown_document,
+                            R.id.numdocreference,
+                            document);
+                    spinnerDocument.setAdapter(adapterDocument);
+                    spinnerDocument.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        Document docSelected = (Document) spinnerDocument.getSelectedItem();
-                        docReference[0] = docSelected.getNumdocreference().toString();
-                        idFdocReference[0] = docSelected.getIdfdocreference();
-                        if (docSelected.getNbfeuillet() == 25) {
-                            fichefull = true;
-                            infoCarnet.setTextColor(Color.RED);
-                            infoCarnet.setText("Karine efa feno 25 takelaka voasoratra");
-                        } else {
-                            infoCarnet.setTextColor(Color.BLACK);
-                            infoCarnet.setText("Karine voasoratra: " + docSelected.getNbfeuillet() + "/25");
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            Document docSelected = (Document) spinnerDocument.getSelectedItem();
+                            docReference[0] = docSelected.getNumdocreference().toString();
+                            idFdocReference[0] = docSelected.getIdfdocreference();
+                            if (docSelected.getNbfeuillet() == 25) {
+                                fichefull = true;
+                                infoCarnet.setTextColor(Color.RED);
+                                infoCarnet.setText("Karine efa feno 25 takelaka voasoratra");
+                            } else {
+                                infoCarnet.setTextColor(Color.BLACK);
+                                infoCarnet.setText("Karine voasoratra: " + docSelected.getNbfeuillet() + "/25");
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
 
-                    }
-                });
-                Toast toast = Toast.makeText(NewElecteurActivity.this, "FOKONTANY: " + fokontanySelected.getLabel_fokontany(), Toast.LENGTH_LONG);
-                toast.show();
-                cv = DB.selectCvFromFokontany(fokontanySelected.getCode_fokontany());
-                spinnerCv = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_cv);
-                spinnerCv.setEnabled(false);
-                // Adapter Cv
-                SpinerCvAdapter adapterCv = new SpinerCvAdapter(NewElecteurActivity.this,
-                        R.layout.dropdown_localisation,
-                        R.id.textViewLabel,
-                        R.id.textViewCode,
-                        cv);
-                spinnerCv.setAdapter(adapterCv);
-                spinnerCv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                        Cv cvSelected = (Cv) spinnerCv.getSelectedItem();
-                        Toast toast = Toast.makeText(NewElecteurActivity.this, "CV : " + cvSelected.getLabel_cv(), Toast.LENGTH_LONG);
-                        toast.show();
-                        bv = DB.selectBvFromCv(cvSelected.getCode_cv());
-                        spinnerBv = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_bv);
-                        spinnerBv.setEnabled(false);
-                        // Adapter Bv
-                        SpinerBvAdapter adapterBv = new SpinerBvAdapter(NewElecteurActivity.this,
-                                R.layout.dropdown_localisation,
-                                R.id.textViewLabel,
-                                R.id.textViewCode,
-                                bv);
-                        spinnerBv.setAdapter(adapterBv);
-                    }
+                        }
+                    });
+                    Toast toast = Toast.makeText(NewElecteurActivity.this, "FOKONTANY: " + fokontanySelected.getLabel_fokontany(), Toast.LENGTH_LONG);
+                    toast.show();
+                    cv = DB.selectCvFromFokontany(fokontanySelected.getCode_fokontany());
+                    spinnerCv = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_cv);
+                    spinnerCv.setEnabled(false);
+                    // Adapter Cv
+                    SpinerCvAdapter adapterCv = new SpinerCvAdapter(NewElecteurActivity.this,
+                            R.layout.dropdown_localisation,
+                            R.id.textViewLabel,
+                            R.id.textViewCode,
+                            cv);
+                    spinnerCv.setAdapter(adapterCv);
+                    spinnerCv.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            Cv cvSelected = (Cv) spinnerCv.getSelectedItem();
+                            Toast toast = Toast.makeText(NewElecteurActivity.this, "CV : " + cvSelected.getLabel_cv(), Toast.LENGTH_LONG);
+                            toast.show();
+                            bv = DB.selectBvFromCv(cvSelected.getCode_cv());
+                            spinnerBv = (Spinner) NewElecteurActivity.this.findViewById(R.id.spinner_bv);
+                            spinnerBv.setEnabled(false);
+                            // Adapter Bv
+                            SpinerBvAdapter adapterBv = new SpinerBvAdapter(NewElecteurActivity.this,
+                                    R.layout.dropdown_localisation,
+                                    R.id.textViewLabel,
+                                    R.id.textViewCode,
+                                    bv);
+                            spinnerBv.setAdapter(adapterBv);
+                        }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> adapterView) {
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
 
-                    }
-                });
-            }
+                        }
+                    });
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
-
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                }
+            });
+        }else{
+            Intent i = new Intent(getApplicationContext(), ParametreActivity.class);
+            startActivity(i);
+            finish();
+        }
 
         nevers.setOnClickListener(new View.OnClickListener() {
             @Override
