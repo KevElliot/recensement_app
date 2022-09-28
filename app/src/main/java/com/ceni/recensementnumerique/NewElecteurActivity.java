@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.Selection;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
@@ -422,6 +423,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+
             }
         });
 
@@ -518,10 +520,16 @@ public class NewElecteurActivity extends AppCompatActivity {
                 } else {
                     cin.setError("Diso");
                 }
-                if (nserie.getText().toString().length() == 7 && nserie2.getText().toString().length() == 1) {
-                    String serial = nserie.getText().toString() + "/" + nserie2.getText().toString();
-                    electeur.setNserieCin(serial);
-                    countFormValide += 1;
+                if (nserie.getText().toString().length() == 7) {
+                    if(nserie2.getText().toString().length() == 0){
+                        String serial = nserie.getText().toString();
+                        electeur.setNserieCin(serial);
+                        countFormValide += 1;
+                    } else{
+                        String serial = nserie.getText().toString() + "/" + nserie2.getText().toString();
+                        electeur.setNserieCin(serial);
+                        countFormValide += 1;
+                    }
                 } else {
                     nserie.setError("Diso");
                 }
