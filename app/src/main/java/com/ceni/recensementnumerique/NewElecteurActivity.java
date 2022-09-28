@@ -1,21 +1,31 @@
 package com.ceni.recensementnumerique;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.Selection;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
@@ -43,9 +53,14 @@ import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Calendar;
 // import java.util.Base64;
 import java.text.ParseException;
@@ -53,6 +68,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class NewElecteurActivity extends AppCompatActivity {
     private List<Fokontany> fokontany;
@@ -61,7 +77,6 @@ public class NewElecteurActivity extends AppCompatActivity {
     private Spinner spinnerFokontany, spinnerCv, spinnerBv, spinnerDocument;
     private List<Document> document;
     private Button mPickDateButton, buttonRecto, buttonVerso, buttonImage, enregistrer;
-    private ImageView recto, verso, imageView;
     private CheckBox sexeHomme, sexeFemme, feuPere, feuMere, nevers;
     private String sexe;
     private EditText nFiche, nom, prenom, lieuNaiss, profession, adresse, nomMere, nomPere, datedeNaissance, editNevers;
@@ -69,7 +84,9 @@ public class NewElecteurActivity extends AppCompatActivity {
     private TextView infoCarnet;
     private int countFormValide;
     private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected, fichefull, isDateNaissValide, isDateDerecense;
+    private ImageView recto, verso, imageView;
     private String msg, user, format, imageRecto, imageVerso, dataFicheElect;
+    private String currentPhotoPath_fiche_recensement, currentPhotoPath_cin_recto_recensement, currentPhotoPath_cin_verso_recensement;
     private Fokontany fokontanySelected;
     private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
 
@@ -310,21 +327,21 @@ public class NewElecteurActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 format = "recto";
-                capture();
+                verifyPermissions();
             }
         });
         this.buttonVerso.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 format = "verso";
-                capture();
+                verifyPermissions();
             }
         });
         this.buttonImage.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
                 format = "feuillet";
-                capture();
+                verifyPermissions();
             }
         });
 
@@ -668,6 +685,355 @@ public class NewElecteurActivity extends AppCompatActivity {
         this.startActivityForResult(intent, REQUEST_ID_IMAGE_CAPTURE);
     }
 
+    ////////////////////////////////// BEGIN MODIFICATION //////////////////////////////////
+
+    public static final int CAMERA_PERM_CODE = 101;
+    public static final int CAMERA_REQUEST_CODE = 102;
+    // private ImageView recto, verso, imageView;
+    // private String msg, user, format, imageRecto, imageVerso, dataFicheElect;
+    // String currentPhotoPath_fiche_recensement, currentPhotoPath_cin_recto_recensement, currentPhotoPath_cin_verso_recensement;
+
+    private void verifyPermissions(){
+        String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA};
+
+        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                permissions[0]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                permissions[1]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                permissions[2]) == PackageManager.PERMISSION_GRANTED){
+
+            switch(format)
+            {
+                case "recto":
+                    dispatchTakePictureIntent("recto");
+                    break;
+                case "verso":
+                    dispatchTakePictureIntent("verso");
+                    break;
+                case "feuillet":
+                    dispatchTakePictureIntent("feuillet");
+                    break;
+                default:
+                    System.out.println("default");
+            }
+        }else{
+            ActivityCompat.requestPermissions(this,
+                    permissions,
+                    CAMERA_PERM_CODE);
+        }
+    }
+
+    public void generateNoteOnSD(Context context, String sFileName, String sBody) {
+        try {
+            File root = new File(Environment.getExternalStorageDirectory(), "Notes");
+            if (!root.exists()) {
+                root.mkdirs();
+            }
+            Log.d("ROOT", root.getAbsolutePath());
+            File gpxfile = new File(root, sFileName);
+            FileWriter writer = new FileWriter(gpxfile);
+            writer.append(sBody);
+            writer.flush();
+            writer.close();
+            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == CAMERA_REQUEST_CODE){
+            if(resultCode == Activity.RESULT_OK){
+
+                if (Objects.equals(this.format, "feuillet")) {
+                    // file for recensement fiche
+                    File f_fiche = new File(currentPhotoPath_fiche_recensement);
+                    // imageView.setImageURI(Uri.fromFile(f_fiche));
+                    Log.d("tag", "ABsolute Url of Image fiche recensement is " + Uri.fromFile(f_fiche));
+
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(f_fiche);
+
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+
+                    this.imageView.setImageBitmap(bitmap);
+
+                    dataFicheElect = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+                    this.generateNoteOnSD(this.getApplicationContext(), "base64", dataFicheElect);
+
+                    if(f_fiche.exists()){
+                        if (f_fiche.delete()){
+                            System.out.println("file delete : " + Uri.fromFile(f_fiche));
+                        } else{
+                            System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
+                        }
+                    }
+
+                    // mediaScanIntent.setData(contentUri);
+                    // this.sendBroadcast(mediaScanIntent);
+                } else if (Objects.equals(this.format, "recto")) {
+                    // file for recensement fiche
+                    File f_fiche = new File(currentPhotoPath_cin_recto_recensement);
+                    // recto.setImageURI(Uri.fromFile(f_fiche));
+                    Log.d("tag", "ABsolute Url of Image recto recensement is " + Uri.fromFile(f_fiche));
+
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(f_fiche);
+
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+
+                    this.recto.setImageBitmap(bitmap);
+
+                    imageRecto = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    Log.d("BASE 64 RECTO : ", imageRecto.trim());
+
+                    if(f_fiche.exists()){
+                        if (f_fiche.delete()){
+                            System.out.println("file delete : " + Uri.fromFile(f_fiche));
+                        } else{
+                            System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
+                        }
+                    }
+
+                    //mediaScanIntent.setData(contentUri);
+                    // this.sendBroadcast(mediaScanIntent);
+                } else if (Objects.equals(this.format, "verso")) {
+                    // file for recensement fiche
+                    File f_fiche = new File(currentPhotoPath_cin_verso_recensement);
+                    // verso.setImageURI(Uri.fromFile(f_fiche));
+                    Log.d("tag", "ABsolute Url of Image verso recensement is " + Uri.fromFile(f_fiche));
+
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(f_fiche);
+
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+
+                    this.verso.setImageBitmap(bitmap);
+
+                    imageVerso = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    Log.d("BASE 64 VERSO : ", imageVerso.trim());
+
+                    if(f_fiche.exists()){
+                        if (f_fiche.delete()){
+                            System.out.println("file delete : " + Uri.fromFile(f_fiche));
+                        } else{
+                            System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
+                        }
+                    }
+
+                    mediaScanIntent.setData(contentUri);
+                    this.sendBroadcast(mediaScanIntent);
+                }
+
+                /*
+
+                if (currentPhotoPath_fiche_recensement == null || currentPhotoPath_fiche_recensement.isEmpty() || currentPhotoPath_fiche_recensement.trim().isEmpty())
+                    System.out.println("String is null, empty or blank.");
+                else{
+                    // file for recensement fiche
+                    File f_fiche = new File(currentPhotoPath_fiche_recensement);
+                    imageView.setImageURI(Uri.fromFile(f_fiche));
+                    Log.d("tag", "ABsolute Url of Image fiche recensement is " + Uri.fromFile(f_fiche));
+
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(f_fiche);
+
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+
+                    dataFicheElect = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    Log.d("BASE 64 FEUILLET : ", dataFicheElect);
+
+                    if(f_fiche.exists()){
+                        if (f_fiche.delete()){
+                            System.out.println("file delete : " + Uri.fromFile(f_fiche));
+                        } else{
+                            System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
+                        }
+                    }
+
+                    mediaScanIntent.setData(contentUri);
+                    this.sendBroadcast(mediaScanIntent);
+                }
+
+                if (currentPhotoPath_cin_recto_recensement == null || currentPhotoPath_cin_recto_recensement.isEmpty() || currentPhotoPath_cin_recto_recensement.trim().isEmpty())
+                    System.out.println("String is null, empty or blank.");
+                else{
+                    // file for recensement fiche
+                    File f_fiche = new File(currentPhotoPath_cin_recto_recensement);
+                    recto.setImageURI(Uri.fromFile(f_fiche));
+                    Log.d("tag", "ABsolute Url of Image recto recensement is " + Uri.fromFile(f_fiche));
+
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(f_fiche);
+
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+
+                    imageRecto = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    Log.d("BASE 64 RECTO : ", imageRecto);
+
+                    if(f_fiche.exists()){
+                        if (f_fiche.delete()){
+                            System.out.println("file delete : " + Uri.fromFile(f_fiche));
+                        } else{
+                            System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
+                        }
+                    }
+
+                    mediaScanIntent.setData(contentUri);
+                    this.sendBroadcast(mediaScanIntent);
+                }
+
+                if (currentPhotoPath_cin_verso_recensement == null || currentPhotoPath_cin_verso_recensement.isEmpty() || currentPhotoPath_cin_verso_recensement.trim().isEmpty())
+                    System.out.println("String is null, empty or blank.");
+                else{
+                    // file for recensement fiche
+                    File f_fiche = new File(currentPhotoPath_cin_verso_recensement);
+                    verso.setImageURI(Uri.fromFile(f_fiche));
+                    Log.d("tag", "ABsolute Url of Image verso recensement is " + Uri.fromFile(f_fiche));
+
+                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(f_fiche);
+
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] byteArray = stream.toByteArray();
+
+                    imageVerso = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    Log.d("BASE 64 VERSO : ", imageVerso);
+
+                    if(f_fiche.exists()){
+                        if (f_fiche.delete()){
+                            System.out.println("file delete : " + Uri.fromFile(f_fiche));
+                        } else{
+                            System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
+                        }
+                    }
+
+                    mediaScanIntent.setData(contentUri);
+                    this.sendBroadcast(mediaScanIntent);
+                }
+
+
+                 */
+
+
+            }
+
+        }
+    }
+
+    private File createImageFile(String name_file) throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".JPEG",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        switch(name_file)
+        {
+            case "feuillet":
+                currentPhotoPath_fiche_recensement = image.getAbsolutePath();
+                break;
+            case "recto":
+                currentPhotoPath_cin_recto_recensement = image.getAbsolutePath();
+                break;
+            case "verso":
+                currentPhotoPath_cin_verso_recensement = image.getAbsolutePath();
+                break;
+            default:
+                System.out.println("default");
+        }
+        return image;
+    }
+
+    private void dispatchTakePictureIntent(String name_file) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile(name_file);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
+            }
+        }
+    }
+
+    ////////////////////////////////// END MODIFICATION //////////////////////////////////
+
+    /*
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -705,6 +1071,7 @@ public class NewElecteurActivity extends AppCompatActivity {
             }
         }
     }
+     */
 
 
 }
