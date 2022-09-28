@@ -22,6 +22,7 @@ import com.ceni.model.Bv;
 import com.ceni.model.Commune;
 import com.ceni.model.Cv;
 import com.ceni.model.Fokontany;
+import com.ceni.model.Tablette;
 import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
@@ -46,7 +47,8 @@ public class ParametreActivity extends AppCompatActivity {
         }
         Db_sqLite DB = new Db_sqLite(this);
         User user = LoginActivity.getUser();
-        String tab = LoginActivity.getConfigTab();
+        Gson gson = new Gson();
+        Tablette tab = gson.fromJson(getIntent().getStringExtra("configTab"), Tablette.class);
         String codeDistrict = user.getCode_district();
         previous = this.findViewById(R.id.imageViewPrevious);
         this.communes = DB.selectCommuneFromDistrict(codeDistrict);
@@ -265,6 +267,7 @@ public class ParametreActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     String configTab = gson.toJson(tab);
                     String myjson = gson.toJson(user);
+
                     Intent i = new Intent(getApplicationContext(), MenuActivity.class);
                     i.putExtra("user", myjson);
                     i.putExtra("configTab", configTab);

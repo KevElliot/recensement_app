@@ -101,6 +101,8 @@ public class MenuActivity extends AppCompatActivity {
                 parametre.setEnabled(false);
                 Intent i = new Intent(getApplicationContext(), ParametreActivity.class);
                 i.putExtra("user", user);
+                String configTab = gson.toJson(tab);
+                i.putExtra("configTab", configTab);
                 startActivity(i);
             }
         });
