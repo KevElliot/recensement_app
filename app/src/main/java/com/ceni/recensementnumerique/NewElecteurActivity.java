@@ -1,5 +1,8 @@
 package com.ceni.recensementnumerique;
 
+import static android.provider.Settings.System.DATE_FORMAT;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,12 +13,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -40,11 +45,18 @@ import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NewElecteurActivity extends AppCompatActivity {
     private List<Fokontany> fokontany;
@@ -60,9 +72,13 @@ public class NewElecteurActivity extends AppCompatActivity {
     private EditText cin, nserie, nserie2, lieuCin, dateCin, datederecensement;
     private TextView infoCarnet;
     private int countFormValide;
-    private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected, fichefull, isDateNaissValide, isDateDerecense;
+    private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected, fichefull, isDateNaissValide, isDateDerecense, isDateCinValid;
     private String msg, user, format, imageRecto, imageVerso, dataFicheElect;
     private Fokontany fokontanySelected;
+
+    private Pattern pattern;
+    private Matcher matcher;
+
     private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
 
     @Override
@@ -110,6 +126,7 @@ public class NewElecteurActivity extends AppCompatActivity {
         feuPereSelected = false;
         isDateNaissValide = false;
         isDateDerecense = false;
+        isDateCinValid = false;
         final String[] docReference = {""};
         final String[] idFdocReference = {""};
         int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
@@ -361,27 +378,27 @@ public class NewElecteurActivity extends AppCompatActivity {
                     String prenomElect = prenom.getText().toString();
                     String naiss = datedeNaissance.getText().toString();
                     SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-                    Date dateNaiss = format.parse(naiss);
+//                    Boolean isDateValide = validateDate(naiss);
                     Boolean isDateValide = checkDate(naiss);
                     if (isDateValide) {
-//                        Date dead = format.parse(dateDead);
-//                        Date limite = format.parse(dateLimite);
-//                        if (dead.getTime() < dateNaiss.getTime() && dateNaiss.getTime() < limite.getTime()) {
-//                            isSamePers = DB.isSamePerson(nomElect, prenomElect, naiss);
-//                            isDateNaissValide = true;
-//                            if (isSamePers) {
-//                                datedeNaissance.setError("mpifidy efa voasoratra!");
-//                                prenom.setError("mpifidy efa voasoratra!");
-//                                nom.setError("mpifidy efa voasoratra!");
-//                            }
-//                        } else {
-//                            datedeNaissance.setError("tsy tafiditra ny date");
-//                        }
-                        datedeNaissance.setError("Daty valide");
+                        Date dateNaiss = format.parse(naiss);
+                        Date dead = format.parse(dateDead);
+                        Date limite = format.parse(dateLimite);
+                        if (dead.getTime() < dateNaiss.getTime() && dateNaiss.getTime() < limite.getTime()) {
+                            isSamePers = DB.isSamePerson(nomElect, prenomElect, naiss);
+                            isDateNaissValide = true;
+                            if (isSamePers) {
+                                datedeNaissance.setError("mpifidy efa voasoratra!");
+                                prenom.setError("mpifidy efa voasoratra!");
+                                nom.setError("mpifidy efa voasoratra!");
+                            }
+                        } else {
+                            datedeNaissance.setError("tsy tafiditra ny date");
+                        }
                     }else {
                         datedeNaissance.setError("Daty tsy valide");
                     }
-                } catch (ParseException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -403,18 +420,61 @@ public class NewElecteurActivity extends AppCompatActivity {
                 String deb = "01/10/2022";
                 String daterecens = datederecensement.getText().toString();
                 SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-                try {
-                    Date dateRecens = format.parse(daterecens);
-                    Date datedeb = format.parse(deb);
-                    Date dateNow = Calendar.getInstance().getTime();
-                    if (datedeb.getTime() < dateRecens.getTime() && dateRecens.getTime() < dateNow.getTime()) {
-                        isDateDerecense = true;
-                    } else {
-                        datederecensement.setError("Tsy ao anatiny daty");
+                Boolean isDateValide = checkDate(daterecens);
+                if (isDateValide) {
+                    try {
+                        Date dateRecens = format.parse(daterecens);
+                        Date datedeb = format.parse(deb);
+                        Date dateNow = Calendar.getInstance().getTime();
+                        if (datedeb.getTime() < dateRecens.getTime() && dateRecens.getTime() < dateNow.getTime()) {
+                            isDateDerecense = true;
+                        } else {
+                            datederecensement.setError("Tsy ao anatiny daty");
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                }else{
+                    datederecensement.setError("Daty tsy valide");
                 }
+            }
+        });
+
+        dateCin.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Date dateNow = Calendar.getInstance().getTime();
+                String dateNaiss = datedeNaissance.getText().toString();
+                String datedeliv = dateCin.getText().toString();
+                SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
+                Boolean isDateValide = checkDate(datedeliv);
+                if (isDateValide) {
+                    try {
+                        Date naiss = format.parse(dateNaiss);
+                        Date deliv = format.parse(datedeliv);
+                        if (naiss.getTime() < deliv.getTime() && deliv.getTime() < dateNow.getTime()) {
+                            isDateCinValid = true;
+                        } else {
+                            dateCin.setError("tsy tafiditra ny date");
+                        }
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    dateCin.setError("Daty tsy valide");
+                }
+
             }
         });
 
@@ -636,16 +696,70 @@ public class NewElecteurActivity extends AppCompatActivity {
 
     private boolean checkDate(String date) {
         SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-        Date d = new Date();
+        Calendar cal = Calendar.getInstance();
+        format.setLenient(false);
         try {
-            d = format.parse(date);
-            Log.d("check_date",""+d+" date valide");
+            Date d = format.parse(date);
+            cal.setTime(d);
+            Log.d("check_date",""+cal.getTime()+" date valide");
         } catch (ParseException e) {
-            Log.d("check_date",""+d+" date non valide");
+            e.printStackTrace();
             return false;
         }
-        // Renvoie true si la date est valide
         return true;
+    }
+
+    public boolean validateDate(final String date){
+
+        matcher = pattern.matcher(date);
+
+        if(matcher.matches()){
+            matcher.reset();
+
+            if(matcher.find()){
+                String day = matcher.group(1);
+                String month = matcher.group(2);
+                int year = Integer.parseInt(matcher.group(3));
+
+                if (day.equals("31") &&
+                        (month.equals("4") || month .equals("6") || month.equals("9") ||
+                                month.equals("11") || month.equals("04") || month .equals("06") ||
+                                month.equals("09"))) {
+                    return false; // only 1,3,5,7,8,10,12 has 31 days
+                }
+
+                else if (month.equals("2") || month.equals("02")) {
+                    //leap year
+                    if(year % 4==0){
+                        if(day.equals("30") || day.equals("31")){
+                            return false;
+                        }
+                        else{
+                            return true;
+                        }
+                    }
+                    else{
+                        if(day.equals("29")||day.equals("30")||day.equals("31")){
+                            return false;
+                        }
+                        else{
+                            return true;
+                        }
+                    }
+                }
+
+                else{
+                    return true;
+                }
+            }
+
+            else{
+                return false;
+            }
+        }
+        else{
+            return false;
+        }
     }
 
     private void capture() {
