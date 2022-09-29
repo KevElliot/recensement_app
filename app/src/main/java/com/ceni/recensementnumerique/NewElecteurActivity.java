@@ -1,5 +1,6 @@
 package com.ceni.recensementnumerique;
 
+import androidx.annotation.Dimension;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import static android.provider.Settings.System.DATE_FORMAT;
@@ -394,6 +395,31 @@ public class NewElecteurActivity extends AppCompatActivity {
             }
         });
 
+        lieuNaiss.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String nomElect = nom.getText().toString();
+                String prenomElect= prenom.getText().toString();
+                isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss);
+                if (isSamePers) {
+                    isSamePers = true;
+                    nom.setError("mpifidy efa voasoratra!");
+                    prenom.setError("mpifidy efa voasoratra!");
+                    mShowSelectedDateText.setText("mpifidy efa voasoratra!");
+                }
+            }
+        });
+
 //        datedeNaissance.addTextChangedListener(new TextWatcher() {
 //            @Override
 //            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -670,18 +696,12 @@ public class NewElecteurActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
-
-
         this.enregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 countFormValide = 0;
                 Electeur electeur = new Electeur();
+
                 if (nom.getText().toString().length() != 0) {
                     electeur.setNom(nom.getText().toString());
                     countFormValide += 1;
@@ -902,64 +922,6 @@ public class NewElecteurActivity extends AppCompatActivity {
 
     }
 
-    private boolean checkDate(String date) {
-        SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-        Calendar cal = Calendar.getInstance();
-        format.setLenient(false);
-        try {
-            Date d = format.parse(date);
-            cal.setTime(d);
-            Log.d("check_date", "" + cal.getTime() + " date valide");
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    public boolean validateDate(final String date) {
-
-        matcher = pattern.matcher(date);
-
-        if (matcher.matches()) {
-            matcher.reset();
-
-            if (matcher.find()) {
-                String day = matcher.group(1);
-                String month = matcher.group(2);
-                int year = Integer.parseInt(matcher.group(3));
-
-                if (day.equals("31") &&
-                        (month.equals("4") || month.equals("6") || month.equals("9") ||
-                                month.equals("11") || month.equals("04") || month.equals("06") ||
-                                month.equals("09"))) {
-                    return false; // only 1,3,5,7,8,10,12 has 31 days
-                } else if (month.equals("2") || month.equals("02")) {
-                    //leap year
-                    if (year % 4 == 0) {
-                        if (day.equals("30") || day.equals("31")) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    } else {
-                        if (day.equals("29") || day.equals("30") || day.equals("31")) {
-                            return false;
-                        } else {
-                            return true;
-                        }
-                    }
-                } else {
-                    return true;
-                }
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
     private void capture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         this.startActivityForResult(intent, REQUEST_ID_IMAGE_CAPTURE);
@@ -1039,20 +1001,23 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                     Uri contentUri = Uri.fromFile(f_fiche);
 
+
+
                     Bitmap bitmap = null;
+                    Bitmap tmpBitmap = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+                        tmpBitmap = this.resizeImage(bitmap,300,true);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    tmpBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     byte[] byteArray = stream.toByteArray();
 
-                    this.imageView.setImageBitmap(bitmap);
+                    this.imageView.setImageBitmap(tmpBitmap);
 
-                    dataFicheElect = Base64.encodeToString(byteArray, Base64.NO_WRAP);
+                    dataFicheElect = Base64.encodeToString(byteArray, Base64.DEFAULT);
                     this.generateNoteOnSD(this.getApplicationContext(), "base64", dataFicheElect);
 
                     if(f_fiche.exists()){
@@ -1075,17 +1040,19 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Uri contentUri = Uri.fromFile(f_fiche);
 
                     Bitmap bitmap = null;
+                    Bitmap tmpBitmap2 = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+                        tmpBitmap2 = this.resizeImage(bitmap,300,true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    tmpBitmap2.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     byte[] byteArray = stream.toByteArray();
 
-                    this.recto.setImageBitmap(bitmap);
+                    this.recto.setImageBitmap(tmpBitmap2);
 
                     imageRecto = Base64.encodeToString(byteArray, Base64.DEFAULT);
                     Log.d("BASE 64 RECTO : ", imageRecto.trim());
@@ -1110,17 +1077,19 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Uri contentUri = Uri.fromFile(f_fiche);
 
                     Bitmap bitmap = null;
+                    Bitmap tmpBitmap3 = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
+                        tmpBitmap3 = this.resizeImage(bitmap,300,true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    tmpBitmap3.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     byte[] byteArray = stream.toByteArray();
 
-                    this.verso.setImageBitmap(bitmap);
+                    this.verso.setImageBitmap(tmpBitmap3);
 
                     imageVerso = Base64.encodeToString(byteArray, Base64.DEFAULT);
                     Log.d("BASE 64 VERSO : ", imageVerso.trim());
@@ -1258,6 +1227,18 @@ public class NewElecteurActivity extends AppCompatActivity {
 
         }
     }
+    public static Bitmap resizeImage(Bitmap realImage, float maxImageSize,
+                                     boolean filter) {
+        float ratio = Math.min(
+                (float) maxImageSize / realImage.getWidth(),
+                (float) maxImageSize / realImage.getHeight());
+        int width = Math.round((float) ratio * realImage.getWidth());
+        int height = Math.round((float) ratio * realImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
+                height, filter);
+        return newBitmap;
+    }
 
     private File createImageFile(String name_file) throws IOException {
         // Create an image file name
@@ -1352,6 +1333,5 @@ public class NewElecteurActivity extends AppCompatActivity {
         }
     }
      */
-
 
 }

@@ -118,6 +118,7 @@ public class RechercheElecteur extends AppCompatActivity {
 //                String rech = inputRecherche.getText().toString();
 //                if (rech.length() != 0) {
 //                    Document doc = DB.selectDocumentbyNum(rech);
+//                    Log.d("DOC", doc.toString());
 //                    if (doc.getIdfdocreference()!=null) {
 //                        elect = DB.Recherche(valeurSearch, doc.getIdfdocreference());
 //                        if (elect.size() != 0) {
@@ -173,7 +174,7 @@ public class RechercheElecteur extends AppCompatActivity {
 //                }
 //            }
 //        });
-//
+
         btnRecherche.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,8 +192,8 @@ public class RechercheElecteur extends AppCompatActivity {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                                     Electeur electeur = new Electeur();
-                                    electeur.setCode_bv(elect.get(position).getCode_bv());
                                     electeur.setIdElect(elect.get(position).getIdElect());
+                                    electeur.setCode_bv(elect.get(position).getCode_bv());
                                     electeur.setnFiche(elect.get(position).getnFiche());
                                     electeur.setNom(elect.get(position).getNom());
                                     electeur.setPrenom(elect.get(position).getPrenom());
@@ -213,6 +214,7 @@ public class RechercheElecteur extends AppCompatActivity {
                                     electeur.setCinVerso(elect.get(position).getCinVerso());
                                     electeur.setObservation(elect.get(position).getObservation());
                                     electeur.setDocreference(elect.get(position).getDocreference());
+                                    electeur.setNum_userinfo(elect.get(position).getNum_userinfo());
                                     electeur.setDateinscription(elect.get(position).getDateinscription());
                                     Gson gson = new Gson();
                                     String myjson = gson.toJson(electeur);
@@ -239,8 +241,8 @@ public class RechercheElecteur extends AppCompatActivity {
                                 @Override
                                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                                     Electeur electeur = new Electeur();
-                                    electeur.setCode_bv(elect.get(position).getCode_bv());
                                     electeur.setIdElect(elect.get(position).getIdElect());
+                                    electeur.setCode_bv(elect.get(position).getCode_bv());
                                     electeur.setnFiche(elect.get(position).getnFiche());
                                     electeur.setNom(elect.get(position).getNom());
                                     electeur.setPrenom(elect.get(position).getPrenom());
@@ -256,11 +258,14 @@ public class RechercheElecteur extends AppCompatActivity {
                                     electeur.setNserieCin(elect.get(position).getNserieCin());
                                     electeur.setDateDeliv(elect.get(position).getDateDeliv());
                                     electeur.setLieuDeliv(elect.get(position).getLieuDeliv());
+
                                     electeur.setFicheElect(elect.get(position).getFicheElect());
                                     electeur.setCinRecto(elect.get(position).getCinRecto());
                                     electeur.setCinVerso(elect.get(position).getCinVerso());
+
                                     electeur.setObservation(elect.get(position).getObservation());
                                     electeur.setDocreference(elect.get(position).getDocreference());
+                                    electeur.setNum_userinfo(elect.get(position).getNum_userinfo());
                                     electeur.setDateinscription(elect.get(position).getDateinscription());
                                     Gson gson = new Gson();
                                     String myjson = gson.toJson(electeur);

@@ -30,7 +30,7 @@ import java.util.List;
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-    private static final int DB_VERSION = 31;
+    private static final int DB_VERSION = 32;
     /*---------------------------------------------------------------------------------------
                                            TABLE ELECTEUR
     ----------------------------------------------------------------------------------------*/
@@ -688,7 +688,6 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public List<Bv> selectBvFromCv(String codeBv) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        ;
         Cursor cursor = MyDB.rawQuery("Select * from Localisation where " + code_cv + "=? group by code_bv", new String[]{codeBv});
         List<Bv> listBv = new ArrayList<>();
         try {
@@ -711,10 +710,10 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public List<Electeur> Recherche(String champ, String recherche) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        List<Electeur> listElect = new ArrayList<>();
-        String sql = "Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "'";
+        String sql="Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "'";
         Log.d("RECHERCHE", sql);
         Cursor cursor = MyDB.rawQuery(sql, null);
+        List<Electeur> listElect = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
                 Electeur e = new Electeur();
@@ -744,15 +743,59 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 e.setDateinscription(cursor.getString(23));
                 listElect.add(e);
             }
-        } catch (Exception ex) {
-            Log.e("error Select SQLITE", "ERROR SELECT ELECTEUR");
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             cursor.close();
             MyDB.close();
         }
         return listElect;
     }
+
+
+//    public List<Electeur> Recherche(String champ, String recherche) {
+//        SQLiteDatabase MyDB = this.getWritableDatabase();
+//        List<Electeur> listElect = new ArrayList<>();
+//        String sql = "Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "'";
+//        Log.d("RECHERCHE", sql);
+//        Cursor cursor = MyDB.rawQuery(sql, null);
+//        try {
+//            while (cursor.moveToNext()) {
+//                Electeur e = new Electeur();
+//                e.setIdElect(cursor.getInt(0));
+//                e.setCode_bv(cursor.getString(1));
+//                e.setnFiche(cursor.getString(2));
+//                e.setNom(cursor.getString(3));
+//                e.setPrenom(cursor.getString(4));
+//                e.setSexe(cursor.getString(5));
+//                e.setProfession(cursor.getString(6));
+//                e.setAdresse(cursor.getString(7));
+//                e.setDateNaiss(cursor.getString(8));
+//                e.setNevers(cursor.getString(9));
+//                e.setLieuNaiss(cursor.getString(10));
+//                e.setNomPere(cursor.getString(11));
+//                e.setNomMere(cursor.getString(12));
+//                e.setCinElect(cursor.getString(13));
+//                e.setNserieCin(cursor.getString(14));
+//                e.setDateDeliv(cursor.getString(15));
+//                e.setLieuDeliv(cursor.getString(16));
+//                e.setFicheElect(cursor.getString(17));
+//                e.setCinRecto(cursor.getString(18));
+//                e.setCinVerso(cursor.getString(19));
+//                e.setObservation(cursor.getString(20));
+//                e.setDocreference(cursor.getString(21));
+//                e.setNum_userinfo(cursor.getString(22));
+//                e.setDateinscription(cursor.getString(23));
+//                listElect.add(e);
+//            }
+//        } catch (Exception e) {
+//            Log.e("error Select SQLITE", "ERROR SELECT ELECTEUR");
+//        } finally {
+//            cursor.close();
+//            MyDB.close();
+//        }
+//        return listElect;
+//    }
 
     public void insertUser(Context c) {
         SQLiteDatabase MyDB = this.getWritableDatabase();

@@ -73,7 +73,13 @@ public class DetailElecteurActivity extends AppCompatActivity {
         nserie.setText(electeur.getNserieCin());
         dateDeliv.setText(electeur.getDateDeliv());
         lieuDeliv.setText(electeur.getLieuDeliv());
-        Bitmap imgFiche = this.decodeImage(electeur.getFicheElect());
+        if(electeur.getFicheElect()!=null) {
+            ficheElect.setVisibility(View.VISIBLE);
+            Bitmap imgFiche = this.decodeImage(electeur.getFicheElect());
+            ficheElect.setImageBitmap(imgFiche);
+        }else{
+            ficheElect.setVisibility(View.GONE);
+        }
         if(electeur.getCinRecto()!=null){
             cinRecto.setVisibility(View.VISIBLE);
             Bitmap imgCinRecto = this.decodeImage(electeur.getCinRecto());
@@ -88,7 +94,6 @@ public class DetailElecteurActivity extends AppCompatActivity {
         }else{
             cinVerso.setVisibility(View.GONE);
         }
-        ficheElect.setImageBitmap(imgFiche);
         //observation.setText(electeur.getObservation());
 
         retour.setOnClickListener(new View.OnClickListener() {
