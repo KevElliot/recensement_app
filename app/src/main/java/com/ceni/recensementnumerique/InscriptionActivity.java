@@ -267,7 +267,7 @@ public class InscriptionActivity extends AppCompatActivity {
                     }
                 }
                 if (nFiche.getText().toString().length() == 12) {
-                    isMemeFiche = DB.isMemeFiche(nFiche.getText().toString());
+                    isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(),idFdocReference[0]);
                     if (isMemeFiche) {
                         msg = "Takelaka efa voasoratra!";
                     } else {

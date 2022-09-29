@@ -173,10 +173,12 @@ public class Db_sqLite extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Boolean isMemeFiche(String nfiche) {
+    public Boolean isMemeFiche(String nfiche,String docref) {
         boolean result = false;
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select " + COLUMN_NFICHE + " from Electeur where " + COLUMN_NFICHE + " =?", new String[]{nfiche});
+        String sql = "Select nFiche from electeur where nFiche='"+nfiche+"' and docreference= '"+docref+"'";
+//        Cursor cursor = MyDB.rawQuery("Select " + COLUMN_NFICHE + " from Electeur where " + COLUMN_NFICHE + " =?", new String[]{nfiche});
+        Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
             long nbElect = this.countElecteur();
             if (nbElect != 0 && cursor.getCount() != 0) {

@@ -388,7 +388,7 @@ public class NewElecteurActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                isMemeFiche = DB.isMemeFiche(nFiche.getText().toString());
+                isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(),idFdocReference[0]);
                 if (isMemeFiche) {
                     nFiche.setError("Takelaka efa voasoratra!");
                 }
@@ -863,6 +863,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Log.d("NEW ELECT", electeur.toString());
                     if (!fichefull) {
                         if (!isSamePers) {
+                            isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(),idFdocReference[0]);
                             if (!isMemeFiche) {
                                 Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
                                 electeur.setCode_bv(bvSelected.getCode_bv());
