@@ -9,9 +9,10 @@
 
     <ScrollView
         android:id="@+id/scrollView"
-        android:layout_width="310dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:scrollbarStyle="outsideInset"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,8 +23,8 @@
         tools:ignore="MissingConstraints">
 
         <LinearLayout
-            android:layout_width="310dp"
-            android:layout_height="460dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintVertical_bias="0.0"
@@ -57,7 +58,7 @@
                     android:textColor="#000000"
                     android:textSize="20sp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/nFiche"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -65,7 +66,7 @@
                     android:gravity="left|center"
                     android:text="Numero de serie"
                     android:inputType="number"
-                    android:textColor="@color/black"
+                    android:textColor="#878787"
                     android:textSize="20sp" />
 
             </LinearLayout>
@@ -121,7 +122,9 @@
                 app:srcCompat="@drawable/cadre_photo"
                 tools:ignore="VectorDrawableCompat" />
 
+
             <Button
+                android:visibility="gone"
                 android:id="@+id/button_image_fiche"
                 android:layout_width="188dp"
                 android:layout_height="49dp"
@@ -669,6 +672,7 @@
                 tools:ignore="VectorDrawableCompat" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/button_image_recto"
                 android:layout_width="188dp"
                 android:layout_height="49dp"
@@ -702,6 +706,7 @@
                 tools:ignore="VectorDrawableCompat" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/button_image_verso"
                 android:layout_width="188dp"
                 android:layout_height="49dp"

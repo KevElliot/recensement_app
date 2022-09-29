@@ -67,11 +67,13 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
+            android:paddingEnd="30dp"
+            android:paddingStart="30dp"
             android:paddingBottom="70dp">
 
             <Button
                 android:id="@+id/parametre"
-                android:layout_width="277dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="49dp"
                 android:layout_gravity="center"
@@ -83,7 +85,7 @@
 
             <Button
                 android:id="@+id/tablette"
-                android:layout_width="277dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="49dp"
                 android:layout_gravity="center"
@@ -95,7 +97,7 @@
 
             <Button
                 android:id="@+id/documents"
-                android:layout_width="277dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="49dp"
                 android:layout_gravity="center"
@@ -107,7 +109,7 @@
 
             <Button
                 android:id="@+id/newInscription"
-                android:layout_width="277dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="49dp"
                 android:layout_gravity="center"
@@ -119,7 +121,7 @@
 
             <Button
                 android:id="@+id/listeSqLite"
-                android:layout_width="277dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="49dp"
                 android:layout_gravity="center"
@@ -133,7 +135,7 @@
 
             <Button
                 android:id="@+id/recherche"
-                android:layout_width="277dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="49dp"
                 android:layout_gravity="center"

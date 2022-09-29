@@ -2,7 +2,9 @@ package com.ceni.recensementnumerique;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,11 +33,15 @@ public class InfoUserActivity extends AppCompatActivity {
         Gson gson = new Gson();
         User user = gson.fromJson(getIntent().getStringExtra("user"), User.class);
         Log.d("----------", "onCreate: " +user.toString());
+
+        SharedPreferences params_localisation = this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
+        String tmpCOmmune = params_localisation.getString("label_commune", "");
+
         nom.setText(user.getNomUser());
         prenom.setText(user.getPrenomUser());
         region.setText(user.getRegionUser());
         district.setText(user.getDistrictUser());
-        commune.setText(user.getCommuneUser());
+        commune.setText(tmpCOmmune);
         nbsaisi.setText(""+user.getNbSaisi());
         retour.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -51,7 +51,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="30dp"
                                     android:fontFamily="@font/courgette"
-                                    android:text="date"
+                                    android:text="Daty : "
                                     android:textColor="#60CA43"
                                     android:textSize="12dp" />
 
@@ -68,7 +68,7 @@
                                     android:layout_marginLeft="30dp"
 
                                     android:fontFamily="@font/courgette"
-                                    android:text="id"
+                                    android:text="id : "
                                     android:textColor="#60CA43"
                                     android:textSize="12dp" />
 
@@ -109,17 +109,17 @@
                                     android:id="@+id/nbabel"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="30dp"
+                                    android:layout_marginStart="30dp"
                                     android:layout_weight="33.6"
                                     android:fontFamily="@font/courgette"
-                                    android:text="Nb takelaka:"
+                                    android:text="Isan'ny takelaka : "
                                     android:textSize="12dp" />
 
                                 <TextView
                                     android:id="@+id/nbDoc"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginRight="30dp"
+                                    android:layout_marginEnd="30dp"
                                     android:layout_weight="66.6"
                                     android:fontFamily="@font/courgette"
                                     android:text="nb doc"
@@ -138,7 +138,7 @@
                                 android:id="@+id/delete"
                                 android:layout_width="27dp"
                                 android:layout_height="35dp"
-                                android:layout_marginRight="20dp"
+                                android:layout_marginEnd="20dp"
                                 app:srcCompat="@drawable/button_supprimer" />
 
                         </LinearLayout>
