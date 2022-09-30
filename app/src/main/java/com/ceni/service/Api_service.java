@@ -114,6 +114,47 @@ public class Api_service {
         }
     }
 
+
+    public static void insertNotebooks(Db_sqLite DB, Context context, String ip, String port, Tablette tab, User us, JSONObject notebooks) {
+        String base_url = "http://" + ip + ":" + port + "/";
+        AndroidNetworking.post(base_url + "/api/insert-voters")
+                .setTag("test")
+                .addHeaders("Accept", "application/json")
+                .addHeaders("Content-Type", "application/json")
+                .setPriority(Priority.HIGH)
+                .addJSONObjectBody(notebooks)
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("addNewDoc", "true " + response.toString());
+                        // TODO: RESPONSE
+                        Toast toast = Toast.makeText(context, "Electeur enregistré!", Toast.LENGTH_LONG);
+                        toast.show();
+                        Log.d(TAG, "Reponse Insert : " + response);
+                        Intent i = new Intent(context, MenuActivity.class);
+                        Gson gson = new Gson();
+                        String configTab = gson.toJson(tab);
+                        i.putExtra("configTab", configTab);
+                        String myJson = gson.toJson(us);
+                        i.putExtra("user", myJson);
+                        //boolean deleted = true;
+
+//                        boolean deleted = DB.deleteElect(electeur.getCinElect());
+//                        if (deleted) {
+//                            context.startActivity(i);
+//                            ListeFokontanyActivity.getInstance().finish();
+//                        }
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        Toast toast = Toast.makeText(context, "Problème serveur!", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                });
+    }
+
+
     // Add information Tablette |MAC and IMEI| to oracle
     public static void addNewInformationTabs(Db_sqLite DB, Context context, String ip, String port, Tablette tab, User us) {
         String base_url = "http://" + ip + ":" + port + "/";

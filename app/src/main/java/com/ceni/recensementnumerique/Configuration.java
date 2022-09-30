@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.model.Configuration_model;
 import com.ceni.model.Tablette;
@@ -44,14 +45,20 @@ public class Configuration extends AppCompatActivity{
         this.resultat = getSharedPreferences("response",Context.MODE_PRIVATE);
         Tablette tab = MenuActivity.getTab();
          this.user = MenuActivity.getCurrent_user();
+
         enregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                enregistrer.setVisibility(View.GONE);
+
+                enregistrer.setEnabled(false);
+                enregistrer.setClickable(false);
+
+                // enregistrer.setVisibility(View.GONE);
                 String ip = adressIp.getText().toString();
                 String p = port.getText().toString();
                 List<Electeur> listElect = DB.selectElecteur();
-                Configuration_model params = new Configuration_model(Configuration.this,ip,p,listElect,resultat);
+                List<Document> documents = DB.selectAllDocument();
+                Configuration_model params = new Configuration_model(Configuration.this,ip,p,listElect,resultat, documents);
                 new Task_insertElect(Configuration.this,params,enregistrer,user,tab).execute();
             }
         });

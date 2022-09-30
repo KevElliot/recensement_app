@@ -11,15 +11,17 @@ public class Configuration_model {
     private String port;
     private List<Electeur> listElect;
     private SharedPreferences resultat;
+    private List<Document> documents;
 
 
 
-    public Configuration_model(Context context, String ip, String port, List<Electeur> listElect, SharedPreferences resultat) {
+    public Configuration_model(Context context, String ip, String port, List<Electeur> listElect, SharedPreferences resultat, List<Document> documents) {
         this.context = context;
         this.ip = ip;
         this.port = port;
         this.listElect = listElect;
         this.resultat = resultat;
+        this.documents = documents;
     }
     public Configuration_model() {
     }
@@ -62,5 +64,13 @@ public class Configuration_model {
 
     public void setResultat(SharedPreferences resultat) {
         this.resultat = resultat;
+    }
+
+    public List<Document> getDocuments() {
+        return documents;
+    }
+
+    public void setDocuments(List<Document> documents) {
+        this.documents = documents;
     }
 }

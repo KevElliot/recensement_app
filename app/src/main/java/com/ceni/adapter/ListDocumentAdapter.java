@@ -45,7 +45,7 @@ public class ListDocumentAdapter extends ArrayAdapter<Document> {
         TextView docreference = convertView.findViewById(R.id.docreference);
         TextView nbdoc = convertView.findViewById(R.id.nbDoc);
         TextView datedoc = convertView.findViewById(R.id.dateDoc);
-        TextView idfdoc = convertView.findViewById(R.id.idDoc);
+        // TextView idfdoc = convertView.findViewById(R.id.idDoc);
 
         if(document.getNbfeuillet()>0){
             delete.setVisibility(View.GONE);
@@ -73,8 +73,8 @@ public class ListDocumentAdapter extends ArrayAdapter<Document> {
 
         docreference.setText(document.getNumdocreference());
         nbdoc.setText(""+document.getNbfeuillet());
-        datedoc.setText("date: "+document.getDatedocreference());
-        idfdoc.setText("id: "+document.getIdfdocreference());
+        datedoc.setText(document.getDatedocreference());
+        // idfdoc.setText("id : "+document.getIdfdocreference());
         return convertView;
     }
 }

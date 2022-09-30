@@ -709,7 +709,6 @@ public class NewElecteurActivity extends AppCompatActivity {
                     nom.setError("Mila fenoina");
                 }
                 if (prenom.getText().toString().length() != 0) {
-                    countFormValide += 1;
                     electeur.setPrenom(prenom.getText().toString());
                 } else {
                     electeur.setPrenom("");
@@ -846,7 +845,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                             }).show();
                 }
 
-                if (countFormValide != 17) {
+                if (countFormValide != 16) {
                     Log.d("COUNT", "" + countFormValide);
                     new AlertDialog.Builder(NewElecteurActivity.this)
                             .setTitle("Fahadisoana")
