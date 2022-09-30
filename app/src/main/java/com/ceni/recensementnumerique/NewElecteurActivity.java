@@ -633,6 +633,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 datecin.setEnabled(true);
             }
         });
+
         materialDatePicker2.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @SuppressLint("SetTextI18n")
             @Override

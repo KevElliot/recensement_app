@@ -30,7 +30,7 @@ import java.util.List;
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-    private static final int DB_VERSION = 32;
+    private static final int DB_VERSION = 44;
     /*---------------------------------------------------------------------------------------
                                            TABLE ELECTEUR
     ----------------------------------------------------------------------------------------*/
@@ -598,6 +598,11 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public boolean deleteElect(String cin) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         return MyDB.delete(TABLE_ELECTEUR, COLUMN_CINELECT + "=?", new String[]{cin}) > 0;
+    }
+
+    public boolean deleteElectId(String id) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        return MyDB.delete(TABLE_ELECTEUR, COLUMN_ID + "=?", new String[]{id}) > 0;
     }
 
     public boolean deleteDocument(String docref) {

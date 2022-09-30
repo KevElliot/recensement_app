@@ -68,6 +68,9 @@ public class Task_insertElect extends AsyncTask<Void, Void, Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         result = false;
+
+        Button tmp = enregistrer;
+
         Context c = params.getContext();
         String ip = params.getIp();
         String port = params.getPort();
@@ -100,7 +103,7 @@ public class Task_insertElect extends AsyncTask<Void, Void, Void> {
         Log.i("xxx", "DEBUGGING ...");
         Log.i("xxx", jsonObject.toString());
 
-        API.insertNotebooks(DB, c, ip, port, tab, us, jsonObject);
+        API.insertNotebooks(DB, c, ip, port, tab, us, jsonObject, tmp);
 
 
 //        for (int i = 0; i < listElect.size(); i++) {
@@ -112,9 +115,9 @@ public class Task_insertElect extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
-        // enregistrer.setVisibility(View.VISIBLE);
-        enregistrer.setEnabled(true);
-        enregistrer.setClickable(true);
+
+//        enregistrer.setEnabled(true);
+//        enregistrer.setClickable(true);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
