@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -23,6 +24,7 @@ import com.ceni.model.Notebook;
 import com.ceni.model.Tablette;
 import com.ceni.model.User;
 import com.ceni.model.Voter;
+import com.ceni.recensementnumerique.Configuration;
 import com.ceni.recensementnumerique.ListeFokontanyActivity;
 import com.ceni.recensementnumerique.MenuActivity;
 import com.google.gson.Gson;
@@ -126,7 +128,7 @@ public class Api_service {
     }
 
 
-    public static void insertNotebooks(Db_sqLite DB, Context context, String ip, String port, Tablette tab, User us, JSONObject notebooks) {
+    public static void insertNotebooks(Db_sqLite DB, Context context, String ip, String port, Tablette tab, User us, JSONObject notebooks, Button tmp) {
         String base_url = "http://" + ip + ":" + port + "/";
         AndroidNetworking.post(base_url + "api/insertVoters")
                 .setTag("test")
@@ -139,6 +141,7 @@ public class Api_service {
                     @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onResponse(JSONArray response) {
+
                         Log.d("addNewDoc", "true " + response.toString());
                         List<Notebook> notebooks = new ArrayList<Notebook>();
                         for(int i = 0; i < response.length(); i++){
@@ -177,6 +180,7 @@ public class Api_service {
 
                         Log.d("notevoterSucces", "notevoterSucces:  " +  notevoterSucces);
                         Log.d("notevoterfailed", "notevoterfailed:  " +  notevoterfailed);
+
                         Log.d("noteFailedvoterSucces", "noteFailedvoterSucces:  " +  noteFailedvoterSucces);
                         Log.d("noteFailedvoterfailed", "noteFailedvoterfailed:  " +  noteFailedvoterfailed);
                         Log.d("notebooks", "notebooks:  " +  notebooks.get(0).toString());
@@ -185,19 +189,31 @@ public class Api_service {
                         Toast toast = Toast.makeText(context, "Electeur enregistré!", Toast.LENGTH_LONG);
                         toast.show();
                         Log.d(TAG, "Reponse Insert : " + response);
+
                         Intent i = new Intent(context, MenuActivity.class);
                         Gson gson = new Gson();
                         String configTab = gson.toJson(tab);
                         i.putExtra("configTab", configTab);
                         String myJson = gson.toJson(us);
                         i.putExtra("user", myJson);
-                        //boolean deleted = true;
-
+//                        boolean deleted = true;
+//
 //                        boolean deleted = DB.deleteElect(electeur.getCinElect());
 //                        if (deleted) {
 //                            context.startActivity(i);
 //                            ListeFokontanyActivity.getInstance().finish();
 //                        }
+
+                        Log.d("SIze to delete : ", ""+idsToDelete.size());
+                        for (int x = 0; x < idsToDelete.size(); x++){
+                            Log.d("MIDITRA DELETE", "DELETE ID : "+idsToDelete.get(x).toString());
+                            DB.deleteElectId(idsToDelete.get(x).toString());
+                        }
+                        tmp.setEnabled(true);
+                        tmp.setClickable(true);
+                        context.startActivity(i);
+                        ListeFokontanyActivity.getInstance().finish();
+
                     }
 
                     @Override

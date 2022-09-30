@@ -633,6 +633,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 datecin.setEnabled(true);
             }
         });
+
         materialDatePicker2.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @SuppressLint("SetTextI18n")
             @Override
@@ -809,7 +810,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 } else {
                     lieuCin.setError("Mila fenoina");
                 }
-                if (dateCinElect!=null) {
+                if (dateCinElect != null) {
                     electeur.setDateDeliv(dateCinElect);
                     countFormValide += 1;
                 } else{

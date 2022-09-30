@@ -50,8 +50,7 @@ public class Configuration extends AppCompatActivity{
             @Override
             public void onClick(View view) {
 
-                enregistrer.setEnabled(false);
-                enregistrer.setClickable(false);
+                enregistrerButtonDisable();
 
                 // enregistrer.setVisibility(View.GONE);
                 String ip = adressIp.getText().toString();
@@ -69,5 +68,16 @@ public class Configuration extends AppCompatActivity{
                 onBackPressed();
             }
         });
+    }
+
+
+    public void enregistrerButtonEnable() {
+        enregistrer.setEnabled(true);
+        enregistrer.setClickable(true);
+    }
+
+    public void enregistrerButtonDisable() {
+        enregistrer.setEnabled(false);
+        enregistrer.setClickable(false);
     }
 }

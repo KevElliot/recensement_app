@@ -1,10 +1,10 @@
 package com.ceni.model;
 
 public class Voter {
-    private String id;
+    private int id;
     private String status;
 
-    public Voter(String id, String status) {
+    public Voter(int id, String status) {
         this.id = id;
         this.status = status;
     }
@@ -13,7 +13,7 @@ public class Voter {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
