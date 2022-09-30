@@ -2,6 +2,7 @@ package com.ceni.service;
 
 import static android.content.ContentValues.TAG;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -142,12 +143,15 @@ public class Api_service {
                     .getAsJSONObject(new JSONObjectRequestListener() {
                         @Override
                         public void onResponse(JSONObject response) {
-                            Log.d("Add new INFO tablette", "true " + response.toString());
+                            Toast toast = Toast.makeText(context, "Tablette enregistré!", Toast.LENGTH_LONG);
+                            toast.show();
+                            ((Activity) context).finish();
                         }
                         @Override
                         public void onError(ANError error) {
                             Toast toast = Toast.makeText(context, "Problème serveur!", Toast.LENGTH_LONG);
                             toast.show();
+                            ((Activity) context).finish();
                         }
                     });
         } catch (Exception e) {

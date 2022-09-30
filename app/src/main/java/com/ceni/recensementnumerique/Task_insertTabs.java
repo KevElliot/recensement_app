@@ -1,6 +1,7 @@
 package com.ceni.recensementnumerique;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
@@ -56,6 +57,6 @@ class Task_insertTabs  extends AsyncTask<Void, Void, Void> {
 
    @Override
    protected void onPostExecute(Void aVoid) {
-      enregistrer.setVisibility(View.VISIBLE);
+
    }
 }

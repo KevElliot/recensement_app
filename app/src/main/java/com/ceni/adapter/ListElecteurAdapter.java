@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import com.ceni.model.Electeur;
 import com.ceni.recensementnumerique.R;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -258,11 +258,9 @@ public class RechercheElecteur extends AppCompatActivity {
                                     electeur.setNserieCin(elect.get(position).getNserieCin());
                                     electeur.setDateDeliv(elect.get(position).getDateDeliv());
                                     electeur.setLieuDeliv(elect.get(position).getLieuDeliv());
-
                                     electeur.setFicheElect(elect.get(position).getFicheElect());
                                     electeur.setCinRecto(elect.get(position).getCinRecto());
                                     electeur.setCinVerso(elect.get(position).getCinVerso());
-
                                     electeur.setObservation(elect.get(position).getObservation());
                                     electeur.setDocreference(elect.get(position).getDocreference());
                                     electeur.setNum_userinfo(elect.get(position).getNum_userinfo());

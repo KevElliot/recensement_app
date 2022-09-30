@@ -7,6 +7,9 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -23,6 +26,8 @@ import com.ceni.model.User;
 import com.ceni.recensementnumerique.R;
 
 
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +35,7 @@ import java.util.List;
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-    private static final int DB_VERSION = 32;
+    private static final int DB_VERSION = 40;
     /*---------------------------------------------------------------------------------------
                                            TABLE ELECTEUR
     ----------------------------------------------------------------------------------------*/
@@ -177,7 +182,6 @@ public class Db_sqLite extends SQLiteOpenHelper {
         boolean result = false;
         SQLiteDatabase MyDB = this.getWritableDatabase();
         String sql = "Select nFiche from electeur where nFiche='"+nfiche+"' and docreference= '"+docref+"'";
-//        Cursor cursor = MyDB.rawQuery("Select " + COLUMN_NFICHE + " from Electeur where " + COLUMN_NFICHE + " =?", new String[]{nfiche});
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
             long nbElect = this.countElecteur();
@@ -712,7 +716,8 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public List<Electeur> Recherche(String champ, String recherche) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql="Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "'";
+        String sql="Select _id,code_bv,nfiche,nom,prenom,sexe,profession,adresse,nevers,lieunaiss,nomPere,nomMere,cinElect,nserieCin,dateDeliv,lieuDeliv,imageElect,cinRecto," +
+                "cinVerso,observation,docreference,num_userinfo,dateInscription from Electeur where " + champ.trim() + "='" + recherche.trim() + "'";
         Log.d("RECHERCHE", sql);
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<Electeur> listElect = new ArrayList<>();
@@ -736,9 +741,11 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 e.setNserieCin(cursor.getString(14));
                 e.setDateDeliv(cursor.getString(15));
                 e.setLieuDeliv(cursor.getString(16));
+
                 e.setFicheElect(cursor.getString(17));
                 e.setCinRecto(cursor.getString(18));
                 e.setCinVerso(cursor.getString(19));
+
                 e.setObservation(cursor.getString(20));
                 e.setDocreference(cursor.getString(21));
                 e.setNum_userinfo(cursor.getString(22));

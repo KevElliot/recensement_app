@@ -20,6 +20,8 @@ import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
+import java.nio.charset.StandardCharsets;
+
 public class DetailElecteurActivity extends AppCompatActivity {
     private ImageView ficheElect,cinRecto,cinVerso,retour,modif;
     private TextView nfiche,dateInscr,nom,prenom,sexe,profession,adresse,dateNaiss,lieuNaiss,nomPere,nomMere,cinElect,nserie,dateDeliv,lieuDeliv,observation;
@@ -138,6 +140,8 @@ public class DetailElecteurActivity extends AppCompatActivity {
         });
     }
     public Bitmap decodeImage (String dataImageElect){
+//        byte[] byteArray = dataImageElect.getBytes(StandardCharsets.UTF_8);
+//        String image = Base64.encodeToString(byteArray, Base64.DEFAULT);
         //Decode image
         byte[] img = Base64.decode(dataImageElect, Base64.DEFAULT);
         Bitmap bm;

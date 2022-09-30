@@ -65,6 +65,7 @@ import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -1008,17 +1009,20 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Bitmap tmpBitmap = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                        tmpBitmap = this.resizeImage(bitmap,300,true);
+                        tmpBitmap = this.resizeImage(bitmap,800,true);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    tmpBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    tmpBitmap.compress(Bitmap.CompressFormat.JPEG, 10, stream);
                     byte[] byteArray = stream.toByteArray();
 
                     this.imageView.setImageBitmap(tmpBitmap);
 
                     dataFicheElect = Base64.encodeToString(byteArray, Base64.DEFAULT);
+//                    dataFicheElect = new String(byteArray, StandardCharsets.UTF_8);
+                    Log.d("FICHE_ELECT_BYTE",dataFicheElect);
+
                     this.generateNoteOnSD(this.getApplicationContext(), "base64", dataFicheElect);
 
                     if(f_fiche.exists()){
@@ -1044,19 +1048,21 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Bitmap tmpBitmap2 = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                        tmpBitmap2 = this.resizeImage(bitmap,300,true);
+                        tmpBitmap2 = this.resizeImage(bitmap,800,true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    tmpBitmap2.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    tmpBitmap2.compress(Bitmap.CompressFormat.JPEG, 10, stream);
                     byte[] byteArray = stream.toByteArray();
 
                     this.recto.setImageBitmap(tmpBitmap2);
 
                     imageRecto = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    Log.d("BASE 64 RECTO : ", imageRecto.trim());
+//                    imageRecto = new String(byteArray, StandardCharsets.UTF_8);
+
+                    Log.d("RECTO : ", imageRecto.trim());
 
                     if(f_fiche.exists()){
                         if (f_fiche.delete()){
@@ -1081,19 +1087,21 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Bitmap tmpBitmap3 = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                        tmpBitmap3 = this.resizeImage(bitmap,300,true);
+                        tmpBitmap3 = this.resizeImage(bitmap,800,true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    tmpBitmap3.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    tmpBitmap3.compress(Bitmap.CompressFormat.JPEG, 10, stream);
                     byte[] byteArray = stream.toByteArray();
 
                     this.verso.setImageBitmap(tmpBitmap3);
 
                     imageVerso = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    Log.d("BASE 64 VERSO : ", imageVerso.trim());
+//                    imageVerso = new String(byteArray, StandardCharsets.UTF_8);
+
+                    Log.d("VERSO : ", imageVerso.trim());
 
                     if(f_fiche.exists()){
                         if (f_fiche.delete()){

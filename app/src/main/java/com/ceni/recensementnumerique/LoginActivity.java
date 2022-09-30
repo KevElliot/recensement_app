@@ -54,7 +54,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 user = DB.selectUser(pseudo, motdepass);
                 // check emei on sqlite
-                Boolean checkResult = DB.findIMEI(checkIMEI);
+
+                //Boolean checkResult = DB.findIMEI(checkIMEI);
+                Boolean checkResult = true;
                 Log.d("IMEI CHECK LOGIN", "Bool " + checkIMEI);
 
                 // get one tablette element
