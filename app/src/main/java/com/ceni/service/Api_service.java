@@ -5,18 +5,24 @@ import static android.content.ContentValues.TAG;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.JSONArrayRequestListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.ParsedRequestListener;
 import com.ceni.model.Document;
 import com.ceni.model.Electeur;
+import com.ceni.model.Notebook;
 import com.ceni.model.Tablette;
 import com.ceni.model.User;
+import com.ceni.model.Voter;
 import com.ceni.recensementnumerique.ListeFokontanyActivity;
 import com.ceni.recensementnumerique.MenuActivity;
 import com.google.gson.Gson;
@@ -26,7 +32,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class Api_service {
@@ -117,18 +128,60 @@ public class Api_service {
 
     public static void insertNotebooks(Db_sqLite DB, Context context, String ip, String port, Tablette tab, User us, JSONObject notebooks) {
         String base_url = "http://" + ip + ":" + port + "/";
-        AndroidNetworking.post(base_url + "/api/insert-voters")
+        AndroidNetworking.post(base_url + "api/insertVoters")
                 .setTag("test")
                 .addHeaders("Accept", "application/json")
                 .addHeaders("Content-Type", "application/json")
                 .setPriority(Priority.HIGH)
                 .addJSONObjectBody(notebooks)
                 .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
+                .getAsJSONArray(new JSONArrayRequestListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         Log.d("addNewDoc", "true " + response.toString());
-                        // TODO: RESPONSE
+                        List<Notebook> notebooks = new ArrayList<Notebook>();
+                        for(int i = 0; i < response.length(); i++){
+                            try {
+                                notebooks.add(new Gson().fromJson(response.get(i).toString(), Notebook.class));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+
+                        Stream<Notebook> success = notebooks.stream().filter(notebook -> notebook.getStatus().equals("success"));
+                        Stream<Notebook> failed = notebooks.stream().filter(notebook -> notebook.getStatus().equals("failed"));
+                        Long notebooksSucces = success.count();
+                        Long notebooksFailed = failed.count();
+
+                        List<Voter> notebooksSuccedVoters = new ArrayList<>();
+                        List<Integer> idsToDelete = new ArrayList<>();
+                        notebooks.stream().filter(notebook -> notebook.getStatus().equals("success")).forEach(notebook -> notebooksSuccedVoters.addAll(notebook.getVoters()));
+                        List<Voter> notebooksFailedVoters = new ArrayList<>();
+                        notebooks.stream().filter(notebook -> notebook.getStatus().equals("failed")).forEach(notebook -> notebooksFailedVoters.addAll(notebook.getVoters()));
+                        Long notevoterSucces = notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("success")).count();
+                        Long notevoterfailed = notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("failed")).count();
+
+                        Long noteFailedvoterSucces = notebooksFailedVoters.stream().filter(voter -> voter.getStatus().equals("success")).count();
+                        Long noteFailedvoterfailed = notebooksFailedVoters.stream().filter(voter -> voter.getStatus().equals("failed")).count();
+
+                        notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("success")).forEach(voter -> idsToDelete.add(voter.getId()));
+                        notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("failed")).forEach(voter -> idsToDelete.add(voter.getId()));
+
+                        notebooksFailedVoters.stream().filter(voter -> voter.getStatus().equals("success")).forEach(voter -> idsToDelete.add(voter.getId()));
+                        notebooksFailedVoters.stream().filter(voter -> voter.getStatus().equals("failed")).forEach(voter -> idsToDelete.add(voter.getId()));
+
+                        Log.d("succes", "succes:  " +  notebooksSucces);
+                        Log.d("failed", "failed:  " +  notebooksFailed);
+
+                        Log.d("notevoterSucces", "notevoterSucces:  " +  notevoterSucces);
+                        Log.d("notevoterfailed", "notevoterfailed:  " +  notevoterfailed);
+                        Log.d("noteFailedvoterSucces", "noteFailedvoterSucces:  " +  noteFailedvoterSucces);
+                        Log.d("noteFailedvoterfailed", "noteFailedvoterfailed:  " +  noteFailedvoterfailed);
+                        Log.d("notebooks", "notebooks:  " +  notebooks.get(0).toString());
+
+                        Log.d("Voters", "Voters:  " +  notebooks.get(0).getVoters().get(0).toString());
                         Toast toast = Toast.makeText(context, "Electeur enregistré!", Toast.LENGTH_LONG);
                         toast.show();
                         Log.d(TAG, "Reponse Insert : " + response);
@@ -146,8 +199,10 @@ public class Api_service {
 //                            ListeFokontanyActivity.getInstance().finish();
 //                        }
                     }
+
                     @Override
-                    public void onError(ANError error) {
+                    public void onError(ANError anError) {
+                        Log.d("error", "true " + anError.toString());
                         Toast toast = Toast.makeText(context, "Problème serveur!", Toast.LENGTH_LONG);
                         toast.show();
                     }
