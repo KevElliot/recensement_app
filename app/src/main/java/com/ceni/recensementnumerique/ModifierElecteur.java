@@ -41,6 +41,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -72,6 +73,7 @@ public class ModifierElecteur extends AppCompatActivity {
         int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
         int anneeMajor = anneeNow - 18;
         int anneeDead = anneeNow - 150;
+        final int[] countFormValide = {0};
         int anneeDebutCin = anneeNow;
         int anneeFinCin = anneeNow - 101 + 18;
         electSexe = electeur.getSexe();
@@ -434,8 +436,20 @@ public class ModifierElecteur extends AppCompatActivity {
                 // e.setNevers(neversDate);
 
                 if (isNevers) {
+
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
+                    Date datycin = null;
+                    int neversVal = 0;
+                    try {
+                        datycin = formatter.parse(dateCin);
+                        neversVal = Integer.parseInt(editTextNevers.getText().toString());
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                    }
+                    int x = datycin.getYear() - neversVal;
+
                     int anneeNevers = Integer.parseInt(editTextNevers.getText().toString());
-                    if (editTextNevers.getText().toString().length() == 4) {
+                    if (editTextNevers.getText().toString().length() == 4 && x>=18) {
                         if (anneeNevers < anneeMajor && anneeNevers > anneeDead) {
                             e.setNevers(editTextNevers.getText().toString());
                             e.setDateNaiss("");
@@ -480,7 +494,26 @@ public class ModifierElecteur extends AppCompatActivity {
                 } else {
                     nSerie.setError("Mila fenoina");
                 }
-                e.setDateDeliv(dateCin);
+                if (dateCin!=null) {
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
+                    Date datycin = null;
+                    Date naiss = null;
+                    try {
+                        datycin = formatter.parse(dateCin);
+                        naiss = formatter.parse(dateNaiss);
+                    } catch (ParseException ex) {
+                        ex.printStackTrace();
+                    }
+                    int x = datycin.getYear() - naiss.getYear();
+                    if(naiss.getTime() < datycin.getTime() && x>=18) {
+                        e.setDateDeliv(dateCin);
+                        countFormValide[0] += 1;
+                    }else{
+                        dateCinElect.setError("verifieo ny daty CIN sy daty nahaterahana ");
+                    }
+                }
+
+
                 if (lieuCinElect.getText().toString().length() != 0) {
                     e.setLieuDeliv(lieuCinElect.getText().toString());
                 } else {
@@ -494,14 +527,19 @@ public class ModifierElecteur extends AppCompatActivity {
                 Log.d("verso",""+imageVerso.length());
                 e.setObservation(observationElect);
                 e.setDateinscription(electeur.getDateinscription());
-                boolean update = db_sqLite.updateElect(e);
-                if(update){
-                    RechercheElecteur.getInstance().finish();
-                    finish();
-                    Intent i = new Intent(getApplicationContext(), RechercheElecteur.class);
-                    startActivity(i);
-                }else{
-                    Toast toast = Toast.makeText(ModifierElecteur.this, "Erreur lors de la modification!", Toast.LENGTH_LONG);
+                if(countFormValide[0] >=1) {
+                    boolean update = db_sqLite.updateElect(e);
+                    if (update) {
+                        RechercheElecteur.getInstance().finish();
+                        finish();
+                        Intent i = new Intent(getApplicationContext(), RechercheElecteur.class);
+                        startActivity(i);
+                    } else {
+                        Toast toast = Toast.makeText(ModifierElecteur.this, "Erreur lors de la modification!", Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }else {
+                    Toast toast = Toast.makeText(ModifierElecteur.this, "Daty nahaterahana na daty cin misy diso!", Toast.LENGTH_LONG);
                     toast.show();
                 }
                 Log.d("TAG", "onClick: "+e.toString());

@@ -399,6 +399,11 @@ public class Db_sqLite extends SQLiteOpenHelper {
         contentValues.put(COLUMN_OBSERVATION, observation);
         contentValues.put(COLUMN_DOCREFERENCE, docreference);
         contentValues.put(COLUMN_DATEINSCRIPTION, dateinscription);
+
+//        Log.d("aaaa",""+dateNaiss);
+//        Log.d("aaaa",""+dateDeliv);
+//        Log.d("aaaa",""+dateinscription);
+
         long result = MyDB.insert(TABLE_ELECTEUR, null, contentValues);
         if (result == -1) {
             return false;

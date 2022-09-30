@@ -748,12 +748,28 @@ public class NewElecteurActivity extends AppCompatActivity {
                     countFormValide += 1;
                 }
                 if (isNevers) {
-                    int anneeNevers = Integer.parseInt(editNevers.getText().toString());
-                    if (editNevers.getText().toString().length() == 4) {
-                        if (anneeNevers < anneeMajor && anneeNevers > anneeDead) {
-                            countFormValide += 1;
-                            electeur.setNevers(editNevers.getText().toString());
-                            electeur.setDateNaiss("");
+
+
+                    int datynevers = Integer.parseInt(editNevers.getText().toString());
+                    String[] arrOfStr = dateCinElect.split("/");
+                    int datycin = Integer.parseInt(arrOfStr[2]);
+                    int y = datycin - datynevers;
+                    
+                    Log.d("YYYYYY",""+y);
+                    Log.d("datycin",""+datycin);
+                    Log.d("datynevers",""+datynevers);
+                    Log.d("dateCinElect",""+dateCinElect);
+
+
+                    if (editNevers.getText().toString().length() == 4 ) {
+                        if (datynevers < anneeMajor && datynevers > anneeDead) {
+                            if(y>=18) {
+                                countFormValide += 1;
+                                electeur.setNevers(editNevers.getText().toString());
+                                electeur.setDateNaiss("");
+                            }else {
+                                editNevers.setError("Tsy feno taona");
+                            }
                         } else {
                             editNevers.setError("Tsy ao anatiny taona");
                         }
@@ -810,8 +826,28 @@ public class NewElecteurActivity extends AppCompatActivity {
                     lieuCin.setError("Mila fenoina");
                 }
                 if (dateCinElect!=null) {
-                    electeur.setDateDeliv(dateCinElect);
-                    countFormValide += 1;
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
+                    Date datycin = null;
+                    Date naiss = null;
+                    try {
+                        datycin = formatter.parse(dateCinElect);
+                        if(!isNevers) {
+                            naiss = formatter.parse(dateNaiss);
+                        }else{
+                            naiss = new Date();
+                            naiss.setYear(0);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    int x = datycin.getYear() - naiss.getYear();
+                    if(naiss.getTime() < datycin.getTime() && x>=18) {
+                        electeur.setDateDeliv(dateCinElect);
+                        countFormValide += 1;
+                    }else{
+                        selectedDateCin.setTextColor(Color.RED);
+                        selectedDateCin.setText("verifieo ny daty CIN sy daty nahaterahana ");
+                    }
                 } else{
                     selectedDateCin.setTextColor(Color.RED);
                     selectedDateCin.setText("Datin'ny CNI: ");
@@ -1007,12 +1043,12 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Bitmap tmpBitmap = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                        tmpBitmap = this.resizeImage(bitmap,300,true);
+                        tmpBitmap = this.resizeImage(bitmap,1000,true);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    tmpBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    tmpBitmap.compress(Bitmap.CompressFormat.JPEG, 60, stream);
                     byte[] byteArray = stream.toByteArray();
 
                     this.imageView.setImageBitmap(tmpBitmap);
@@ -1043,13 +1079,13 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Bitmap tmpBitmap2 = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                        tmpBitmap2 = this.resizeImage(bitmap,300,true);
+                        tmpBitmap2 = this.resizeImage(bitmap,1000,true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    tmpBitmap2.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    tmpBitmap2.compress(Bitmap.CompressFormat.JPEG, 60, stream);
                     byte[] byteArray = stream.toByteArray();
 
                     this.recto.setImageBitmap(tmpBitmap2);
@@ -1080,13 +1116,13 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Bitmap tmpBitmap3 = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                        tmpBitmap3 = this.resizeImage(bitmap,300,true);
+                        tmpBitmap3 = this.resizeImage(bitmap,1000,true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
 
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    tmpBitmap3.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    tmpBitmap3.compress(Bitmap.CompressFormat.JPEG, 60, stream);
                     byte[] byteArray = stream.toByteArray();
 
                     this.verso.setImageBitmap(tmpBitmap3);
