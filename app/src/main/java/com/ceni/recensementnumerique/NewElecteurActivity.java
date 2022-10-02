@@ -17,14 +17,17 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.net.Uri;
 import android.os.Bundle;
@@ -963,23 +966,13 @@ public class NewElecteurActivity extends AppCompatActivity {
                     dataFicheElect = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
                     if (f_fiche.exists()) {
-                        f_fiche.delete();
-                        try {
-                            f_fiche.getCanonicalFile().delete();
-                            getApplicationContext().deleteFile(f_fiche.getName());
+                        if (f_fiche.delete()) {
                             Log.d("Fiche_elect_deleted", "file delete : " + Uri.fromFile(f_fiche));
-                        } catch (IOException e) {
-                            e.printStackTrace();
+
+                        } else {
+                            Log.d("Fiche_elect_not_deleted", "file not deleted : " + Uri.fromFile(f_fiche));
                         }
                     }
-
-//                    if (f_fiche.exists()) {
-//                        if (f_fiche.delete()) {
-//                            Log.d("Fiche_elect_deleted", "file delete : " + Uri.fromFile(f_fiche));
-//                        } else {
-//                            Log.d("Fiche_elect_not_deleted", "file not deleted : " + Uri.fromFile(f_fiche));
-//                        }
-//                    }
                 } else if (Objects.equals(this.format, "recto")) {
                     // file for recensement fiche
                     File f_fiche = new File(currentPhotoPath_cin_recto_recensement);
@@ -1008,6 +1001,7 @@ public class NewElecteurActivity extends AppCompatActivity {
 
                     if (f_fiche.exists()) {
                         if (f_fiche.delete()) {
+                            callBroadCast();
                             Log.d("recto_deleted", "file delete : " + Uri.fromFile(f_fiche));
                         } else {
                             Log.d("recto_not_deleted", "file not deleted : " + Uri.fromFile(f_fiche));
@@ -1041,6 +1035,7 @@ public class NewElecteurActivity extends AppCompatActivity {
 
                     if (f_fiche.exists()) {
                         if (f_fiche.delete()) {
+                            callBroadCast();
                             Log.d("verso_deleted", "file delete : " + Uri.fromFile(f_fiche));
                         } else {
                             Log.d("verso_not_deleted", "file not deleted : " + Uri.fromFile(f_fiche));
@@ -1068,8 +1063,11 @@ public class NewElecteurActivity extends AppCompatActivity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        // File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        //File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        //File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+        File storageDir = new File( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
+
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".JPEG",         /* suffix */
@@ -1117,5 +1115,4 @@ public class NewElecteurActivity extends AppCompatActivity {
             }
         }
     }
-
 }
