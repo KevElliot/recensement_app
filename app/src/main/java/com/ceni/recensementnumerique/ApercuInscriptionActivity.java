@@ -93,7 +93,8 @@ public class ApercuInscriptionActivity extends AppCompatActivity {
                 Electeur electeur = gson.fromJson(getIntent().getStringExtra("newElect"), Electeur.class);
                 Log.d("Electeur final:", "Electeur : " + electeur.toString());
                 Log.d("Aperçu ACTIVITY", "id DOC REF:  " + electeur.getDocreference());
-                boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), electeur.getDateinscription());
+
+                boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(),"10", electeur.getDateinscription());
                 if (result) {
                     Document doc = DB.selectDocumentbyid(electeur.getDocreference());
                     User us = gson.fromJson(user, User.class);

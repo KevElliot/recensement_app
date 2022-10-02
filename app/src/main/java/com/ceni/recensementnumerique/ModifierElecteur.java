@@ -54,7 +54,7 @@ public class ModifierElecteur extends AppCompatActivity {
     private Button button_image_fiche, mPickDateButton, pick_datecin, button_image_recto, button_image_verso, enregistrer;
     private CheckBox sexeHomme, sexeFemme, nevers, observation1, observation2, observation3;
     private TextView dateNaissElect, dateCinElect, dateInscr, nFiche;
-    private String format,imageFiche, imageRecto, imageVerso,dateNaiss,neversDate, dateCin, sexe, electSexe, observationElect;
+    private String format, imageFiche, imageRecto, imageVerso, dateNaiss, neversDate, dateCin, sexe, electSexe, observationElect;
     private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
     Db_sqLite db_sqLite;
     private boolean isNevers;
@@ -125,33 +125,35 @@ public class ModifierElecteur extends AppCompatActivity {
         nSerie.setText(electeur.getNserieCin());
         lieuCinElect.setText(electeur.getLieuDeliv());
         if (electeur.getNevers().length() != 0) {
-            nevers.isChecked();
+            nevers.setChecked(true);
+            mPickDateButton.setVisibility(View.GONE);
             editTextNevers.setText(electeur.getNevers());
             neversDate = electeur.getNevers();
         } else {
+            nevers.setChecked(false);
             editTextNevers.setVisibility(View.GONE);
+            dateNaissElect.setText(electeur.getDateNaiss());
             dateNaiss = electeur.getDateNaiss();
         }
-        dateNaissElect.setText(electeur.getDateNaiss());
         dateCinElect.setText(electeur.getDateDeliv());
         dateInscr.setText(electeur.getDateinscription());
         dateCin = electeur.getDateDeliv();
         Bitmap imgFiche = this.decodeImage(electeur.getFicheElect());
 
         ficheElect.setImageBitmap(imgFiche);
-        if(electeur.getCinRecto()!=null){
+        if (electeur.getCinRecto() != null) {
             cin_recto.setVisibility(View.VISIBLE);
             Bitmap imgCinRecto = this.decodeImage(electeur.getCinRecto());
             cin_recto.setImageBitmap(imgCinRecto);
 
-        }else{
+        } else {
             cin_recto.setVisibility(View.GONE);
         }
-        if(electeur.getCinVerso()!=null){
+        if (electeur.getCinVerso() != null) {
             cin_verso.setVisibility(View.VISIBLE);
             Bitmap imgCinVerso = this.decodeImage(electeur.getCinVerso());
             cin_verso.setImageBitmap(imgCinVerso);
-        }else{
+        } else {
             cin_verso.setVisibility(View.GONE);
         }
 
@@ -234,6 +236,7 @@ public class ModifierElecteur extends AppCompatActivity {
         constraintBuilder.setEnd(anneeFin);
 
         MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
+        materialDateBuilder.setInputMode(MaterialDatePicker.INPUT_MODE_TEXT);
         materialDateBuilder.setSelection(anneeFin);
         materialDateBuilder.setCalendarConstraints(constraintBuilder.build());
         materialDateBuilder.setTitleText("Daty nahaterahana:");
@@ -261,7 +264,7 @@ public class ModifierElecteur extends AppCompatActivity {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 String formattedDate = format.format(calendar.getTime());
                 mPickDateButton.setEnabled(true);
-                neversDate= "";
+                neversDate = "";
                 dateNaiss = formattedDate;
                 dateNaissElect.setText(formattedDate);
             }
@@ -269,12 +272,12 @@ public class ModifierElecteur extends AppCompatActivity {
 
         Calendar calendar2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar2.clear();
-        int fin = anneeNow - 101+18;
+        int fin = anneeNow - 101 + 18;
 
-        calendar2.set(Calendar.YEAR,anneeNow);
-        calendar2.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH)+1);
+        calendar2.set(Calendar.YEAR, anneeNow);
+        calendar2.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + 1);
         Long anneeFinDateCin = calendar2.getTimeInMillis();
-        calendar2.set(Calendar.YEAR,fin);
+        calendar2.set(Calendar.YEAR, fin);
         Long anneeStartDateCin = calendar2.getTimeInMillis();
 
         CalendarConstraints.Builder constraintBuilder2 = new CalendarConstraints.Builder();
@@ -282,6 +285,7 @@ public class ModifierElecteur extends AppCompatActivity {
         constraintBuilder2.setEnd(anneeFinDateCin);
 
         MaterialDatePicker.Builder materialDateBuilder2 = MaterialDatePicker.Builder.datePicker();
+        materialDateBuilder2.setInputMode(MaterialDatePicker.INPUT_MODE_TEXT);
         materialDateBuilder2.setSelection(anneeFinDateCin);
         materialDateBuilder2.setCalendarConstraints(constraintBuilder2.build());
         materialDateBuilder2.setTitleText("Datin'ny karapanondro:");
@@ -306,9 +310,9 @@ public class ModifierElecteur extends AppCompatActivity {
             @Override
             public void onPositiveButtonClick(Object selection) {
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                calendar.setTimeInMillis((Long)selection);
+                calendar.setTimeInMillis((Long) selection);
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                String formattedDate  = format.format(calendar.getTime());
+                String formattedDate = format.format(calendar.getTime());
                 pick_datecin.setEnabled(true);
                 dateCin = formattedDate;
                 dateCinElect.setText(formattedDate);
@@ -393,15 +397,15 @@ public class ModifierElecteur extends AppCompatActivity {
                 }
             }
         });
-        enregistrer.setOnClickListener(new View.OnClickListener(){
+        enregistrer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Electeur e = new Electeur();
                 int idElect = electeur.getIdElect();
-                if(editTextNevers.getText().toString().length()!=0){
+                if (editTextNevers.getText().toString().length() != 0) {
                     neversDate = editTextNevers.getText().toString();
-                    dateNaiss="";
-                }else{
+                    dateNaiss = "";
+                } else {
                     neversDate = "";
                 }
                 e.setIdElect(idElect);
@@ -409,7 +413,7 @@ public class ModifierElecteur extends AppCompatActivity {
                 e.setCode_bv(electeur.getCode_bv());
 
                 e.setnFiche(nFiche.getText().toString());
-                if(nomElect.getText().toString().length() != 0){
+                if (nomElect.getText().toString().length() != 0) {
                     e.setNom(nomElect.getText().toString());
                 } else {
                     nomElect.setError("Mila fenoina");
@@ -436,20 +440,19 @@ public class ModifierElecteur extends AppCompatActivity {
                 // e.setNevers(neversDate);
 
                 if (isNevers) {
-
+                    neversDate = editTextNevers.getText().toString();
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
-                    Date datycin = null;
+                    int datycin = 0;
                     int neversVal = 0;
-                    try {
-                        datycin = formatter.parse(dateCin);
-                        neversVal = Integer.parseInt(editTextNevers.getText().toString());
-                    } catch (ParseException ex) {
-                        ex.printStackTrace();
-                    }
-                    int x = datycin.getYear() - neversVal;
+
+                    String[] arrOfStr = dateCin.split("/");
+                    datycin = Integer.parseInt(arrOfStr[2]);
+
+                    neversVal = Integer.parseInt(editTextNevers.getText().toString());
+                    int x = datycin - neversVal;
 
                     int anneeNevers = Integer.parseInt(editTextNevers.getText().toString());
-                    if (editTextNevers.getText().toString().length() == 4 && x>=18) {
+                    if (editTextNevers.getText().toString().length() == 4 && x >= 10) {
                         if (anneeNevers < anneeMajor && anneeNevers > anneeDead) {
                             e.setNevers(editTextNevers.getText().toString());
                             e.setDateNaiss("");
@@ -461,7 +464,8 @@ public class ModifierElecteur extends AppCompatActivity {
                     }
                 } else {
                     if (dateNaiss != null) {
-                        e.setDateNaiss(dateNaiss);
+                        //dateNaissElect
+                        e.setDateNaiss(dateNaissElect.getText().toString());
                         e.setNevers("");
                     } else {
                         editTextNevers.setTextColor(Color.RED);
@@ -494,21 +498,32 @@ public class ModifierElecteur extends AppCompatActivity {
                 } else {
                     nSerie.setError("Mila fenoina");
                 }
-                if (dateCin!=null) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
-                    Date datycin = null;
-                    Date naiss = null;
-                    try {
-                        datycin = formatter.parse(dateCin);
-                        naiss = formatter.parse(dateNaiss);
-                    } catch (ParseException ex) {
-                        ex.printStackTrace();
+                if (dateCin != null) {
+                    int bday = 0;
+                    if (!isNevers) {
+                        String[] arrOfStr = dateNaissElect.getText().toString().split("/");
+                        bday = Integer.parseInt(arrOfStr[2]);
+
+                    } else {
+                        bday = Integer.parseInt(editTextNevers.getText().toString());
                     }
-                    int x = datycin.getYear() - naiss.getYear();
-                    if(naiss.getTime() < datycin.getTime() && x>=18) {
-                        e.setDateDeliv(dateCin);
-                        countFormValide[0] += 1;
-                    }else{
+                    String[] cindat = dateCin.split("/");
+                    int cin = Integer.parseInt(cindat[2]);
+
+                    Log.d("datycin", "" + cin);
+                    Log.d("naiss", "" + bday);
+
+                    int x = cin - bday;
+                    if (bday < cin) {
+                        if (x >= 10) {
+                            e.setDateDeliv(dateCin);
+                            countFormValide[0] += 1;
+                        } else {
+                            Log.d("x>=10", "x>=10");
+                            dateCinElect.setError("verifieo ny daty CIN sy daty nahaterahana ");
+                        }
+                    } else {
+                        Log.d("bday < cin", "bday < cin");
                         dateCinElect.setError("verifieo ny daty CIN sy daty nahaterahana ");
                     }
                 }
@@ -520,14 +535,18 @@ public class ModifierElecteur extends AppCompatActivity {
                     lieuCinElect.setError("Mila fenoina");
                 }
                 e.setFicheElect(imageFiche);
-                Log.d("fiche",""+imageFiche.length());
-                e.setCinRecto(imageRecto);
-                Log.d("recto",""+imageRecto.length());
-                e.setCinVerso(imageVerso);
-                Log.d("verso",""+imageVerso.length());
+                Log.d("fiche", "" + imageFiche.length());
+                if (imageRecto != null) {
+                    e.setCinRecto(imageRecto);
+                    Log.d("recto", "" + imageRecto.length());
+                }
+                if (imageVerso != null) {
+                    e.setCinVerso(imageVerso);
+                    Log.d("verso", "" + imageVerso.length());
+                }
                 e.setObservation(observationElect);
                 e.setDateinscription(electeur.getDateinscription());
-                if(countFormValide[0] >=1) {
+                if (countFormValide[0] == 1) {
                     boolean update = db_sqLite.updateElect(e);
                     if (update) {
                         RechercheElecteur.getInstance().finish();
@@ -538,12 +557,12 @@ public class ModifierElecteur extends AppCompatActivity {
                         Toast toast = Toast.makeText(ModifierElecteur.this, "Erreur lors de la modification!", Toast.LENGTH_LONG);
                         toast.show();
                     }
-                }else {
+                } else {
                     Toast toast = Toast.makeText(ModifierElecteur.this, "Daty nahaterahana na daty cin misy diso!", Toast.LENGTH_LONG);
                     toast.show();
                 }
-                Log.d("TAG", "onClick: "+e.toString());
-                Log.d("ID", "ID: "+idElect);
+                Log.d("TAG", "onClick: " + e.toString());
+                Log.d("ID", "ID: " + idElect);
             }
         });
 
@@ -558,6 +577,7 @@ public class ModifierElecteur extends AppCompatActivity {
         bm = BitmapFactory.decodeByteArray(img, 0, img.length, opt);
         return bm;
     }
+
     private void capture() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         this.startActivityForResult(intent, REQUEST_ID_IMAGE_CAPTURE);
@@ -572,20 +592,19 @@ public class ModifierElecteur extends AppCompatActivity {
     // private String msg, user, format, imageRecto, imageVerso, dataFicheElect;
     // String currentPhotoPath_fiche_recensement, currentPhotoPath_cin_recto_recensement, currentPhotoPath_cin_verso_recensement;
 
-    private void verifyPermissions(){
+    private void verifyPermissions() {
         String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA};
 
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 permissions[0]) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 permissions[1]) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[2]) == PackageManager.PERMISSION_GRANTED){
+                permissions[2]) == PackageManager.PERMISSION_GRANTED) {
 
-            switch(format)
-            {
+            switch (format) {
                 case "recto":
                     dispatchTakePictureIntent("recto");
                     break;
@@ -598,7 +617,7 @@ public class ModifierElecteur extends AppCompatActivity {
                 default:
                     System.out.println("default");
             }
-        }else{
+        } else {
             ActivityCompat.requestPermissions(this,
                     permissions,
                     CAMERA_PERM_CODE);
@@ -626,8 +645,8 @@ public class ModifierElecteur extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CAMERA_REQUEST_CODE){
-            if(resultCode == Activity.RESULT_OK){
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
 
                 if (Objects.equals(this.format, "feuillet")) {
                     // file for recensement fiche
@@ -654,10 +673,10 @@ public class ModifierElecteur extends AppCompatActivity {
                     imageFiche = Base64.encodeToString(byteArray, Base64.NO_WRAP);
                     // this.generateNoteOnSD(this.getApplicationContext(), "base64", imageFiche);
 
-                    if(f_fiche.exists()){
-                        if (f_fiche.delete()){
+                    if (f_fiche.exists()) {
+                        if (f_fiche.delete()) {
                             System.out.println("file delete : " + Uri.fromFile(f_fiche));
-                        } else{
+                        } else {
                             System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
                         }
                     }
@@ -689,10 +708,10 @@ public class ModifierElecteur extends AppCompatActivity {
                     imageRecto = Base64.encodeToString(byteArray, Base64.DEFAULT);
                     Log.d("BASE 64 RECTO : ", imageRecto.trim());
 
-                    if(f_fiche.exists()){
-                        if (f_fiche.delete()){
+                    if (f_fiche.exists()) {
+                        if (f_fiche.delete()) {
                             System.out.println("file delete : " + Uri.fromFile(f_fiche));
-                        } else{
+                        } else {
                             System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
                         }
                     }
@@ -724,10 +743,10 @@ public class ModifierElecteur extends AppCompatActivity {
                     imageVerso = Base64.encodeToString(byteArray, Base64.DEFAULT);
                     Log.d("BASE 64 VERSO : ", imageVerso.trim());
 
-                    if(f_fiche.exists()){
-                        if (f_fiche.delete()){
+                    if (f_fiche.exists()) {
+                        if (f_fiche.delete()) {
                             System.out.println("file delete : " + Uri.fromFile(f_fiche));
-                        } else{
+                        } else {
                             System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
                         }
                     }
@@ -871,8 +890,7 @@ public class ModifierElecteur extends AppCompatActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        switch(name_file)
-        {
+        switch (name_file) {
             case "feuillet":
                 currentPhotoPath_fiche_recensement = image.getAbsolutePath();
                 break;

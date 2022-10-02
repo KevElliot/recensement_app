@@ -374,7 +374,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return listdoc.get(0);
     }
 
-    public Boolean insertElecteurData(String code_bv, String nfiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss, String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String imageElect, String cinRecto, String cinVerso, String observation, String docreference, String dateinscription) {
+    public Boolean insertElecteurData(String code_bv, String nfiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss, String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String imageElect, String cinRecto, String cinVerso, String observation, String docreference,String num_userinfo, String dateinscription) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_CODE_BV, code_bv);
@@ -398,6 +398,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         contentValues.put(COLUMN_CINVERSO, cinVerso);
         contentValues.put(COLUMN_OBSERVATION, observation);
         contentValues.put(COLUMN_DOCREFERENCE, docreference);
+        contentValues.put(COLUMN_NUMUSERINFO, num_userinfo);
         contentValues.put(COLUMN_DATEINSCRIPTION, dateinscription);
 
 //        Log.d("aaaa",""+dateNaiss);

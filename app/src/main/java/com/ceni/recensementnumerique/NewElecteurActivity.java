@@ -3,6 +3,7 @@ package com.ceni.recensementnumerique;
 import androidx.annotation.Dimension;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import static android.provider.Settings.System.DATE_FORMAT;
 
 import androidx.annotation.RequiresApi;
@@ -15,6 +16,7 @@ import androidx.core.content.FileProvider;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -96,21 +98,18 @@ public class NewElecteurActivity extends AppCompatActivity {
     private List<Bv> bv;
     private Spinner spinnerFokontany, spinnerCv, spinnerBv, spinnerDocument;
     private List<Document> document;
-    private Button mPickDateButton, buttonRecto, buttonVerso, buttonImage, enregistrer,datecin,datederecensement;
+    private Button mPickDateButton, buttonRecto, buttonVerso, buttonImage, enregistrer, datecin, datederecensement;
     private ImageView recto, verso, imageView;
     private CheckBox sexeHomme, sexeFemme, feuPere, feuMere, nevers;
     private String sexe;
     private EditText nFiche, nom, prenom, lieuNaiss, profession, adresse, nomMere, nomPere, editNevers;
     private EditText cin, nserie, nserie2, lieuCin;
-    private TextView infoCarnet,mShowSelectedDateText,selectedDateCin,selectedDateRecensement;
+    private TextView infoCarnet, mShowSelectedDateText, selectedDateCin, selectedDateRecensement;
     private int countFormValide;
     private boolean isMemeFiche, isSamePers, isNevers, feuMereSelected, feuPereSelected, fichefull;
-    private String msg, user, format, imageRecto, imageVerso, dataFicheElect,dateNaiss,dateCinElect,daterecensement;
+    private String msg, user, format, imageRecto, imageVerso, dataFicheElect, dateNaiss, dateCinElect, daterecensement;
     private String currentPhotoPath_fiche_recensement, currentPhotoPath_cin_recto_recensement, currentPhotoPath_cin_verso_recensement;
     private Fokontany fokontanySelected;
-
-    private Pattern pattern;
-    private Matcher matcher;
 
     private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
 
@@ -355,6 +354,7 @@ public class NewElecteurActivity extends AppCompatActivity {
         this.buttonRecto.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                buttonRecto.setEnabled(false);
                 format = "recto";
                 verifyPermissions();
             }
@@ -362,6 +362,7 @@ public class NewElecteurActivity extends AppCompatActivity {
         this.buttonVerso.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                buttonVerso.setEnabled(false);
                 format = "verso";
                 verifyPermissions();
             }
@@ -369,6 +370,7 @@ public class NewElecteurActivity extends AppCompatActivity {
         this.buttonImage.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
+                buttonImage.setEnabled(false);
                 format = "feuillet";
                 verifyPermissions();
             }
@@ -388,7 +390,7 @@ public class NewElecteurActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(),idFdocReference[0]);
+                isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(), idFdocReference[0]);
                 if (isMemeFiche) {
                     nFiche.setError("Takelaka efa voasoratra!");
                 }
@@ -409,7 +411,7 @@ public class NewElecteurActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String nomElect = nom.getText().toString();
-                String prenomElect= prenom.getText().toString();
+                String prenomElect = prenom.getText().toString();
                 isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss);
                 if (isSamePers) {
                     isSamePers = true;
@@ -490,7 +492,7 @@ public class NewElecteurActivity extends AppCompatActivity {
         constraintBuilder.setEnd(anneeFin);
 
         MaterialDatePicker.Builder materialDateBuilder = MaterialDatePicker.Builder.datePicker();
-
+        materialDateBuilder.setInputMode(MaterialDatePicker.INPUT_MODE_TEXT);
         materialDateBuilder.setSelection(anneeFin);
         materialDateBuilder.setCalendarConstraints(constraintBuilder.build());
         materialDateBuilder.setTitleText("Daty nahaterahana:");
@@ -523,90 +525,15 @@ public class NewElecteurActivity extends AppCompatActivity {
             }
         });
 
-//        datederecensement.addTextChangedListener(new TextWatcher() {
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                String deb = "01/10/2022";
-//                String daterecens = datederecensement.getText().toString();
-//                SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-//                Boolean isDateValide = checkDate(daterecens);
-//                if (isDateValide) {
-//                    try {
-//                        Date dateRecens = format.parse(daterecens);
-//                        Date datedeb = format.parse(deb);
-//                        Date dateNow = Calendar.getInstance().getTime();
-//                        if (datedeb.getTime() < dateRecens.getTime()) {
-//                            isDateDerecense = true;
-//                        } else {
-//                            datederecensement.setError("Tsy ao anatiny daty");
-//                        }
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//                } else {
-//                    datederecensement.setError("Daty tsy valide");
-//                }
-//
-//            }
-//        });
-
-//        dateCin.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                Date dateNow = Calendar.getInstance().getTime();
-//                String dateNaiss = "datedeNaissance.getText().toString()";
-//                String datedeliv = dateCin.getText().toString();
-//                SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-//                Boolean isDateValide = checkDate(datedeliv);
-//                if (isDateValide) {
-//                    try {
-//                        Date naiss = format.parse(dateNaiss);
-//                        Date deliv = format.parse(datedeliv);
-//                        if (naiss.getTime() < deliv.getTime() && deliv.getTime() < dateNow.getTime()) {
-//                            isDateCinValid = true;
-//                        } else {
-//                            dateCin.setError("tsy tafiditra ny date");
-//                        }
-//
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//                } else {
-//                    dateCin.setError("Daty tsy valide");
-//                }
-//
-//            }
-//        });
 
         Calendar calendar2 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar2.clear();
-        int fin = anneeNow - 101+18;
+        int fin = anneeNow - 101 + 18;
 
-        calendar2.set(Calendar.YEAR,anneeNow);
-        calendar2.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH)+1);
+        calendar2.set(Calendar.YEAR, anneeNow);
+        calendar2.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + 1);
         Long anneeFinDateCin = calendar2.getTimeInMillis();
-        calendar2.set(Calendar.YEAR,fin);
+        calendar2.set(Calendar.YEAR, fin);
         Long anneeStartDateCin = calendar2.getTimeInMillis();
 
         CalendarConstraints.Builder constraintBuilder2 = new CalendarConstraints.Builder();
@@ -614,6 +541,7 @@ public class NewElecteurActivity extends AppCompatActivity {
         constraintBuilder2.setEnd(anneeFinDateCin);
 
         MaterialDatePicker.Builder materialDateBuilder2 = MaterialDatePicker.Builder.datePicker();
+        materialDateBuilder2.setInputMode(MaterialDatePicker.INPUT_MODE_TEXT);
         materialDateBuilder2.setSelection(anneeFinDateCin);
         materialDateBuilder2.setCalendarConstraints(constraintBuilder2.build());
         materialDateBuilder2.setTitleText("Datin'ny karapanondro:");
@@ -623,7 +551,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         datecin.setEnabled(false);
-                        materialDatePicker2.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
+                        materialDatePicker2.show(getSupportFragmentManager(), "DATE CNI:");
                     }
                 });
 
@@ -639,9 +567,9 @@ public class NewElecteurActivity extends AppCompatActivity {
             @Override
             public void onPositiveButtonClick(Object selection) {
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                calendar.setTimeInMillis((Long)selection);
+                calendar.setTimeInMillis((Long) selection);
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                String formattedDate  = format.format(calendar.getTime());
+                String formattedDate = format.format(calendar.getTime());
                 datecin.setEnabled(true);
                 dateCinElect = formattedDate;
                 selectedDateCin.setText("Daty nahazahona ny CNI: " + formattedDate);
@@ -650,12 +578,12 @@ public class NewElecteurActivity extends AppCompatActivity {
 
         Calendar calendar3 = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar3.clear();
-        int fin3 = Calendar.getInstance().get(Calendar.YEAR)-1;
+        int fin3 = Calendar.getInstance().get(Calendar.YEAR) - 1;
 
-        calendar3.set(Calendar.YEAR,anneeNow);
-        calendar3.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH)+1);
+        calendar3.set(Calendar.YEAR, anneeNow);
+        calendar3.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + 1);
         Long anneeFinRecens = calendar3.getTimeInMillis();
-        calendar3.set(Calendar.YEAR,fin3);
+        calendar3.set(Calendar.YEAR, fin3);
         Long anneeStartRecens = calendar3.getTimeInMillis();
 
         CalendarConstraints.Builder constraintBuilder3 = new CalendarConstraints.Builder();
@@ -663,6 +591,7 @@ public class NewElecteurActivity extends AppCompatActivity {
         constraintBuilder3.setEnd(anneeFinRecens);
 
         MaterialDatePicker.Builder materialDateBuilder3 = MaterialDatePicker.Builder.datePicker();
+        materialDateBuilder3.setInputMode(MaterialDatePicker.INPUT_MODE_TEXT);
         materialDateBuilder3.setSelection(anneeFinRecens);
         materialDateBuilder3.setCalendarConstraints(constraintBuilder3.build());
         materialDateBuilder3.setTitleText("Daty:");
@@ -672,7 +601,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         datederecensement.setEnabled(false);
-                        materialDatePicker3.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
+                        materialDatePicker3.show(getSupportFragmentManager(), "DATE DE RECENSEMENT:");
                     }
                 });
 
@@ -687,9 +616,9 @@ public class NewElecteurActivity extends AppCompatActivity {
             @Override
             public void onPositiveButtonClick(Object selection) {
                 Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                calendar.setTimeInMillis((Long)selection);
+                calendar.setTimeInMillis((Long) selection);
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                String formattedDate  = format.format(calendar.getTime());
+                String formattedDate = format.format(calendar.getTime());
                 datederecensement.setEnabled(true);
                 daterecensement = formattedDate;
                 selectedDateRecensement.setText("Date recensement : " + formattedDate);
@@ -702,7 +631,7 @@ public class NewElecteurActivity extends AppCompatActivity {
             public void onClick(View view) {
                 countFormValide = 0;
                 Electeur electeur = new Electeur();
-
+                enregistrer.setEnabled(false);
                 if (nom.getText().toString().length() != 0) {
                     electeur.setNom(nom.getText().toString());
                     countFormValide += 1;
@@ -720,12 +649,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 } else {
                     lieuNaiss.setError("Mila fenoina");
                 }
-                if (profession.getText().toString().length() != 0) {
-                    electeur.setProfession(profession.getText().toString());
-                    countFormValide += 1;
-                } else {
-                    profession.setError("Mila fenoina");
-                }
+
                 if (adresse.getText().toString().length() != 0) {
                     electeur.setAdresse(adresse.getText().toString());
                     countFormValide += 1;
@@ -750,26 +674,20 @@ public class NewElecteurActivity extends AppCompatActivity {
                 }
                 if (isNevers) {
 
-
                     int datynevers = Integer.parseInt(editNevers.getText().toString());
                     String[] arrOfStr = dateCinElect.split("/");
                     int datycin = Integer.parseInt(arrOfStr[2]);
                     int y = datycin - datynevers;
-                    
-                    Log.d("YYYYYY",""+y);
-                    Log.d("datycin",""+datycin);
-                    Log.d("datynevers",""+datynevers);
-                    Log.d("dateCinElect",""+dateCinElect);
 
-
-                    if (editNevers.getText().toString().length() == 4 ) {
+                    if (editNevers.getText().toString().length() == 4) {
                         if (datynevers < anneeMajor && datynevers > anneeDead) {
-                            if(y>=18) {
+                            if (y >= 10) {
                                 countFormValide += 1;
                                 electeur.setNevers(editNevers.getText().toString());
                                 electeur.setDateNaiss("");
-                            }else {
-                                editNevers.setError("Tsy feno taona");
+                            } else {
+                                editNevers.setError("Tsy ampy taona");
+                                selectedDateCin.setText("verifieo ny daty CIN sy daty nahaterahana ");
                             }
                         } else {
                             editNevers.setError("Tsy ao anatiny taona");
@@ -787,6 +705,37 @@ public class NewElecteurActivity extends AppCompatActivity {
                         mShowSelectedDateText.setText("Mila apetraka ny daty nahaterahana");
                     }
                 }
+
+                if (dateCinElect != null) {
+                    String bday = "";
+                    if (dateNaiss != null) {
+                        bday = dateNaiss;
+                    }else{
+                        bday = "00/00/"+editNevers.getText().toString();
+                    }
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
+                    Date datycin = null;
+                    Date naiss = null;
+                    try {
+                        datycin = formatter.parse(dateCinElect);
+                        naiss = formatter.parse(bday);
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    int x = datycin.getYear() - naiss.getYear();
+                    if (naiss.getTime() < datycin.getTime() && x >= 10) {
+                        electeur.setDateDeliv(dateCinElect);
+                        countFormValide += 1;
+                    } else {
+                        selectedDateCin.setTextColor(Color.RED);
+                        selectedDateCin.setText("verifieo ny daty CIN sy daty nahaterahana ");
+                    }
+                } else {
+                    selectedDateCin.setTextColor(Color.RED);
+                    selectedDateCin.setText("Datin'ny CNI: ");
+                }
+
 
                 if (nFiche.getText().toString().length() == 8) {
                     electeur.setnFiche(nFiche.getText().toString());
@@ -826,37 +775,11 @@ public class NewElecteurActivity extends AppCompatActivity {
                 } else {
                     lieuCin.setError("Mila fenoina");
                 }
-                if (dateCinElect!=null) {
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
-                    Date datycin = null;
-                    Date naiss = null;
-                    try {
-                        datycin = formatter.parse(dateCinElect);
-                        if(!isNevers) {
-                            naiss = formatter.parse(dateNaiss);
-                        }else{
-                            naiss = new Date();
-                            naiss.setYear(0);
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    int x = datycin.getYear() - naiss.getYear();
-                    if(naiss.getTime() < datycin.getTime() && x>=18) {
-                        electeur.setDateDeliv(dateCinElect);
-                        countFormValide += 1;
-                    }else{
-                        selectedDateCin.setTextColor(Color.RED);
-                        selectedDateCin.setText("verifieo ny daty CIN sy daty nahaterahana ");
-                    }
-                } else{
-                    selectedDateCin.setTextColor(Color.RED);
-                    selectedDateCin.setText("Datin'ny CNI: ");
-                }
+
                 if (daterecensement != null) {
                     electeur.setDateinscription(daterecensement.toString());
                     countFormValide += 1;
-                }  else {
+                } else {
                     selectedDateRecensement.setTextColor(Color.RED);
                     selectedDateRecensement.setText("Datin'ny recensement");
                 }
@@ -870,6 +793,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                     countFormValide += 1;
                     electeur.setFicheElect(dataFicheElect);
                 } else {
+                    enregistrer.setEnabled(true);
                     new AlertDialog.Builder(NewElecteurActivity.this)
                             .setTitle("Fahadisoana?")
                             .setMessage("Iangaviana ianao mba haka sarin'ny takelaka!.")
@@ -882,7 +806,8 @@ public class NewElecteurActivity extends AppCompatActivity {
                             }).show();
                 }
 
-                if (countFormValide != 16) {
+                if (countFormValide != 15) {
+                    enregistrer.setEnabled(true);
                     Log.d("COUNT", "" + countFormValide);
                     new AlertDialog.Builder(NewElecteurActivity.this)
                             .setTitle("Fahadisoana")
@@ -899,24 +824,27 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Log.d("NEW ELECT", electeur.toString());
                     if (!fichefull) {
                         if (!isSamePers) {
-                            isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(),idFdocReference[0]);
+                            isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(), idFdocReference[0]);
                             if (!isMemeFiche) {
+                                Gson gson = new Gson();
+                                User us = gson.fromJson(user, User.class);
                                 Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
                                 electeur.setCode_bv(bvSelected.getCode_bv());
-                                boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), electeur.getDateinscription());
+                                electeur.setProfession(profession.getText().toString());
+                                boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(),us.getIdUser(), electeur.getDateinscription());
                                 if (result) {
                                     Document doc = DB.selectDocumentbyid(electeur.getDocreference());
-                                    Gson gson = new Gson();
-                                    User us = gson.fromJson(user, User.class);
                                     DB.counterStat(doc, us, 1);
                                     Toast toast = Toast.makeText(NewElecteurActivity.this, "Electeur enregistré!", Toast.LENGTH_LONG);
                                     toast.show();
                                     Intent i = new Intent(getApplicationContext(), NewElecteurActivity.class);
                                     i.putExtra("user", user);
+                                    enregistrer.setEnabled(true);
                                     startActivity(i);
                                     finish();
                                 }
                             } else {
+                                enregistrer.setEnabled(true);
                                 new AlertDialog.Builder(NewElecteurActivity.this)
                                         .setTitle("Fahadisoana")
                                         .setMessage("Takelaka efa voasoratra!")
@@ -929,6 +857,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                                         }).show();
                             }
                         } else {
+                            enregistrer.setEnabled(true);
                             new AlertDialog.Builder(NewElecteurActivity.this)
                                     .setTitle("Fahadisoana")
                                     .setMessage("Mpifidy efa voasoratra!")
@@ -941,6 +870,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                                     }).show();
                         }
                     } else {
+                        enregistrer.setEnabled(true);
                         new AlertDialog.Builder(NewElecteurActivity.this)
                                 .setTitle("Fahadisoana")
                                 .setMessage("Karine efa feno! Manamboara vaovao!")
@@ -968,83 +898,59 @@ public class NewElecteurActivity extends AppCompatActivity {
 
     public static final int CAMERA_PERM_CODE = 101;
     public static final int CAMERA_REQUEST_CODE = 102;
-    // private ImageView recto, verso, imageView;
-    // private String msg, user, format, imageRecto, imageVerso, dataFicheElect;
-    // String currentPhotoPath_fiche_recensement, currentPhotoPath_cin_recto_recensement, currentPhotoPath_cin_verso_recensement;
 
-    private void verifyPermissions(){
+    private void verifyPermissions() {
         String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA};
 
-        if(ContextCompat.checkSelfPermission(this.getApplicationContext(),
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 permissions[0]) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this.getApplicationContext(),
                 permissions[1]) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this.getApplicationContext(),
-                permissions[2]) == PackageManager.PERMISSION_GRANTED){
+                permissions[2]) == PackageManager.PERMISSION_GRANTED) {
 
-            switch(format)
-            {
+            switch (format) {
                 case "recto":
+                    buttonRecto.setEnabled(true);
                     dispatchTakePictureIntent("recto");
                     break;
                 case "verso":
+                    buttonVerso.setEnabled(true);
                     dispatchTakePictureIntent("verso");
                     break;
                 case "feuillet":
+                    buttonImage.setEnabled(true);
                     dispatchTakePictureIntent("feuillet");
                     break;
                 default:
                     System.out.println("default");
             }
-        }else{
+        } else {
             ActivityCompat.requestPermissions(this,
                     permissions,
                     CAMERA_PERM_CODE);
         }
     }
 
-    public void generateNoteOnSD(Context context, String sFileName, String sBody) {
-        try {
-            File root = new File(Environment.getExternalStorageDirectory(), "Notes");
-            if (!root.exists()) {
-                root.mkdirs();
-            }
-            Log.d("ROOT", root.getAbsolutePath());
-            File gpxfile = new File(root, sFileName);
-            FileWriter writer = new FileWriter(gpxfile);
-            writer.append(sBody);
-            writer.flush();
-            writer.close();
-            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == CAMERA_REQUEST_CODE){
-            if(resultCode == Activity.RESULT_OK){
+        if (requestCode == CAMERA_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
 
                 if (Objects.equals(this.format, "feuillet")) {
                     // file for recensement fiche
                     File f_fiche = new File(currentPhotoPath_fiche_recensement);
-                    // imageView.setImageURI(Uri.fromFile(f_fiche));
                     Log.d("tag", "ABsolute Url of Image fiche recensement is " + Uri.fromFile(f_fiche));
 
-                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                     Uri contentUri = Uri.fromFile(f_fiche);
-
-
-
                     Bitmap bitmap = null;
                     Bitmap tmpBitmap = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                        tmpBitmap = this.resizeImage(bitmap,1000,true);
+                        tmpBitmap = this.resizeImage(bitmap, 1000, true);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -1055,32 +961,39 @@ public class NewElecteurActivity extends AppCompatActivity {
                     this.imageView.setImageBitmap(tmpBitmap);
 
                     dataFicheElect = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    this.generateNoteOnSD(this.getApplicationContext(), "base64", dataFicheElect);
 
-                    if(f_fiche.exists()){
-                        if (f_fiche.delete()){
-                            System.out.println("file delete : " + Uri.fromFile(f_fiche));
-                        } else{
-                            System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
+                    if (f_fiche.exists()) {
+                        f_fiche.delete();
+                        try {
+                            f_fiche.getCanonicalFile().delete();
+                            getApplicationContext().deleteFile(f_fiche.getName());
+                            Log.d("Fiche_elect_deleted", "file delete : " + Uri.fromFile(f_fiche));
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
                     }
 
-                    // mediaScanIntent.setData(contentUri);
-                    // this.sendBroadcast(mediaScanIntent);
+//                    if (f_fiche.exists()) {
+//                        if (f_fiche.delete()) {
+//                            Log.d("Fiche_elect_deleted", "file delete : " + Uri.fromFile(f_fiche));
+//                        } else {
+//                            Log.d("Fiche_elect_not_deleted", "file not deleted : " + Uri.fromFile(f_fiche));
+//                        }
+//                    }
                 } else if (Objects.equals(this.format, "recto")) {
                     // file for recensement fiche
                     File f_fiche = new File(currentPhotoPath_cin_recto_recensement);
                     // recto.setImageURI(Uri.fromFile(f_fiche));
                     Log.d("tag", "ABsolute Url of Image recto recensement is " + Uri.fromFile(f_fiche));
 
-                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                     Uri contentUri = Uri.fromFile(f_fiche);
 
                     Bitmap bitmap = null;
                     Bitmap tmpBitmap2 = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                        tmpBitmap2 = this.resizeImage(bitmap,1000,true);
+                        tmpBitmap2 = this.resizeImage(bitmap, 1000, true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -1092,32 +1005,28 @@ public class NewElecteurActivity extends AppCompatActivity {
                     this.recto.setImageBitmap(tmpBitmap2);
 
                     imageRecto = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    Log.d("BASE 64 RECTO : ", imageRecto.trim());
 
-                    if(f_fiche.exists()){
-                        if (f_fiche.delete()){
-                            System.out.println("file delete : " + Uri.fromFile(f_fiche));
-                        } else{
-                            System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
+                    if (f_fiche.exists()) {
+                        if (f_fiche.delete()) {
+                            Log.d("recto_deleted", "file delete : " + Uri.fromFile(f_fiche));
+                        } else {
+                            Log.d("recto_not_deleted", "file not deleted : " + Uri.fromFile(f_fiche));
                         }
                     }
-
-                    //mediaScanIntent.setData(contentUri);
-                    // this.sendBroadcast(mediaScanIntent);
                 } else if (Objects.equals(this.format, "verso")) {
                     // file for recensement fiche
                     File f_fiche = new File(currentPhotoPath_cin_verso_recensement);
                     // verso.setImageURI(Uri.fromFile(f_fiche));
                     Log.d("tag", "ABsolute Url of Image verso recensement is " + Uri.fromFile(f_fiche));
 
-                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                     Uri contentUri = Uri.fromFile(f_fiche);
 
                     Bitmap bitmap = null;
                     Bitmap tmpBitmap3 = null;
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                        tmpBitmap3 = this.resizeImage(bitmap,1000,true);
+                        tmpBitmap3 = this.resizeImage(bitmap, 1000, true);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -1129,141 +1038,19 @@ public class NewElecteurActivity extends AppCompatActivity {
                     this.verso.setImageBitmap(tmpBitmap3);
 
                     imageVerso = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    Log.d("BASE 64 VERSO : ", imageVerso.trim());
 
-                    if(f_fiche.exists()){
-                        if (f_fiche.delete()){
-                            System.out.println("file delete : " + Uri.fromFile(f_fiche));
-                        } else{
-                            System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
+                    if (f_fiche.exists()) {
+                        if (f_fiche.delete()) {
+                            Log.d("verso_deleted", "file delete : " + Uri.fromFile(f_fiche));
+                        } else {
+                            Log.d("verso_not_deleted", "file not deleted : " + Uri.fromFile(f_fiche));
                         }
                     }
-
-                    mediaScanIntent.setData(contentUri);
-                    this.sendBroadcast(mediaScanIntent);
                 }
-
-                /*
-
-                if (currentPhotoPath_fiche_recensement == null || currentPhotoPath_fiche_recensement.isEmpty() || currentPhotoPath_fiche_recensement.trim().isEmpty())
-                    System.out.println("String is null, empty or blank.");
-                else{
-                    // file for recensement fiche
-                    File f_fiche = new File(currentPhotoPath_fiche_recensement);
-                    imageView.setImageURI(Uri.fromFile(f_fiche));
-                    Log.d("tag", "ABsolute Url of Image fiche recensement is " + Uri.fromFile(f_fiche));
-
-                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    Uri contentUri = Uri.fromFile(f_fiche);
-
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-
-                    dataFicheElect = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    Log.d("BASE 64 FEUILLET : ", dataFicheElect);
-
-                    if(f_fiche.exists()){
-                        if (f_fiche.delete()){
-                            System.out.println("file delete : " + Uri.fromFile(f_fiche));
-                        } else{
-                            System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
-                        }
-                    }
-
-                    mediaScanIntent.setData(contentUri);
-                    this.sendBroadcast(mediaScanIntent);
-                }
-
-                if (currentPhotoPath_cin_recto_recensement == null || currentPhotoPath_cin_recto_recensement.isEmpty() || currentPhotoPath_cin_recto_recensement.trim().isEmpty())
-                    System.out.println("String is null, empty or blank.");
-                else{
-                    // file for recensement fiche
-                    File f_fiche = new File(currentPhotoPath_cin_recto_recensement);
-                    recto.setImageURI(Uri.fromFile(f_fiche));
-                    Log.d("tag", "ABsolute Url of Image recto recensement is " + Uri.fromFile(f_fiche));
-
-                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    Uri contentUri = Uri.fromFile(f_fiche);
-
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-
-                    imageRecto = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    Log.d("BASE 64 RECTO : ", imageRecto);
-
-                    if(f_fiche.exists()){
-                        if (f_fiche.delete()){
-                            System.out.println("file delete : " + Uri.fromFile(f_fiche));
-                        } else{
-                            System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
-                        }
-                    }
-
-                    mediaScanIntent.setData(contentUri);
-                    this.sendBroadcast(mediaScanIntent);
-                }
-
-                if (currentPhotoPath_cin_verso_recensement == null || currentPhotoPath_cin_verso_recensement.isEmpty() || currentPhotoPath_cin_verso_recensement.trim().isEmpty())
-                    System.out.println("String is null, empty or blank.");
-                else{
-                    // file for recensement fiche
-                    File f_fiche = new File(currentPhotoPath_cin_verso_recensement);
-                    verso.setImageURI(Uri.fromFile(f_fiche));
-                    Log.d("tag", "ABsolute Url of Image verso recensement is " + Uri.fromFile(f_fiche));
-
-                    Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    Uri contentUri = Uri.fromFile(f_fiche);
-
-                    Bitmap bitmap = null;
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), contentUri);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-
-                    imageVerso = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    Log.d("BASE 64 VERSO : ", imageVerso);
-
-                    if(f_fiche.exists()){
-                        if (f_fiche.delete()){
-                            System.out.println("file delete : " + Uri.fromFile(f_fiche));
-                        } else{
-                            System.out.println("file not deleted : " + Uri.fromFile(f_fiche));
-                        }
-                    }
-
-                    mediaScanIntent.setData(contentUri);
-                    this.sendBroadcast(mediaScanIntent);
-                }
-
-
-                 */
-
-
             }
-
         }
     }
+
     public static Bitmap resizeImage(Bitmap realImage, float maxImageSize,
                                      boolean filter) {
         float ratio = Math.min(
@@ -1281,8 +1068,8 @@ public class NewElecteurActivity extends AppCompatActivity {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        // File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".JPEG",         /* suffix */
@@ -1290,15 +1077,17 @@ public class NewElecteurActivity extends AppCompatActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        switch(name_file)
-        {
+        switch (name_file) {
             case "feuillet":
+                Log.d("FEUILLET ENREGISTRER ", "FEUILLET ENREGISTRER : " + image.getAbsolutePath());
                 currentPhotoPath_fiche_recensement = image.getAbsolutePath();
                 break;
             case "recto":
+                Log.d("RECTO ENREGISTRER ", "RECTO ENREGISTRER : " + image.getAbsolutePath());
                 currentPhotoPath_cin_recto_recensement = image.getAbsolutePath();
                 break;
             case "verso":
+                Log.d("VERSO ENREGISTRER ", "VERSO ENREGISTRER : " + image.getAbsolutePath());
                 currentPhotoPath_cin_verso_recensement = image.getAbsolutePath();
                 break;
             default:
@@ -1328,47 +1117,5 @@ public class NewElecteurActivity extends AppCompatActivity {
             }
         }
     }
-
-    ////////////////////////////////// END MODIFICATION //////////////////////////////////
-
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_ID_IMAGE_CAPTURE) {
-            if (resultCode == RESULT_OK) {
-                Bitmap bp = (Bitmap) data.getExtras().get("data");
-
-//                ByteBuffer buffer = ByteBuffer.allocate(bp.getRowBytes() * bp.getHeight());
-//                bp.copyPixelsToBuffer(buffer);
-//                byte[] byteArray = buffer.array();
-
-                //Encode Image
-                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                bp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                byte[] byteArray = stream.toByteArray();
-
-                if (this.format == "recto") {
-                    imageRecto = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    Log.d("Recto", imageRecto);
-                    this.recto.setImageBitmap(bp);
-                } else if (this.format == "verso") {
-                    imageVerso = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    Log.d("Verso", imageVerso);
-                    this.verso.setImageBitmap(bp);
-                } else if (this.format == "feuillet") {
-                    dataFicheElect = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    Log.d("feuillet", dataFicheElect);
-                    this.imageView.setImageBitmap(bp);
-                }
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "Action canceled", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "Action Failed", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-     */
 
 }

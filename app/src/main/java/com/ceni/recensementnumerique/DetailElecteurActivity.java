@@ -21,8 +21,8 @@ import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
 public class DetailElecteurActivity extends AppCompatActivity {
-    private ImageView ficheElect,cinRecto,cinVerso,retour,modif;
-    private TextView nfiche,dateInscr,nom,prenom,sexe,profession,adresse,dateNaiss,lieuNaiss,nomPere,nomMere,cinElect,nserie,dateDeliv,lieuDeliv,observation;
+    private ImageView ficheElect, cinRecto, cinVerso, retour, modif;
+    private TextView nfiche, dateInscr, nom, prenom, sexe, profession, adresse, dateNaiss, lieuNaiss, nomPere, nomMere, cinElect, nserie, dateDeliv, lieuDeliv, observation;
     private Button suppression;
 
 
@@ -61,10 +61,14 @@ public class DetailElecteurActivity extends AppCompatActivity {
         sexe.setText(electeur.getSexe());
         profession.setText(electeur.getProfession());
         adresse.setText(electeur.getAdresse());
-        if(electeur.getDateNaiss().length()!=0){
-            dateNaiss.setText(electeur.getDateNaiss());
-        }else{
-            dateNaiss.setText(electeur.getNevers());
+        if (electeur.getDateNaiss() == null) {
+            dateNaiss.setText("null");
+        } else {
+            if (electeur.getDateNaiss().length() != 0) {
+                dateNaiss.setText(electeur.getDateNaiss());
+            } else {
+                dateNaiss.setText(electeur.getNevers());
+            }
         }
         lieuNaiss.setText(electeur.getLieuNaiss());
         nomPere.setText(electeur.getNomPere());
@@ -73,25 +77,25 @@ public class DetailElecteurActivity extends AppCompatActivity {
         nserie.setText(electeur.getNserieCin());
         dateDeliv.setText(electeur.getDateDeliv());
         lieuDeliv.setText(electeur.getLieuDeliv());
-        if(electeur.getFicheElect()!=null) {
+        if (electeur.getFicheElect() != null) {
             ficheElect.setVisibility(View.VISIBLE);
             Bitmap imgFiche = this.decodeImage(electeur.getFicheElect());
             ficheElect.setImageBitmap(imgFiche);
-        }else{
+        } else {
             ficheElect.setVisibility(View.GONE);
         }
-        if(electeur.getCinRecto()!=null){
+        if (electeur.getCinRecto() != null) {
             cinRecto.setVisibility(View.VISIBLE);
             Bitmap imgCinRecto = this.decodeImage(electeur.getCinRecto());
             cinRecto.setImageBitmap(imgCinRecto);
-        }else{
+        } else {
             cinRecto.setVisibility(View.GONE);
         }
-        if(electeur.getCinVerso()!=null){
+        if (electeur.getCinVerso() != null) {
             cinVerso.setVisibility(View.VISIBLE);
             Bitmap imgCinVerso = this.decodeImage(electeur.getCinVerso());
             cinVerso.setImageBitmap(imgCinVerso);
-        }else{
+        } else {
             cinVerso.setVisibility(View.GONE);
         }
         //observation.setText(electeur.getObservation());
@@ -104,11 +108,11 @@ public class DetailElecteurActivity extends AppCompatActivity {
         });
         modif.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-            Intent i = new Intent(getApplicationContext(), ModifierElecteur.class);
-            String myjson = gson.toJson(electeur);
-            i.putExtra("electeur", myjson);
-            startActivity(i);
-            finish();
+                Intent i = new Intent(getApplicationContext(), ModifierElecteur.class);
+                String myjson = gson.toJson(electeur);
+                i.putExtra("electeur", myjson);
+                startActivity(i);
+                finish();
             }
         });
         suppression.setOnClickListener(new View.OnClickListener() {
@@ -116,20 +120,20 @@ public class DetailElecteurActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Db_sqLite DB = new Db_sqLite(DetailElecteurActivity.this);
                 Boolean deleted = DB.deleteElect(electeur.getCinElect());
-                if(deleted){
+                if (deleted) {
                     Document doc = DB.selectDocumentbyid(electeur.getDocreference());
                     User user = MenuActivity.getCurrent_user();
-                    User users = DB.selectUser(user.getPseudo(),user.getMotdepasse());
+                    User users = DB.selectUser(user.getPseudo(), user.getMotdepasse());
                     String myjson = gson.toJson(users);
-                    DB.counterStat(doc,users,-1);
+                    DB.counterStat(doc, users, -1);
                     ListeFokontanyActivity.getInstance().finish();
                     RechercheElecteur.getInstance().finish();
                     Intent i = new Intent(getApplicationContext(), ListeFokontanyActivity.class);
-                    i.putExtra("user",myjson);
+                    i.putExtra("user", myjson);
                     startActivity(i);
                     finish();
 
-                }else{
+                } else {
                     Toast toast = Toast.makeText(DetailElecteurActivity.this, "Erreur lors de la suppression!", Toast.LENGTH_LONG);
                     toast.show();
                 }
@@ -137,7 +141,8 @@ public class DetailElecteurActivity extends AppCompatActivity {
             }
         });
     }
-    public Bitmap decodeImage (String dataImageElect){
+
+    public Bitmap decodeImage(String dataImageElect) {
         //Decode image
         byte[] img = Base64.decode(dataImageElect, Base64.DEFAULT);
         Bitmap bm;
