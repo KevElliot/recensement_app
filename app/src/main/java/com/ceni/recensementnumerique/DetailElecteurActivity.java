@@ -59,14 +59,9 @@ public class DetailElecteurActivity extends AppCompatActivity {
 
         String tmp = electeur.getDocreference();
         String tmpReal = "";
-        if (tmp.length() > 6)
-        {
-            tmpReal = tmp.substring(tmp.length() - 6);
-        }
-        else
-        {
-            tmpReal = tmp;
-        }
+
+        int endSub = tmp.length();
+        tmpReal = tmp.substring(12, endSub);
 
         nfiche.setText(tmpReal);
         dateInscr.setText(electeur.getDateinscription());
