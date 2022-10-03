@@ -929,12 +929,15 @@ public class NewElecteurActivity extends AppCompatActivity {
                     dispatchTakePictureIntent("feuillet");
                     break;
                 default:
-                    System.out.println("default");
+                    Log.d("Verification", "Mitsofoka DEFAULT");
             }
         } else {
             ActivityCompat.requestPermissions(this,
                     permissions,
                     CAMERA_PERM_CODE);
+            buttonVerso.setEnabled(true);
+            buttonImage.setEnabled(true);
+            buttonRecto.setEnabled(true);
         }
     }
 

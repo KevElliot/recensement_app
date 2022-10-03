@@ -198,13 +198,6 @@ public class Api_service {
                         i.putExtra("configTab", configTab);
                         String myJson = gson.toJson(us);
                         i.putExtra("user", myJson);
-//                        boolean deleted = true;
-//
-//                        boolean deleted = DB.deleteElect(electeur.getCinElect());
-//                        if (deleted) {
-//                            context.startActivity(i);
-//                            ListeFokontanyActivity.getInstance().finish();
-//                        }
 
                         Log.d("SIze to delete : ", ""+idsToDelete.size());
                         for (int x = 0; x < idsToDelete.size(); x++){
