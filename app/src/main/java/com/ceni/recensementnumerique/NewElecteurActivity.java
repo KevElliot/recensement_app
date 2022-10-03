@@ -832,13 +832,14 @@ public class NewElecteurActivity extends AppCompatActivity {
                             if (!isMemeFiche) {
                                 Gson gson = new Gson();
                                 User us = gson.fromJson(user, User.class);
+                                User tmpus = DB.selectUser(us.getPseudo(),us.getMotdepasse());
                                 Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
                                 electeur.setCode_bv(bvSelected.getCode_bv());
                                 electeur.setProfession(profession.getText().toString());
                                 boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(),us.getIdUser(), electeur.getDateinscription());
                                 if (result) {
                                     Document doc = DB.selectDocumentbyid(electeur.getDocreference());
-                                    DB.counterStat(doc, us, 1);
+                                    DB.counterStat(doc, tmpus, 1);
                                     Toast toast = Toast.makeText(NewElecteurActivity.this, "Electeur enregistré!", Toast.LENGTH_LONG);
                                     toast.show();
                                     Intent i = new Intent(getApplicationContext(), NewElecteurActivity.class);
