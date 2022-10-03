@@ -415,7 +415,8 @@ public class NewElecteurActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 String nomElect = nom.getText().toString();
                 String prenomElect = prenom.getText().toString();
-                isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss);
+                Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
+                isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss,bvSelected.getCode_bv());
                 if (isSamePers) {
                     isSamePers = true;
                     nom.setError("mpifidy efa voasoratra!");
@@ -684,7 +685,7 @@ public class NewElecteurActivity extends AppCompatActivity {
 
                     if (editNevers.getText().toString().length() == 4) {
                         if (datynevers < anneeMajor && datynevers > anneeDead) {
-                            if (y >= 10) {
+                            if (y >= 1) {
                                 countFormValide += 1;
                                 electeur.setNevers(editNevers.getText().toString());
                                 electeur.setDateNaiss("");
@@ -727,7 +728,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     int x = datycin.getYear() - naiss.getYear();
-                    if (naiss.getTime() < datycin.getTime() && x >= 10) {
+                    if (naiss.getTime() < datycin.getTime() && x >= 1) {
                         electeur.setDateDeliv(dateCinElect);
                         countFormValide += 1;
                     } else {
@@ -1001,7 +1002,6 @@ public class NewElecteurActivity extends AppCompatActivity {
 
                     if (f_fiche.exists()) {
                         if (f_fiche.delete()) {
-                            callBroadCast();
                             Log.d("recto_deleted", "file delete : " + Uri.fromFile(f_fiche));
                         } else {
                             Log.d("recto_not_deleted", "file not deleted : " + Uri.fromFile(f_fiche));
@@ -1035,7 +1035,6 @@ public class NewElecteurActivity extends AppCompatActivity {
 
                     if (f_fiche.exists()) {
                         if (f_fiche.delete()) {
-                            callBroadCast();
                             Log.d("verso_deleted", "file delete : " + Uri.fromFile(f_fiche));
                         } else {
                             Log.d("verso_not_deleted", "file not deleted : " + Uri.fromFile(f_fiche));

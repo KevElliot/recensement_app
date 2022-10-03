@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.ceni.adapter.SpinerCommuneAdapter;
 import com.ceni.adapter.SpinnerDocumentAdapter;
+import com.ceni.model.Bv;
 import com.ceni.model.Commune;
 import com.ceni.model.Document;
 import com.ceni.model.Electeur;
@@ -273,7 +274,7 @@ public class InscriptionActivity extends AppCompatActivity {
                     } else {
                         String nomElect = nom.getText().toString();
                         String prenomElect = prenom.getText().toString();
-                        isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss);
+                        isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss,"12");
                         if (isSamePers) {
                             msg = "mpifidy efa voasoratra!";
                         } else {

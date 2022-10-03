@@ -452,7 +452,7 @@ public class ModifierElecteur extends AppCompatActivity {
                     int x = datycin - neversVal;
 
                     int anneeNevers = Integer.parseInt(editTextNevers.getText().toString());
-                    if (editTextNevers.getText().toString().length() == 4 && x >= 10) {
+                    if (editTextNevers.getText().toString().length() == 4 && x >= 1) {
                         if (anneeNevers < anneeMajor && anneeNevers > anneeDead) {
                             e.setNevers(editTextNevers.getText().toString());
                             e.setDateNaiss("");
@@ -515,7 +515,7 @@ public class ModifierElecteur extends AppCompatActivity {
 
                     int x = cin - bday;
                     if (bday < cin) {
-                        if (x >= 10) {
+                        if (x >= 1) {
                             e.setDateDeliv(dateCin);
                             countFormValide[0] += 1;
                         } else {
