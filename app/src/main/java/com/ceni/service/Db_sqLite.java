@@ -272,7 +272,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public List<Document> selectAllDocument() {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from documents", null);
+        Cursor cursor = MyDB.rawQuery("Select * from documents order by id desc", null);
         List<Document> listdoc = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
@@ -351,7 +351,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public Document selectDocumentbyid(String id) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from documents where idfdocreference= '" + id + "'", null);
+        Cursor cursor = MyDB.rawQuery("Select * from documents where idfdocreference= '" + id + "' order by id desc", null);
         List<Document> listdoc = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
