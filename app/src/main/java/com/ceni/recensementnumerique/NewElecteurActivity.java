@@ -425,52 +425,6 @@ public class NewElecteurActivity extends AppCompatActivity {
                 }
             }
         });
-
-//        datedeNaissance.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                try {
-//                    String dateDead = "10/06/" + anneeDead;
-//                    String dateLimite = "10/06/2005";
-//                    String nomElect = nom.getText().toString();
-//                    String prenomElect = prenom.getText().toString();
-//                    String naiss = datedeNaissance.getText().toString();
-//                    SimpleDateFormat format = new SimpleDateFormat("dd/mm/yyyy");
-////                    Boolean isDateValide = validateDate(naiss);
-//                    Boolean isDateValide = checkDate(naiss);
-//                    if (isDateValide) {
-//                        Date dateNaiss = format.parse(naiss);
-//                        Date dead = format.parse(dateDead);
-//                        Date limite = format.parse(dateLimite);
-//                        if (dead.getTime() < dateNaiss.getTime() && dateNaiss.getTime() < limite.getTime()) {
-//                            isSamePers = DB.isSamePerson(nomElect, prenomElect, naiss);
-//                            isDateNaissValide = true;
-//                            if (isSamePers) {
-//                                datedeNaissance.setError("mpifidy efa voasoratra!");
-//                                prenom.setError("mpifidy efa voasoratra!");
-//                                nom.setError("mpifidy efa voasoratra!");
-//                            }
-//                        } else {
-//                            datedeNaissance.setError("tsy tafiditra ny date");
-//                        }
-//                    } else {
-//                        datedeNaissance.setError("Daty tsy valide");
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        });
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.clear();
 
@@ -743,9 +697,22 @@ public class NewElecteurActivity extends AppCompatActivity {
                 }
 
 
-                if (nFiche.getText().toString().length() == 8) {
-                    electeur.setnFiche(nFiche.getText().toString());
-                    countFormValide += 1;
+                if (nFiche.getText().toString().length() >= 1 && nFiche.getText().toString().length() <= 8) {
+                    if(nFiche.getText().toString().length() == 6){
+                        electeur.setnFiche("00"+nFiche.getText().toString());
+                        countFormValide += 1;
+                        Log.d("NFICHE : ", "|6| "+electeur.getnFiche());
+                    }else if(nFiche.getText().toString().length() == 7){
+                        countFormValide += 1;
+                        electeur.setnFiche("0"+nFiche.getText().toString());
+                        Log.d("NFICHE : ", "|7| "+electeur.getnFiche());
+                    }else if(nFiche.getText().toString().length() == 8){
+                        countFormValide += 1;
+                        electeur.setnFiche(nFiche.getText().toString());
+                        Log.d("NFICHE : ", "|8| "+electeur.getnFiche());
+                    }else {
+                        nFiche.setError("Misy diso");
+                    }
                 } else {
                     nFiche.setError("Misy diso");
                 }
