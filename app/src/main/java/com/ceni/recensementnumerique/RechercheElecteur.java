@@ -84,7 +84,7 @@ public class RechercheElecteur extends AppCompatActivity {
                     search3.setChecked(false);
                 } else {
                     valeurSearch = "docreference";
-                    inputRecherche.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+                    inputRecherche.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
                     inputRecherche.setText("");
                     search1.setChecked(false);
                     search2.setChecked(false);
@@ -98,7 +98,7 @@ public class RechercheElecteur extends AppCompatActivity {
                 if (search3.isChecked()) {
                     valeurSearch = "docreference";
                     inputRecherche.setText("");
-                    inputRecherche.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
+                    inputRecherche.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
                     search1.setChecked(false);
                     search2.setChecked(false);
                     search3.setChecked(true);

@@ -27,6 +27,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.MediaScannerConnection;
 import android.os.Build;
 import android.net.Uri;
@@ -416,11 +417,12 @@ public class NewElecteurActivity extends AppCompatActivity {
                 String nomElect = nom.getText().toString();
                 String prenomElect = prenom.getText().toString();
                 Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
-                isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss,bvSelected.getCode_bv());
+                isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss, bvSelected.getCode_bv());
                 if (isSamePers) {
                     isSamePers = true;
                     nom.setError("mpifidy efa voasoratra!");
                     prenom.setError("mpifidy efa voasoratra!");
+                    mShowSelectedDateText.setTypeface(Typeface.DEFAULT_BOLD);
                     mShowSelectedDateText.setText("mpifidy efa voasoratra!");
                 }
             }
@@ -477,6 +479,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 String formattedDate = format.format(calendar.getTime());
                 mShowSelectedDateText.setTextColor(Color.BLACK);
+                mShowSelectedDateText.setTypeface(Typeface.DEFAULT_BOLD);
                 mPickDateButton.setEnabled(true);
                 dateNaiss = formattedDate;
                 mShowSelectedDateText.setText("Daty nahaterahana: " + formattedDate);
@@ -541,8 +544,8 @@ public class NewElecteurActivity extends AppCompatActivity {
         calendar3.set(Calendar.YEAR, anneeNow);
         calendar3.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + 2);
         Long anneeFinRecens = calendar3.getTimeInMillis();
-        calendar3.set(Calendar.DAY_OF_MONTH,01);
-        calendar3.set(Calendar.MONTH,10);
+        calendar3.set(Calendar.DAY_OF_MONTH, 01);
+        calendar3.set(Calendar.MONTH, 9);
         calendar3.set(Calendar.YEAR, 2022);
         Long anneeStartRecens = calendar3.getTimeInMillis();
 
@@ -670,8 +673,8 @@ public class NewElecteurActivity extends AppCompatActivity {
                     String bday = "";
                     if (dateNaiss != null) {
                         bday = dateNaiss;
-                    }else{
-                        bday = "00/00/"+editNevers.getText().toString();
+                    } else {
+                        bday = "00/00/" + editNevers.getText().toString();
                     }
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/mm/yyyy");
                     Date datycin = null;
@@ -698,19 +701,16 @@ public class NewElecteurActivity extends AppCompatActivity {
 
 
                 if (nFiche.getText().toString().length() >= 1 && nFiche.getText().toString().length() <= 8) {
-                    if(nFiche.getText().toString().length() == 6){
-                        electeur.setnFiche("00"+nFiche.getText().toString());
+                    if (nFiche.getText().toString().length() == 6) {
+                        electeur.setnFiche("00" + nFiche.getText().toString());
                         countFormValide += 1;
-                        Log.d("NFICHE : ", "|6| "+electeur.getnFiche());
-                    }else if(nFiche.getText().toString().length() == 7){
+                    } else if (nFiche.getText().toString().length() == 7) {
                         countFormValide += 1;
-                        electeur.setnFiche("0"+nFiche.getText().toString());
-                        Log.d("NFICHE : ", "|7| "+electeur.getnFiche());
-                    }else if(nFiche.getText().toString().length() == 8){
+                        electeur.setnFiche("0" + nFiche.getText().toString());
+                    } else if (nFiche.getText().toString().length() == 8) {
                         countFormValide += 1;
                         electeur.setnFiche(nFiche.getText().toString());
-                        Log.d("NFICHE : ", "|8| "+electeur.getnFiche());
-                    }else {
+                    } else {
                         nFiche.setError("Misy diso");
                     }
                 } else {
@@ -729,18 +729,23 @@ public class NewElecteurActivity extends AppCompatActivity {
                 } else {
                     cin.setError("Diso");
                 }
-                if (nserie.getText().toString().length() == 7) {
-                    if (nserie2.getText().toString().length() == 0) {
-                        String serial = nserie.getText().toString();
-                        electeur.setNserieCin(serial);
-                        countFormValide += 1;
+                if (nserie.getText().toString().length() == 0) {
+                    electeur.setNserieCin("illisible");
+                    countFormValide += 1;
+                }else{
+                    if (nserie.getText().toString().length() == 7) {
+                        if (nserie2.getText().toString().length() == 0) {
+                            String serial = nserie.getText().toString();
+                            electeur.setNserieCin(serial);
+                            countFormValide += 1;
+                        } else {
+                            String serial = nserie.getText().toString() + "/" + nserie2.getText().toString();
+                            electeur.setNserieCin(serial);
+                            countFormValide += 1;
+                        }
                     } else {
-                        String serial = nserie.getText().toString() + "/" + nserie2.getText().toString();
-                        electeur.setNserieCin(serial);
-                        countFormValide += 1;
+                        nserie.setError("Diso");
                     }
-                } else {
-                    nserie.setError("Diso");
                 }
                 if (lieuCin.getText().toString().length() != 0) {
                     electeur.setLieuDeliv(lieuCin.getText().toString());
@@ -797,16 +802,16 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Log.d("NEW ELECT", electeur.toString());
                     if (!fichefull) {
                         Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
-                        isSamePers = DB.isSamePerson(electeur.getNom(), electeur.getPrenom(), electeur.getDateNaiss(),bvSelected.getCode_bv());
+                        isSamePers = DB.isSamePerson(electeur.getNom(), electeur.getPrenom(), electeur.getDateNaiss(), bvSelected.getCode_bv());
                         if (!isSamePers) {
                             isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(), idFdocReference[0]);
                             if (!isMemeFiche) {
                                 Gson gson = new Gson();
                                 User us = gson.fromJson(user, User.class);
-                                User tmpus = DB.selectUser(us.getPseudo(),us.getMotdepasse());
+                                User tmpus = DB.selectUser(us.getPseudo(), us.getMotdepasse());
                                 electeur.setCode_bv(bvSelected.getCode_bv());
                                 electeur.setProfession(profession.getText().toString());
-                                boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(),us.getIdUser(), electeur.getDateinscription());
+                                boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), us.getIdUser(), electeur.getDateinscription());
                                 if (result) {
                                     Document doc = DB.selectDocumentbyid(electeur.getDocreference());
                                     DB.counterStat(doc, tmpus, 1);
@@ -969,7 +974,6 @@ public class NewElecteurActivity extends AppCompatActivity {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
                     tmpBitmap2.compress(Bitmap.CompressFormat.JPEG, 60, stream);
                     byte[] byteArray = stream.toByteArray();
-
                     this.recto.setImageBitmap(tmpBitmap2);
 
                     imageRecto = Base64.encodeToString(byteArray, Base64.DEFAULT);
@@ -1039,7 +1043,7 @@ public class NewElecteurActivity extends AppCompatActivity {
         //File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         //File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        File storageDir = new File( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Camera");
 
         File image = File.createTempFile(
                 imageFileName,  /* prefix */

@@ -80,12 +80,22 @@ public class AddDocumentActivity extends AppCompatActivity {
         ajouter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String docref = numdocref.getText().toString();
-                if (numdocref.getText().length() != 6 || datedocument.length() == 0) {
+                String docref = "";
+                if(numdocref.getText().toString().length() == 6){
+                    docref = "00"+numdocref.getText().toString();
+                }else if(numdocref.getText().toString().length() == 7){
+                    docref = "0"+numdocref.getText().toString();
+                }else if(numdocref.getText().toString().length() == 8){
+                    docref = numdocref.getText().toString();
+                }else{
+                    numdocref.setError("Tsy ampy");
+                }
+                if (numdocref.getText().length() <= 5 || datedocument.length() == 0) {
                     numdocref.setError("Mila fenoina");
                     Toast toast = Toast.makeText(AddDocumentActivity.this, "Misy diso!", Toast.LENGTH_LONG);
                     toast.show();
                 } else {
+                    Log.d("DOCUMENT_REF","------------ "+docref);
                     Document doc = new Document("0",codefokontany_pref,codebv_pref, docref, datedocument, 0);
                     boolean result = DB.insertDocument(doc);
                     if (result) {
