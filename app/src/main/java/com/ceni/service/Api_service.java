@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import com.ceni.model.Voter;
 import com.ceni.recensementnumerique.Configuration;
 import com.ceni.recensementnumerique.ListeFokontanyActivity;
 import com.ceni.recensementnumerique.MenuActivity;
+import com.ceni.recensementnumerique.StatistiqueActivity;
 import com.google.gson.Gson;
 
 
@@ -204,14 +206,21 @@ public class Api_service {
 //                            ListeFokontanyActivity.getInstance().finish();
 //                        }
 
-                        Log.d("SIze to delete : ", ""+idsToDelete.size());
-                        for (int x = 0; x < idsToDelete.size(); x++){
-                            Log.d("MIDITRA DELETE", "DELETE ID : "+idsToDelete.get(x).toString());
-                            DB.deleteElectId(idsToDelete.get(x).toString());
-                        }
-                        tmp.setEnabled(true);
-                        tmp.setClickable(true);
-                        context.startActivity(i);
+//                        Log.d("SIze to delete : ", ""+idsToDelete.size());
+//                        for (int x = 0; x < idsToDelete.size(); x++){
+//                            Log.d("MIDITRA DELETE", "DELETE ID : "+idsToDelete.get(x).toString());
+//                            DB.deleteElectId(idsToDelete.get(x).toString());
+//                        }
+//                         tmp.setEnabled(true);
+//                         tmp.setClickable(true);
+
+                        Intent intent = new Intent(context, StatistiqueActivity.class);
+                        intent.putExtra("response_stat", response.toString());
+                        intent.putExtra("configTab", configTab);
+                        intent.putExtra("user", myJson);
+
+
+                        context.startActivity(intent);
                         ListeFokontanyActivity.getInstance().finish();
 
                     }

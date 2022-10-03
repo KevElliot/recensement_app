@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public class Task_insertElect extends AsyncTask<Void, Void, Void> {
+public class Task_insertElect extends AsyncTask<Void, Void, String> {
     Api_service API;
     User us;
     Db_sqLite DB;
@@ -64,9 +64,10 @@ public class Task_insertElect extends AsyncTask<Void, Void, Void> {
         this.gson = new Gson();
     }
 
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected String doInBackground(Void... voids) {
         result = false;
 
         Button tmp = enregistrer;
@@ -78,6 +79,8 @@ public class Task_insertElect extends AsyncTask<Void, Void, Void> {
         List<Document> documents = params.getDocuments();
         JSONArray notebooks = new JSONArray();
 
+        Log.i("xxx", "DEBUGGING INSIDE ...");
+        // do fillter code here
         documents.stream().forEach(document -> {
             JSONObject jsonObject = new JSONObject();
             try {
@@ -114,10 +117,9 @@ public class Task_insertElect extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-
-//        enregistrer.setEnabled(true);
-//        enregistrer.setClickable(true);
+    protected void onPostExecute(String aVoid) {
+        super.onPostExecute(aVoid);
+        Log.d("POST","response : " + aVoid);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
