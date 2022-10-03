@@ -22,7 +22,7 @@ import com.google.gson.Gson;
 
 public class DetailElecteurActivity extends AppCompatActivity {
     private ImageView ficheElect, cinRecto, cinVerso, retour, modif;
-    private TextView nfiche, dateInscr, nom, prenom, sexe, profession, adresse, dateNaiss, lieuNaiss, nomPere, nomMere, cinElect, nserie, dateDeliv, lieuDeliv, observation;
+    private TextView nfiche, dateInscr, nom, prenom, sexe, profession, adresse, dateNaiss, lieuNaiss, nomPere, nomMere, cinElect, nserie, dateDeliv, lieuDeliv, observation, nFeuillet;
     private Button suppression;
 
 
@@ -52,8 +52,10 @@ public class DetailElecteurActivity extends AppCompatActivity {
         dateDeliv = findViewById(R.id.dateCinElect);
         lieuDeliv = findViewById(R.id.lieuCinElect);
         observation = findViewById(R.id.observation);
+        nFeuillet = findViewById(R.id.nFeuillet);
         Gson gson = new Gson();
         Electeur electeur = gson.fromJson(getIntent().getStringExtra("electeur"), Electeur.class);
+        nFeuillet.setText(electeur.getFicheElect());
         nfiche.setText(electeur.getnFiche());
         dateInscr.setText(electeur.getDateinscription());
         nom.setText(electeur.getNom());
