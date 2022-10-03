@@ -206,13 +206,13 @@ public class Api_service {
 //                            ListeFokontanyActivity.getInstance().finish();
 //                        }
 
-//                        Log.d("SIze to delete : ", ""+idsToDelete.size());
-//                        for (int x = 0; x < idsToDelete.size(); x++){
-//                            Log.d("MIDITRA DELETE", "DELETE ID : "+idsToDelete.get(x).toString());
-//                            DB.deleteElectId(idsToDelete.get(x).toString());
-//                        }
-//                         tmp.setEnabled(true);
-//                         tmp.setClickable(true);
+                        Log.d("SIze to delete : ", ""+idsToDelete.size());
+                        for (int x = 0; x < idsToDelete.size(); x++){
+                            Log.d("MIDITRA DELETE", "DELETE ID : "+idsToDelete.get(x).toString());
+                            DB.deleteElectId(idsToDelete.get(x).toString());
+                        }
+                         tmp.setEnabled(true);
+                         tmp.setClickable(true);
 
                         Intent intent = new Intent(context, StatistiqueActivity.class);
                         intent.putExtra("response_stat", response.toString());
