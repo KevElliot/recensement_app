@@ -53,6 +53,7 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/input_field"
                 android:ems="10"
+                android:inputType="textPersonName"
                 android:fontFamily="@font/courgette"
                 android:hint="Pseudo"
                 android:minHeight="48dp"

@@ -827,13 +827,14 @@ public class NewElecteurActivity extends AppCompatActivity {
                 } else {
                     Log.d("NEW ELECT", electeur.toString());
                     if (!fichefull) {
+                        Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
+                        isSamePers = DB.isSamePerson(electeur.getNom(), electeur.getPrenom(), electeur.getDateNaiss(),bvSelected.getCode_bv());
                         if (!isSamePers) {
                             isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(), idFdocReference[0]);
                             if (!isMemeFiche) {
                                 Gson gson = new Gson();
                                 User us = gson.fromJson(user, User.class);
                                 User tmpus = DB.selectUser(us.getPseudo(),us.getMotdepasse());
-                                Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
                                 electeur.setCode_bv(bvSelected.getCode_bv());
                                 electeur.setProfession(profession.getText().toString());
                                 boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(),us.getIdUser(), electeur.getDateinscription());
