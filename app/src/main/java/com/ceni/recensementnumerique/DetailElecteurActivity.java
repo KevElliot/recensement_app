@@ -55,8 +55,20 @@ public class DetailElecteurActivity extends AppCompatActivity {
         nFeuillet = findViewById(R.id.nFeuillet);
         Gson gson = new Gson();
         Electeur electeur = gson.fromJson(getIntent().getStringExtra("electeur"), Electeur.class);
-        nFeuillet.setText(electeur.getFicheElect());
-        nfiche.setText(electeur.getnFiche());
+        nFeuillet.setText(electeur.getnFiche());
+
+        String tmp = electeur.getDocreference();
+        String tmpReal = "";
+        if (tmp.length() > 6)
+        {
+            tmpReal = tmp.substring(tmp.length() - 6);
+        }
+        else
+        {
+            tmpReal = tmp;
+        }
+
+        nfiche.setText(tmpReal);
         dateInscr.setText(electeur.getDateinscription());
         nom.setText(electeur.getNom());
         prenom.setText(electeur.getPrenom());
