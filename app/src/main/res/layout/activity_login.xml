@@ -53,7 +53,7 @@
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/input_field"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="textPersonName|textCapCharacters"
                 android:fontFamily="@font/courgette"
                 android:hint="Pseudo"
                 android:minHeight="48dp"
@@ -69,7 +69,7 @@
                 android:fontFamily="@font/courgette"
                 android:hint="Mot de passe"
                 android:layout_marginBottom="20dp"
-                android:inputType="textPassword"
+                android:inputType="textCapCharacters|textPassword"
                 android:minHeight="48dp"
                 android:textColor="#7A7A7A"
                 android:textColorHint="#7A7A7A" />

@@ -152,7 +152,7 @@ public class AddDocumentActivity extends AppCompatActivity {
                 calendar.setTimeInMillis((Long) selection);
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 String formattedDate = format.format(calendar.getTime());
-                mShowSelectedDateText.setTextColor(Color.WHITE);
+                mShowSelectedDateText.setTextColor(Color.BLACK);
                 mPickDateButton.setEnabled(true);
                 datedocument = formattedDate;
                 mShowSelectedDateText.setText("Daty karine: " + formattedDate);

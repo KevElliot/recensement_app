@@ -522,7 +522,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 calendar.setTimeInMillis((Long) selection);
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
                 String formattedDate = format.format(calendar.getTime());
-                mShowSelectedDateText.setTextColor(Color.WHITE);
+                mShowSelectedDateText.setTextColor(Color.BLACK);
                 mPickDateButton.setEnabled(true);
                 dateNaiss = formattedDate;
                 mShowSelectedDateText.setText("Daty nahaterahana: " + formattedDate);
@@ -585,9 +585,11 @@ public class NewElecteurActivity extends AppCompatActivity {
         int fin3 = Calendar.getInstance().get(Calendar.YEAR) - 1;
 
         calendar3.set(Calendar.YEAR, anneeNow);
-        calendar3.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + 1);
+        calendar3.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + 2);
         Long anneeFinRecens = calendar3.getTimeInMillis();
-        calendar3.set(Calendar.YEAR, fin3);
+        calendar3.set(Calendar.DAY_OF_MONTH,01);
+        calendar3.set(Calendar.MONTH,10);
+        calendar3.set(Calendar.YEAR, 2022);
         Long anneeStartRecens = calendar3.getTimeInMillis();
 
         CalendarConstraints.Builder constraintBuilder3 = new CalendarConstraints.Builder();
