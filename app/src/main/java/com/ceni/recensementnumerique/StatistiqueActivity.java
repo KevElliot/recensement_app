@@ -8,6 +8,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ceni.model.Notebook;
@@ -29,6 +32,7 @@ public class StatistiqueActivity extends AppCompatActivity {
     TextView karineSuccess, karineFailed, takelakaSuccess, takelakaFailed, karineFailedTakelakaSuccess, karineFailedTakelakaFailed;
     private static Tablette tab;
     private static String user;
+    private ImageView previous;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -37,7 +41,7 @@ public class StatistiqueActivity extends AppCompatActivity {
         setContentView(R.layout.activity_statistique);
         karineSuccess = findViewById(R.id.karineLasa);
         karineFailed = findViewById(R.id.karineTsyLasa);
-
+        previous = findViewById(R.id.imageViewPrevious);
         takelakaSuccess = findViewById(R.id.karineLasaTakelakaLasa);
         takelakaFailed = findViewById(R.id.karineLasaTakelakaTsyLasa);
 
@@ -111,9 +115,9 @@ public class StatistiqueActivity extends AppCompatActivity {
         Gson gson = new Gson();
         tab = gson.fromJson(getIntent().getStringExtra("configTab"), Tablette.class);
 
-        new Handler().postDelayed(new Runnable() {
+        previous.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
+            public void onClick(View v) {
                 Intent i = new Intent(StatistiqueActivity.this, MenuActivity.class);
                 String configTab = gson.toJson(tab);
                 i.putExtra("configTab", configTab);
@@ -121,7 +125,6 @@ public class StatistiqueActivity extends AppCompatActivity {
                 startActivity(i);
                 finish();
             }
-        }, 5000);
-
+        });
     }
 }
