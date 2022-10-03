@@ -297,7 +297,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public List<Document> selectDocument(String code_fokontany) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from documents where code_fokontany = '" + code_fokontany + "'", null);
+        Cursor cursor = MyDB.rawQuery("Select * from documents where code_fokontany = '" + code_fokontany + "' order by id desc", null);
         List<Document> listdoc = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
