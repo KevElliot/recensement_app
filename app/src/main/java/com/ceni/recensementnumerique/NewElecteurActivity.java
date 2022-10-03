@@ -533,6 +533,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 String formattedDate = format.format(calendar.getTime());
                 datecin.setEnabled(true);
                 dateCinElect = formattedDate;
+                selectedDateCin.setTypeface(Typeface.DEFAULT_BOLD);
                 selectedDateCin.setText("Daty nahazahona ny CNI: " + formattedDate);
             }
         });
@@ -584,6 +585,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 String formattedDate = format.format(calendar.getTime());
                 datederecensement.setEnabled(true);
                 daterecensement = formattedDate;
+                selectedDateRecensement.setTypeface(Typeface.DEFAULT_BOLD);
                 selectedDateRecensement.setText("Date recensement : " + formattedDate);
             }
         });

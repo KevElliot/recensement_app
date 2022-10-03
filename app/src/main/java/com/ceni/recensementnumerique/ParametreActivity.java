@@ -57,7 +57,6 @@ public class ParametreActivity extends AppCompatActivity {
         spinnerFokontany = (Spinner) ParametreActivity.this.findViewById(R.id.spinner_fokontany);
         params_localisation = this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = params_localisation.edit();
-
         if(params_localisation!=null){
             // Adapter Commune
             SpinerCommuneAdapter adapterCommune = new SpinerCommuneAdapter(ParametreActivity.this,
