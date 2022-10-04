@@ -348,7 +348,6 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
         return res;
     }
-
     public Document selectDocumentbyid(String id) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         Cursor cursor = MyDB.rawQuery("Select * from documents where idfdocreference= '" + id + "' order by id desc", null);

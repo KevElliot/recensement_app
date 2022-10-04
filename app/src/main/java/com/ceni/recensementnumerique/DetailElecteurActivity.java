@@ -24,6 +24,7 @@ public class DetailElecteurActivity extends AppCompatActivity {
     private ImageView ficheElect, cinRecto, cinVerso, retour, modif;
     private TextView nfiche, dateInscr, nom, prenom, sexe, profession, adresse, dateNaiss, lieuNaiss, nomPere, nomMere, cinElect, nserie, dateDeliv, lieuDeliv, observation, nFeuillet;
     private Button suppression;
+    private Db_sqLite db;
 
 
     @Override
@@ -53,17 +54,13 @@ public class DetailElecteurActivity extends AppCompatActivity {
         lieuDeliv = findViewById(R.id.lieuCinElect);
         observation = findViewById(R.id.observation);
         nFeuillet = findViewById(R.id.nFeuillet);
+        db = new Db_sqLite(this);
         Gson gson = new Gson();
         Electeur electeur = gson.fromJson(getIntent().getStringExtra("electeur"), Electeur.class);
         nFeuillet.setText(electeur.getnFiche());
 
-        String tmp = electeur.getDocreference();
-        String tmpReal = "";
-
-        int endSub = tmp.length();
-        tmpReal = tmp.substring(12, endSub);
-
-        nfiche.setText(tmpReal);
+        Document d = db.selectDocumentbyid(electeur.getDocreference());
+        nfiche.setText(d.getNumdocreference());
         dateInscr.setText(electeur.getDateinscription());
         nom.setText(electeur.getNom());
         prenom.setText(electeur.getPrenom());

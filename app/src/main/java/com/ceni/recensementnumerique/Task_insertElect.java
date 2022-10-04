@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,8 +33,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -126,6 +131,9 @@ public class Task_insertElect extends AsyncTask<Void, Void, String> {
     private JSONArray getVotersByDocument(Document document, List<Electeur> voters){
         Stream<Electeur> electeurStream = voters.stream().filter(voter -> Objects.equals(voter.getDocreference(), document.getIdfdocreference()));
         JSONArray newVoters = new JSONArray();
+        Date tmpDate = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        String formattedDate = df.format(tmpDate);
         electeurStream.forEach(electeur -> {
             try {
                 JSONObject jsonObject = new JSONObject();
@@ -153,6 +161,7 @@ public class Task_insertElect extends AsyncTask<Void, Void, String> {
                 jsonObject.put("idfdocreference", electeur.getDocreference());
                 jsonObject.put("num_userinfo", electeur.getNum_userinfo());
                 jsonObject.put("drecensement", electeur.getDateinscription());
+                jsonObject.put("datemaj", formattedDate);
 
                 newVoters.put(jsonObject);
             } catch (JSONException e) {
