@@ -542,7 +542,7 @@ public class NewElecteurActivity extends AppCompatActivity {
         calendar3.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + 2);
         Long anneeFinRecens = calendar3.getTimeInMillis();
         calendar3.set(Calendar.DAY_OF_MONTH,01);
-        calendar3.set(Calendar.MONTH,10);
+        calendar3.set(Calendar.MONTH,9);
         calendar3.set(Calendar.YEAR, 2022);
         Long anneeStartRecens = calendar3.getTimeInMillis();
 
