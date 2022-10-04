@@ -36,6 +36,7 @@ public class ParametreActivity extends AppCompatActivity {
     private List<Cv> cv;
     private List<Bv> bv;
     private ImageView previous;
+    private String user;
     private static SharedPreferences params_localisation;
 
     @Override
@@ -56,7 +57,6 @@ public class ParametreActivity extends AppCompatActivity {
         spinnerFokontany = (Spinner) ParametreActivity.this.findViewById(R.id.spinner_fokontany);
         params_localisation = this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = params_localisation.edit();
-
         if(params_localisation!=null){
             // Adapter Commune
             SpinerCommuneAdapter adapterCommune = new SpinerCommuneAdapter(ParametreActivity.this,
@@ -66,8 +66,19 @@ public class ParametreActivity extends AppCompatActivity {
                     this.communes);
 
             this.spinnerCommune.setAdapter(adapterCommune);
-            int commune_pref = params_localisation.getInt("position_commune",0);
-           this.spinnerCommune.setSelection(commune_pref);
+
+            if(user.getRole().equals("CID")){
+                // user role = cid
+                this.spinnerCommune.setEnabled(true);
+                int commune_pref = params_localisation.getInt("position_commune", 0);
+                this.spinnerCommune.setSelection(commune_pref);
+            }else{
+                //user role = AR
+                String commune_user = user.getCommuneUser();
+                int index = getPosition(communes,commune_user);
+                spinnerCommune.setSelection(index);
+                this.spinnerCommune.setEnabled(false);
+            }
             this.spinnerCommune.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -278,5 +289,13 @@ public class ParametreActivity extends AppCompatActivity {
         });
     }
 
-
+    private int getPosition(List<Commune> c,String s){
+        for(int i=0;i<c.size();i++){
+            if(c.get(i).getLabel_commune().equals(s)){
+                Log.d("LOOG","-------- "+i);
+                return i;
+            }
+        }
+        return 0;
+    }
 }
