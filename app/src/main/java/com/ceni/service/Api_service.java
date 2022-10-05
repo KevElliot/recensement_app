@@ -40,9 +40,9 @@ import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 public class Api_service {
 
@@ -199,13 +199,16 @@ public class Api_service {
                         String myJson = gson.toJson(us);
                         i.putExtra("user", myJson);
 
+
+                        ///controle connexion oracle
+
                         Log.d("SIze to delete : ", ""+idsToDelete.size());
                         for (int x = 0; x < idsToDelete.size(); x++){
                             Log.d("MIDITRA DELETE", "DELETE ID : "+idsToDelete.get(x).toString());
                             DB.deleteElectId(idsToDelete.get(x).toString());
                         }
-                         tmp.setEnabled(true);
-                         tmp.setClickable(true);
+                        tmp.setEnabled(true);
+                        tmp.setClickable(true);
 
                         Intent intent = new Intent(context, StatistiqueActivity.class);
                         intent.putExtra("response_stat", response.toString());
@@ -221,7 +224,11 @@ public class Api_service {
                     @Override
                     public void onError(ANError anError) {
                         Log.d("error", "true " + anError.toString());
-                        Toast toast = Toast.makeText(context, "Problème serveur!", Toast.LENGTH_LONG);
+                        String error = anError.toString();
+                        String customMessage = "Misy olana ny fandefasana info";
+                        if(error.toLowerCase(Locale.ROOT).contains("failed to connect")) customMessage = "Misy olana ny fifandraisana amin'ny adiresy " + error.split("to /")[1].split(" ")[0];
+                        if(error.toLowerCase(Locale.ROOT).contains("process failed")) customMessage = "Misy olana ny fandefasana ny données, tsy misy traité na iray aza";
+                        Toast toast = Toast.makeText(context, customMessage, Toast.LENGTH_LONG);
                         toast.show();
                     }
                 });

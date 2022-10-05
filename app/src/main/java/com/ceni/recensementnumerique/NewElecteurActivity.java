@@ -491,8 +491,9 @@ public class NewElecteurActivity extends AppCompatActivity {
         calendar2.clear();
         int fin = anneeNow - 101 + 18;
 
-        calendar2.set(Calendar.YEAR, anneeNow);
-        calendar2.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + 1);
+        calendar2.set(Calendar.DAY_OF_MONTH,31);
+        calendar2.set(Calendar.MONTH,11);
+        calendar2.set(Calendar.YEAR, 2022);
         Long anneeFinDateCin = calendar2.getTimeInMillis();
         calendar2.set(Calendar.YEAR, fin);
         Long anneeStartDateCin = calendar2.getTimeInMillis();
@@ -542,8 +543,9 @@ public class NewElecteurActivity extends AppCompatActivity {
         calendar3.clear();
         int fin3 = Calendar.getInstance().get(Calendar.YEAR) - 1;
 
-        calendar3.set(Calendar.YEAR, anneeNow);
-        calendar3.set(Calendar.MONTH, Calendar.getInstance().get(Calendar.MONTH) + 2);
+        calendar3.set(Calendar.DAY_OF_MONTH,31);
+        calendar3.set(Calendar.MONTH,11);
+        calendar3.set(Calendar.YEAR, 2022);
         Long anneeFinRecens = calendar3.getTimeInMillis();
         calendar3.set(Calendar.DAY_OF_MONTH,01);
         calendar3.set(Calendar.MONTH,9);
