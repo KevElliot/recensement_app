@@ -40,7 +40,7 @@ public class DocumentActivity extends AppCompatActivity {
         retour = findViewById(R.id.imageViewPrevious);
         this.DB = new Db_sqLite(DocumentActivity.this);
         this.user = MenuActivity.getCurrent_user();
-        List<Document> listDoc = DB.selectAllDocument(user.getCode_commune());
+        List<Document> listDoc = DB.selectAllDocument();
         if (listDoc.size() <= 0) {
             Toast toast = Toast.makeText(DocumentActivity.this, "Tsy misy karine tafiditra!", Toast.LENGTH_LONG);
             toast.show();
