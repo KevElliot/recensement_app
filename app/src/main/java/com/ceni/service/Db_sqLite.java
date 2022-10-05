@@ -490,7 +490,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public List<Electeur> selectElecteur(String codecommune) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from Electeur where code_bv ='"+codecommune+"'%", null);
+        Cursor cursor = MyDB.rawQuery("Select * from Electeur where code_bv like '"+codecommune+"%'", null);
         List<Electeur> listElect = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
