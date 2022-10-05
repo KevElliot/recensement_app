@@ -691,14 +691,20 @@ public class NewElecteurActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    int x = datycin.getYear() - naiss.getYear();
-                    if (naiss.getTime() < datycin.getTime() && x >= 1) {
-                        electeur.setDateDeliv(dateCinElect);
-                        countFormValide += 1;
-                    } else {
+                    if(datycin != null && naiss!= null ){
+                        int x = datycin.getYear() - naiss.getYear();
+                        if (naiss.getTime() < datycin.getTime() && x >= 1) {
+                            electeur.setDateDeliv(dateCinElect);
+                            countFormValide += 1;
+                        } else {
+                            selectedDateCin.setTextColor(Color.RED);
+                            selectedDateCin.setText("verifieo ny daty CIN sy daty nahaterahana ");
+                        }
+                    }else {
                         selectedDateCin.setTextColor(Color.RED);
-                        selectedDateCin.setText("verifieo ny daty CIN sy daty nahaterahana ");
+                        selectedDateCin.setText("Mila fenohina ny daty nahaterahana ");
                     }
+
                 } else {
                     selectedDateCin.setTextColor(Color.RED);
                     selectedDateCin.setText("Datin'ny CNI: ");
@@ -816,18 +822,20 @@ public class NewElecteurActivity extends AppCompatActivity {
                                 User tmpus = DB.selectUser(us.getPseudo(), us.getMotdepasse());
                                 electeur.setCode_bv(bvSelected.getCode_bv());
                                 electeur.setProfession(profession.getText().toString());
-                                boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), us.getIdUser(), electeur.getDateinscription());
-                                if (result) {
-                                    Document doc = DB.selectDocumentbyid(electeur.getDocreference());
-                                    DB.counterStat(doc, tmpus, 1);
-                                    Toast toast = Toast.makeText(NewElecteurActivity.this, "Electeur enregistré!", Toast.LENGTH_LONG);
-                                    toast.show();
-                                    Intent i = new Intent(getApplicationContext(), NewElecteurActivity.class);
-                                    i.putExtra("user", user);
-                                    enregistrer.setEnabled(true);
-                                    startActivity(i);
-                                    finish();
-                                }
+
+                                    boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), us.getIdUser(), electeur.getDateinscription());
+                                    if (result) {
+                                        Document doc = DB.selectDocumentbyid(electeur.getDocreference());
+                                        DB.counterStat(doc, tmpus, 1);
+                                        Toast toast = Toast.makeText(NewElecteurActivity.this, "Electeur enregistré!", Toast.LENGTH_LONG);
+                                        toast.show();
+                                        Intent i = new Intent(getApplicationContext(), NewElecteurActivity.class);
+                                        i.putExtra("user", user);
+                                        enregistrer.setEnabled(true);
+                                        startActivity(i);
+                                        finish();
+                                    }
+
                             } else {
                                 enregistrer.setEnabled(true);
                                 new AlertDialog.Builder(NewElecteurActivity.this)
