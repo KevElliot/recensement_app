@@ -270,9 +270,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return res;
     }
 
-    public List<Document> selectAllDocument() {
+    public List<Document> selectAllDocument(String codecommune) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from documents order by id desc", null);
+        Cursor cursor = MyDB.rawQuery("Select * from documents where code_bv like '"+codecommune+"%'order by id desc", null);
         List<Document> listdoc = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
@@ -488,9 +488,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return result;
     }
 
-    public List<Electeur> selectElecteur() {
+    public List<Electeur> selectElecteur(String codecommune) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from Electeur", null);
+        Cursor cursor = MyDB.rawQuery("Select * from Electeur where code_bv ='"+codecommune+"'%", null);
         List<Electeur> listElect = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
@@ -723,9 +723,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return listBv;
     }
 
-    public List<Electeur> Recherche(String champ, String recherche) {
+    public List<Electeur> Recherche(String champ, String recherche,String codecommune) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql="Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "'";
+        String sql="Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "' and code_bv like'"+codecommune+"'%";
         Log.d("RECHERCHE", sql);
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<Electeur> listElect = new ArrayList<>();
