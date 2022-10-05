@@ -431,8 +431,9 @@ public class NewElecteurActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.clear();
 
-        calendar.set(Calendar.YEAR, anneeMajor);
-        calendar.set(Calendar.MONTH, Calendar.JUNE);
+        calendar.set(Calendar.DAY_OF_MONTH,10);
+        calendar.set(Calendar.MONTH,Calendar.JUNE);
+        calendar.set(Calendar.YEAR, 2005);
         Long anneeFin = calendar.getTimeInMillis();
 
         calendar.set(Calendar.YEAR, anneeDead);
@@ -440,9 +441,9 @@ public class NewElecteurActivity extends AppCompatActivity {
 
         CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
         Calendar max = Calendar.getInstance();
-        max.set(Calendar.YEAR, 2005);
-        max.set(Calendar.MONTH, Calendar.JUNE);
-        max.set(Calendar.DAY_OF_MONTH, 10);
+//        max.set(Calendar.YEAR, 2005);
+//        max.set(Calendar.MONTH, Calendar.JUNE);
+//        max.set(Calendar.DAY_OF_MONTH, 10);
 
         CalendarConstraints.DateValidator dateValidatorMax = DateValidatorPointBackward.before(max.getTimeInMillis());
         ArrayList<CalendarConstraints.DateValidator> listValidators = new ArrayList<CalendarConstraints.DateValidator>();
