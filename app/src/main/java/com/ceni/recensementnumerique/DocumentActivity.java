@@ -16,6 +16,7 @@ import com.ceni.adapter.ListDocumentAdapter;
 import com.ceni.adapter.ListElecteurAdapter;
 import com.ceni.model.Document;
 import com.ceni.model.Electeur;
+import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class DocumentActivity extends AppCompatActivity {
     Button ajouter;
     ImageView retour;
     Db_sqLite DB;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,8 @@ public class DocumentActivity extends AppCompatActivity {
         ajouter = findViewById(R.id.ajouter);
         retour = findViewById(R.id.imageViewPrevious);
         this.DB = new Db_sqLite(DocumentActivity.this);
-        List<Document> listDoc = DB.selectAllDocument();
+        this.user = MenuActivity.getCurrent_user();
+        List<Document> listDoc = DB.selectAllDocument(user.getCode_commune());
         if (listDoc.size() <= 0) {
             Toast toast = Toast.makeText(DocumentActivity.this, "Tsy misy karine tafiditra!", Toast.LENGTH_LONG);
             toast.show();

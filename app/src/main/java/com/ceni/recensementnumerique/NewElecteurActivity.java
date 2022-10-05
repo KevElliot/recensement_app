@@ -213,6 +213,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                             infoCarnet.setTextColor(Color.RED);
                             infoCarnet.setText("Karine efa feno 25 takelaka voasoratra");
                         } else {
+                            fichefull = false;
                             infoCarnet.setTextColor(Color.BLACK);
                             infoCarnet.setText("Karine voasoratra: " + docSelected.getNbfeuillet() + "/25");
                         }
@@ -439,9 +440,9 @@ public class NewElecteurActivity extends AppCompatActivity {
 
         CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
         Calendar max = Calendar.getInstance();
-        max.set(Calendar.YEAR, anneeMajor);
+        max.set(Calendar.YEAR, 2005);
         max.set(Calendar.MONTH, Calendar.JUNE);
-        max.set(Calendar.DAY_OF_MONTH, 11);
+        max.set(Calendar.DAY_OF_MONTH, 10);
 
         CalendarConstraints.DateValidator dateValidatorMax = DateValidatorPointBackward.before(max.getTimeInMillis());
         ArrayList<CalendarConstraints.DateValidator> listValidators = new ArrayList<CalendarConstraints.DateValidator>();

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ceni.adapter.RecyclerAdapter;
 import com.ceni.model.Electeur;
+import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class BackgroundTask extends AsyncTask<Void,Electeur,Void> {
     private ArrayList<Electeur> electeurs = new ArrayList<>();
     private List<Electeur> AllElecteurs = new ArrayList<>();
     private Db_sqLite DB;
+    private User user;
 
     public BackgroundTask(RecyclerView recyclerView, ProgressBar progressBar,Context context){
      this.recyclerView = recyclerView;
@@ -39,7 +41,8 @@ public class BackgroundTask extends AsyncTask<Void,Electeur,Void> {
     @Override
     protected Void doInBackground(Void... voids) {
         DB = new Db_sqLite(context);
-        AllElecteurs = DB.selectElecteur();
+        this.user = MenuActivity.getCurrent_user();
+        AllElecteurs = DB.selectElecteur(user.getCode_commune());
         for (int i=0;i<AllElecteurs.size();i++){
             Electeur e = new Electeur();
             e.setCode_bv(AllElecteurs.get(i).getCode_bv());

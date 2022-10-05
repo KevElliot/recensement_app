@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.ceni.adapter.ListElecteurAdapter;
 import com.ceni.model.Document;
 import com.ceni.model.Electeur;
+import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
@@ -33,6 +34,7 @@ public class RechercheElecteur extends AppCompatActivity {
     private List<Electeur> elect;
     private ListElecteurAdapter listElecteurAdapter;
     private Db_sqLite DB;
+    private User user;
     static RechercheElecteur rechercheElecteur;
 
     @Override
@@ -49,6 +51,7 @@ public class RechercheElecteur extends AppCompatActivity {
         inputRecherche = this.findViewById(R.id.inputRecherche);
         btnRecherche = this.findViewById(R.id.btnRecherche);
         DB = new Db_sqLite(this);
+        this.user = MenuActivity.getCurrent_user();
         valeurSearch = "cinElect";
         inputRecherche.setFilters(new InputFilter[]{new InputFilter.LengthFilter(12)});
 
@@ -183,7 +186,7 @@ public class RechercheElecteur extends AppCompatActivity {
                     if (valeurSearch == "docreference") {
                         Document doc = DB.selectDocumentbyNum(rech);
                         if (doc.getIdfdocreference() != null) {
-                            elect = DB.Recherche("docreference", doc.getIdfdocreference());
+                            elect = DB.Recherche("docreference", doc.getIdfdocreference(),user.getCode_commune());
                             if (elect.size() != 0) {
                                 Log.d("Elect", "... " + elect.get(0).toString());
                                 listElecteurAdapter = new ListElecteurAdapter(RechercheElecteur.this, elect);
@@ -238,7 +241,7 @@ public class RechercheElecteur extends AppCompatActivity {
                             toast.show();
                         }
                     } else {
-                        elect = DB.Recherche(valeurSearch, rech);
+                        elect = DB.Recherche(valeurSearch, rech,user.getCode_commune());
                         if (elect.size() != 0) {
                             Log.d("Elect", "... " + elect.get(0).toString());
                             listElecteurAdapter = new ListElecteurAdapter(RechercheElecteur.this, elect);
