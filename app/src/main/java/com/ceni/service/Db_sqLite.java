@@ -725,7 +725,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public List<Electeur> Recherche(String champ, String recherche,String codecommune) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql="Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "' and code_bv like'"+codecommune+"'%";
+        String sql="Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "' and code_bv like'"+codecommune+"%'";
         Log.d("RECHERCHE", sql);
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<Electeur> listElect = new ArrayList<>();
