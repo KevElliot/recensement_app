@@ -55,8 +55,8 @@ public class Configuration extends AppCompatActivity{
                 // enregistrer.setVisibility(View.GONE);
                 String ip = adressIp.getText().toString();
                 String p = port.getText().toString();
-                List<Electeur> listElect = DB.selectElecteur(user.getCode_commune());
-                List<Document> documents = DB.selectAllDocument(user.getCode_commune());
+                List<Electeur> listElect = DB.selectElecteur();
+                List<Document> documents = DB.selectAllDocument();
                 Configuration_model params = new Configuration_model(Configuration.this,ip,p,listElect,resultat, documents);
                 new Task_insertElect(Configuration.this,params,enregistrer,user,tab).execute();
             }

@@ -30,7 +30,7 @@ import java.util.List;
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-    private static final int DB_VERSION = 46;
+    private static final int DB_VERSION = 44;
     /*---------------------------------------------------------------------------------------
                                            TABLE ELECTEUR
     ----------------------------------------------------------------------------------------*/
@@ -270,9 +270,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return res;
     }
 
-    public List<Document> selectAllDocument(String codecommune) {
+    public List<Document> selectAllDocument() {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from documents where code_bv like '"+codecommune+"%'order by id desc", null);
+        Cursor cursor = MyDB.rawQuery("Select * from documents order by id desc", null);
         List<Document> listdoc = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
@@ -348,6 +348,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
         return res;
     }
+
     public Document selectDocumentbyid(String id) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         Cursor cursor = MyDB.rawQuery("Select * from documents where idfdocreference= '" + id + "' order by id desc", null);
@@ -375,39 +376,36 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public Boolean insertElecteurData(String code_bv, String nfiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss, String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String imageElect, String cinRecto, String cinVerso, String observation, String docreference,String num_userinfo, String dateinscription) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(COLUMN_CODE_BV, code_bv);
-            contentValues.put(COLUMN_NFICHE, nfiche);
-            contentValues.put(COLUMN_NOM, nom);
-            contentValues.put(COLUMN_PRENOM, prenom);
-            contentValues.put(COLUMN_SEXE, sexe);
-            contentValues.put(COLUMN_PROFESSION, profession);
-            contentValues.put(COLUMN_ADRESSE, adresse);
-            contentValues.put(COLUMN_DATENAISS, dateNaiss);
-            contentValues.put(COLUMN_NEVERS, nevers);
-            contentValues.put(COLUMN_LIEUNAISS, lieuNaiss);
-            contentValues.put(COLUMN_NOMPERE, nomPere);
-            contentValues.put(COLUMN_NOMMERE, nomMere);
-            contentValues.put(COLUMN_CINELECT, cinElect);
-            contentValues.put(COLUMN_NSERIECIN, nserieCin);
-            contentValues.put(COLUMN_DATEDELIV, dateDeliv);
-            contentValues.put(COLUMN_LIEUDELIV, lieuDeliv);
-            contentValues.put(COLUMN_IMAGEELECT, imageElect);
-            contentValues.put(COLUMN_CINRECTO, cinRecto);
-            contentValues.put(COLUMN_CINVERSO, cinVerso);
-            contentValues.put(COLUMN_OBSERVATION, observation);
-            contentValues.put(COLUMN_DOCREFERENCE, docreference);
-            contentValues.put(COLUMN_NUMUSERINFO, num_userinfo);
-            contentValues.put(COLUMN_DATEINSCRIPTION, dateinscription);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_CODE_BV, code_bv);
+        contentValues.put(COLUMN_NFICHE, nfiche);
+        contentValues.put(COLUMN_NOM, nom);
+        contentValues.put(COLUMN_PRENOM, prenom);
+        contentValues.put(COLUMN_SEXE, sexe);
+        contentValues.put(COLUMN_PROFESSION, profession);
+        contentValues.put(COLUMN_ADRESSE, adresse);
+        contentValues.put(COLUMN_DATENAISS, dateNaiss);
+        contentValues.put(COLUMN_NEVERS, nevers);
+        contentValues.put(COLUMN_LIEUNAISS, lieuNaiss);
+        contentValues.put(COLUMN_NOMPERE, nomPere);
+        contentValues.put(COLUMN_NOMMERE, nomMere);
+        contentValues.put(COLUMN_CINELECT, cinElect);
+        contentValues.put(COLUMN_NSERIECIN, nserieCin);
+        contentValues.put(COLUMN_DATEDELIV, dateDeliv);
+        contentValues.put(COLUMN_LIEUDELIV, lieuDeliv);
+        contentValues.put(COLUMN_IMAGEELECT, imageElect);
+        contentValues.put(COLUMN_CINRECTO, cinRecto);
+        contentValues.put(COLUMN_CINVERSO, cinVerso);
+        contentValues.put(COLUMN_OBSERVATION, observation);
+        contentValues.put(COLUMN_DOCREFERENCE, docreference);
+        contentValues.put(COLUMN_NUMUSERINFO, num_userinfo);
+        contentValues.put(COLUMN_DATEINSCRIPTION, dateinscription);
 
 //        Log.d("aaaa",""+dateNaiss);
 //        Log.d("aaaa",""+dateDeliv);
 //        Log.d("aaaa",""+dateinscription);
 
-            long result = MyDB.insert(TABLE_ELECTEUR, null, contentValues);
-
-
+        long result = MyDB.insert(TABLE_ELECTEUR, null, contentValues);
         if (result == -1) {
             return false;
         } else {
@@ -488,9 +486,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return result;
     }
 
-    public List<Electeur> selectElecteur(String codecommune) {
+    public List<Electeur> selectElecteur() {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from Electeur where code_bv like '"+codecommune+"%'", null);
+        Cursor cursor = MyDB.rawQuery("Select * from Electeur", null);
         List<Electeur> listElect = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
@@ -723,9 +721,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return listBv;
     }
 
-    public List<Electeur> Recherche(String champ, String recherche,String codecommune) {
+    public List<Electeur> Recherche(String champ, String recherche) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql="Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "' and code_bv like'"+codecommune+"%'";
+        String sql="Select * from Electeur where " + champ.trim() + "='" + recherche.trim() + "'";
         Log.d("RECHERCHE", sql);
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<Electeur> listElect = new ArrayList<>();
