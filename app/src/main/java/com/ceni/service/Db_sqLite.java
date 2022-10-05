@@ -375,36 +375,39 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public Boolean insertElecteurData(String code_bv, String nfiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss, String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String imageElect, String cinRecto, String cinVerso, String observation, String docreference,String num_userinfo, String dateinscription) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COLUMN_CODE_BV, code_bv);
-        contentValues.put(COLUMN_NFICHE, nfiche);
-        contentValues.put(COLUMN_NOM, nom);
-        contentValues.put(COLUMN_PRENOM, prenom);
-        contentValues.put(COLUMN_SEXE, sexe);
-        contentValues.put(COLUMN_PROFESSION, profession);
-        contentValues.put(COLUMN_ADRESSE, adresse);
-        contentValues.put(COLUMN_DATENAISS, dateNaiss);
-        contentValues.put(COLUMN_NEVERS, nevers);
-        contentValues.put(COLUMN_LIEUNAISS, lieuNaiss);
-        contentValues.put(COLUMN_NOMPERE, nomPere);
-        contentValues.put(COLUMN_NOMMERE, nomMere);
-        contentValues.put(COLUMN_CINELECT, cinElect);
-        contentValues.put(COLUMN_NSERIECIN, nserieCin);
-        contentValues.put(COLUMN_DATEDELIV, dateDeliv);
-        contentValues.put(COLUMN_LIEUDELIV, lieuDeliv);
-        contentValues.put(COLUMN_IMAGEELECT, imageElect);
-        contentValues.put(COLUMN_CINRECTO, cinRecto);
-        contentValues.put(COLUMN_CINVERSO, cinVerso);
-        contentValues.put(COLUMN_OBSERVATION, observation);
-        contentValues.put(COLUMN_DOCREFERENCE, docreference);
-        contentValues.put(COLUMN_NUMUSERINFO, num_userinfo);
-        contentValues.put(COLUMN_DATEINSCRIPTION, dateinscription);
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(COLUMN_CODE_BV, code_bv);
+            contentValues.put(COLUMN_NFICHE, nfiche);
+            contentValues.put(COLUMN_NOM, nom);
+            contentValues.put(COLUMN_PRENOM, prenom);
+            contentValues.put(COLUMN_SEXE, sexe);
+            contentValues.put(COLUMN_PROFESSION, profession);
+            contentValues.put(COLUMN_ADRESSE, adresse);
+            contentValues.put(COLUMN_DATENAISS, dateNaiss);
+            contentValues.put(COLUMN_NEVERS, nevers);
+            contentValues.put(COLUMN_LIEUNAISS, lieuNaiss);
+            contentValues.put(COLUMN_NOMPERE, nomPere);
+            contentValues.put(COLUMN_NOMMERE, nomMere);
+            contentValues.put(COLUMN_CINELECT, cinElect);
+            contentValues.put(COLUMN_NSERIECIN, nserieCin);
+            contentValues.put(COLUMN_DATEDELIV, dateDeliv);
+            contentValues.put(COLUMN_LIEUDELIV, lieuDeliv);
+            contentValues.put(COLUMN_IMAGEELECT, imageElect);
+            contentValues.put(COLUMN_CINRECTO, cinRecto);
+            contentValues.put(COLUMN_CINVERSO, cinVerso);
+            contentValues.put(COLUMN_OBSERVATION, observation);
+            contentValues.put(COLUMN_DOCREFERENCE, docreference);
+            contentValues.put(COLUMN_NUMUSERINFO, num_userinfo);
+            contentValues.put(COLUMN_DATEINSCRIPTION, dateinscription);
 
 //        Log.d("aaaa",""+dateNaiss);
 //        Log.d("aaaa",""+dateDeliv);
 //        Log.d("aaaa",""+dateinscription);
 
-        long result = MyDB.insert(TABLE_ELECTEUR, null, contentValues);
+            long result = MyDB.insert(TABLE_ELECTEUR, null, contentValues);
+
+
         if (result == -1) {
             return false;
         } else {
