@@ -323,11 +323,11 @@ public class NewElecteurActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (sexeFemme.isChecked()) {
-                    sexe = "Masculin";
+                    sexe = "Feminin";
                     sexeFemme.setChecked(true);
                     sexeHomme.setChecked(false);
                 } else {
-                    sexe = "Feminin";
+                    sexe = "Masculin";
                     sexeFemme.setChecked(false);
                     sexeHomme.setChecked(true);
                 }
