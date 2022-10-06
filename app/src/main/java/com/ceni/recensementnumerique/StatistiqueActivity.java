@@ -102,6 +102,8 @@ public class StatistiqueActivity extends AppCompatActivity {
         Log.d("noteFailedvoterSucces", "noteFailedvoterSucces:  " +  noteFailedvoterSucces);
         Log.d("noteFailedvoterfailed", "noteFailedvoterfailed:  " +  noteFailedvoterfailed);
 
+
+
         karineSuccess.setText(String.valueOf(notebooksFailed));
         karineFailed.setText(String.valueOf(notebooksSucces));
 
