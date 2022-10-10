@@ -197,7 +197,7 @@ public class Api_service {
                         Log.d("Duplicated", "noteFailedvoterduplicated:  " +  noteFoundVoterDuplicated);
                         Log.d("notebooks", "notebooks:  " +  notebooks.get(0).toString());
 
-                        Log.d("Voters", "Voters:  " +  notebooks.get(0).getVoters().get(0).toString());
+//                        Log.d("Voters", "Voters:  " +  notebooks.get(0).getVoters().get(0).toString());
                         Toast toast = Toast.makeText(context, "Electeur enregistré!", Toast.LENGTH_LONG);
                         toast.show();
                         Log.d(TAG, "Reponse Insert : " + response);
