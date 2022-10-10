@@ -54,10 +54,10 @@ public class StatistiqueActivity extends AppCompatActivity {
         karineFailed.setText(String.valueOf(statistiqueToDisplay.get(4) + statistiqueToDisplay.get(5)));
 
         takelakaSuccess.setText(String.valueOf(statistiqueToDisplay.get(1)));
-        takelakaFailed.setText(String.valueOf(statistiqueToDisplay.get(2) + statistiqueToDisplay.get(3)));
+        takelakaFailed.setText(String.valueOf(statistiqueToDisplay.get(3) + statistiqueToDisplay.get(2)));
 
         karineFailedTakelakaSuccess.setText(String.valueOf(statistiqueToDisplay.get(6)));
-        karineFailedTakelakaFailed.setText(String.valueOf(statistiqueToDisplay.get(7) + statistiqueToDisplay.get(8)));
+        karineFailedTakelakaFailed.setText(String.valueOf(statistiqueToDisplay.get(8) + statistiqueToDisplay.get(7)));
 
         user = getIntent().getStringExtra("user");
         Gson gson = new Gson();
