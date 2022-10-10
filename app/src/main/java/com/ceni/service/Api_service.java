@@ -155,39 +155,49 @@ public class Api_service {
                         }
 
 
-                        Stream<Notebook> success = notebooks.stream().filter(notebook -> notebook.getStatus().equals("success"));
+                        Stream<Notebook> success = notebooks.stream().filter(notebook -> notebook.getStatus().equals("inserted"));
+                        Stream<Notebook> found = notebooks.stream().filter(notebook -> notebook.getStatus().equals("found"));
                         Stream<Notebook> failed = notebooks.stream().filter(notebook -> notebook.getStatus().equals("failed"));
                         Long notebooksSucces = success.count();
                         Long notebooksFailed = failed.count();
+                        Long notebooksFound = found.count();
 
                         List<Voter> notebooksSuccedVoters = new ArrayList<>();
+                        List<Voter> notebooksDuplicatedVoters = new ArrayList<>();
                         List<Integer> idsToDelete = new ArrayList<>();
-                        notebooks.stream().filter(notebook -> notebook.getStatus().equals("success")).forEach(notebook -> notebooksSuccedVoters.addAll(notebook.getVoters()));
-                        List<Voter> notebooksFailedVoters = new ArrayList<>();
-                        notebooks.stream().filter(notebook -> notebook.getStatus().equals("failed")).forEach(notebook -> notebooksFailedVoters.addAll(notebook.getVoters()));
-                        Long notevoterSucces = notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("success")).count();
+                        notebooks.stream().filter(notebook -> notebook.getStatus().equals("inserted")).forEach(notebook -> notebooksSuccedVoters.addAll(notebook.getVoters()));
+                        notebooks.stream().filter(notebook -> notebook.getStatus().equals("found")).forEach(notebook -> notebooksDuplicatedVoters.addAll(notebook.getVoters()));
+//                        List<Voter> notebooksFailedVoters = new ArrayList<>();
+//                        notebooks.stream().filter(notebook -> notebook.getStatus().equals("failed")).forEach(notebook -> notebooksFailedVoters.addAll(notebook.getVoters()));
+
+                        Long notevoterSucces = notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("inserted")).count();
                         Long notevoterfailed = notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("failed")).count();
+                        Long notevoterduplicated = notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("duplicated")).count();
 
-                        Long noteFailedvoterSucces = notebooksFailedVoters.stream().filter(voter -> voter.getStatus().equals("success")).count();
-                        Long noteFailedvoterfailed = notebooksFailedVoters.stream().filter(voter -> voter.getStatus().equals("failed")).count();
+                        Long noteFoundVoterSuccess = notebooksDuplicatedVoters.stream().filter(voter -> voter.getStatus().equals("inserted")).count();
+                        Long noteFoundVoterFailed = notebooksDuplicatedVoters.stream().filter(voter -> voter.getStatus().equals("failed")).count();
+                        Long noteFoundVoterDuplicated = notebooksDuplicatedVoters.stream().filter(voter -> voter.getStatus().equals("duplicated")).count();
 
-                        notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("success")).forEach(voter -> idsToDelete.add(voter.getId()));
-                        notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("failed")).forEach(voter -> idsToDelete.add(voter.getId()));
+                        notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("inserted")).forEach(voter -> idsToDelete.add(voter.getId()));
+                        notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("duplicated")).forEach(voter -> idsToDelete.add(voter.getId()));
 
-                        notebooksFailedVoters.stream().filter(voter -> voter.getStatus().equals("success")).forEach(voter -> idsToDelete.add(voter.getId()));
-                        notebooksFailedVoters.stream().filter(voter -> voter.getStatus().equals("failed")).forEach(voter -> idsToDelete.add(voter.getId()));
+                        notebooksDuplicatedVoters.stream().filter(voter -> voter.getStatus().equals("inserted")).forEach(voter -> idsToDelete.add(voter.getId()));
+                        notebooksDuplicatedVoters.stream().filter(voter -> voter.getStatus().equals("duplicated")).forEach(voter -> idsToDelete.add(voter.getId()));
 
                         Log.d("succes", "succes:  " +  notebooksSucces);
                         Log.d("failed", "failed:  " +  notebooksFailed);
+                        Log.d("found", "found:  " +  notebooksFound);
 
                         Log.d("notevoterSucces", "notevoterSucces:  " +  notevoterSucces);
                         Log.d("notevoterfailed", "notevoterfailed:  " +  notevoterfailed);
+                        Log.d("notevoterduplicated", "notevoterduplicated:  " +  notevoterduplicated);
 
-                        Log.d("noteFailedvoterSucces", "noteFailedvoterSucces:  " +  noteFailedvoterSucces);
-                        Log.d("noteFailedvoterfailed", "noteFailedvoterfailed:  " +  noteFailedvoterfailed);
+                        Log.d("noteFailedvoterSucces", "noteFailedvoterSucces:  " +  noteFoundVoterSuccess);
+                        Log.d("noteFailedvoterfailed", "noteFailedvoterfailed:  " +  noteFoundVoterFailed);
+                        Log.d("Duplicated", "noteFailedvoterduplicated:  " +  noteFoundVoterDuplicated);
                         Log.d("notebooks", "notebooks:  " +  notebooks.get(0).toString());
 
-                        Log.d("Voters", "Voters:  " +  notebooks.get(0).getVoters().get(0).toString());
+//                        Log.d("Voters", "Voters:  " +  notebooks.get(0).getVoters().get(0).toString());
                         Toast toast = Toast.makeText(context, "Electeur enregistré!", Toast.LENGTH_LONG);
                         toast.show();
                         Log.d(TAG, "Reponse Insert : " + response);
