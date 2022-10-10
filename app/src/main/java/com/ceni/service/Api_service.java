@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
@@ -154,6 +155,7 @@ public class Api_service {
                             }
                         }
 
+                        ArrayList<Long> tabsToStatistique = new ArrayList<>();
 
                         Stream<Notebook> success = notebooks.stream().filter(notebook -> notebook.getStatus().equals("inserted"));
                         Stream<Notebook> found = notebooks.stream().filter(notebook -> notebook.getStatus().equals("found"));
@@ -197,7 +199,21 @@ public class Api_service {
                         Log.d("Duplicated", "noteFailedvoterduplicated:  " +  noteFoundVoterDuplicated);
                         Log.d("notebooks", "notebooks:  " +  notebooks.get(0).toString());
 
-//                        Log.d("Voters", "Voters:  " +  notebooks.get(0).getVoters().get(0).toString());
+                        // TODO INSERTED TO TABS
+                        // TODO INSERT NOTEBOOKS SUCCESS
+                        tabsToStatistique.add(notebooksSucces);
+                        // TODO INSERT VOTERS INSERTED & DUPLICATED
+                        tabsToStatistique.add(notevoterSucces);
+                        tabsToStatistique.add(notevoterduplicated);
+                        tabsToStatistique.add(notevoterfailed);
+                        // TODO INSERT NOTEBOOKS FOUND
+                        tabsToStatistique.add(notebooksFound);
+                        tabsToStatistique.add(notebooksFailed);
+                        // TODO INSERT VOTERS INSERTED & FAILED
+                        tabsToStatistique.add(noteFoundVoterSuccess);
+                        tabsToStatistique.add(noteFoundVoterDuplicated);
+                        tabsToStatistique.add(noteFoundVoterFailed);
+
                         Toast toast = Toast.makeText(context, "Electeur enregistré!", Toast.LENGTH_LONG);
                         toast.show();
                         Log.d(TAG, "Reponse Insert : " + response);
@@ -220,10 +236,13 @@ public class Api_service {
                         tmp.setEnabled(true);
                         tmp.setClickable(true);
 
+                        String statTab = gson.toJson(tabsToStatistique);
+
                         Intent intent = new Intent(context, StatistiqueActivity.class);
                         intent.putExtra("response_stat", response.toString());
                         intent.putExtra("configTab", configTab);
                         intent.putExtra("user", myJson);
+                        intent.putExtra("statistique", tabsToStatistique);
 
 
                         context.startActivity(intent);
