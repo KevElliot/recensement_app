@@ -213,10 +213,10 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return result;
     }
 
-    public Boolean isMemeDoc(String numdoc) {
+    public Boolean isMemeDoc(String numdoc,String codefokot) {
         boolean result = false;
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select " + numdocreference + " from documents where " + numdocreference + " =?", new String[]{numdoc});
+        Cursor cursor = MyDB.rawQuery("Select " + numdocreference + " from documents where " + numdocreference + " =? and code_fokontany = '"+codefokot+"'", new String[]{numdoc});
         try {
             Log.d("MM DOCUMENT", "" + cursor.getCount());
             if (cursor.getCount() != 0) {
@@ -232,7 +232,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
     }
 
     public Boolean insertDocument(Document doc) {
-        boolean ismemedoc = isMemeDoc(doc.getNumdocreference());
+        boolean ismemedoc = isMemeDoc(doc.getNumdocreference(),doc.getDoccode_fokontany());
         SQLiteDatabase MyDB = this.getWritableDatabase();
         boolean res = false;
         if (!ismemedoc) {
