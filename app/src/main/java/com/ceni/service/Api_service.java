@@ -229,10 +229,10 @@ public class Api_service {
                         ///controle connexion oracle
 
                         Log.d("SIze to delete : ", ""+idsToDelete.size());
-//                        for (int x = 0; x < idsToDelete.size(); x++){
-//                            Log.d("MIDITRA DELETE", "DELETE ID : "+idsToDelete.get(x).toString());
-//                            DB.deleteElectId(idsToDelete.get(x).toString());
-//                        }
+                        for (int x = 0; x < idsToDelete.size(); x++){
+                            Log.d("MIDITRA DELETE", "DELETE ID : "+idsToDelete.get(x).toString());
+                            DB.deleteElectId(idsToDelete.get(x).toString());
+                        }
                         tmp.setEnabled(true);
                         tmp.setClickable(true);
 
