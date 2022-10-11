@@ -649,7 +649,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                     int y = datycin - datynevers;
 
                     if (editNevers.getText().toString().length() == 4) {
-                        if (datynevers < anneeMajor+1 && datynevers > anneeDead) {
+                        if (datynevers <= anneeMajor+2 && datynevers >= anneeDead) {
                             if (y >= 1) {
                                 countFormValide += 1;
                                 electeur.setNevers(editNevers.getText().toString());
