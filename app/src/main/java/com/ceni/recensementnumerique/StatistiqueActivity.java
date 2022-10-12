@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 
 public class StatistiqueActivity extends AppCompatActivity {
 
-    TextView karineSuccess, karineFailed, takelakaSuccess, takelakaFailed, karineFailedTakelakaSuccess, karineFailedTakelakaFailed;
+    TextView karineSuccess, karineFailed, takelakaSuccess, takelakaFailed, karineFailedTakelakaSuccess, karineFailedTakelakaFailed, takelakaMiverinaKarineLasa, takelakaMiverinaKarineTsyLasa;
     private static Tablette tab;
     private static String user;
     private ImageView previous;
@@ -48,16 +48,24 @@ public class StatistiqueActivity extends AppCompatActivity {
         karineFailedTakelakaSuccess = findViewById(R.id.karineTsyLasaTakelakaLasa);
         karineFailedTakelakaFailed = findViewById(R.id.karineTsyLasaTakelakaTsyLasa);
 
+        takelakaMiverinaKarineLasa = findViewById(R.id.karineLasaTakelakaMiverina);
+        takelakaMiverinaKarineTsyLasa = findViewById(R.id.karineTsyLasaTakelakaMiverina);
+
         ArrayList<Long> statistiqueToDisplay = (ArrayList<Long>) getIntent().getSerializableExtra("statistique");
 
         karineSuccess.setText(String.valueOf(statistiqueToDisplay.get(0)));
         karineFailed.setText(String.valueOf(statistiqueToDisplay.get(4) + statistiqueToDisplay.get(5)));
 
         takelakaSuccess.setText(String.valueOf(statistiqueToDisplay.get(1)));
-        takelakaFailed.setText(String.valueOf(statistiqueToDisplay.get(3) + statistiqueToDisplay.get(2)));
+        // takelakaFailed.setText(String.valueOf(statistiqueToDisplay.get(3) + statistiqueToDisplay.get(2)));
+        takelakaFailed.setText(String.valueOf(statistiqueToDisplay.get(3)));
 
         karineFailedTakelakaSuccess.setText(String.valueOf(statistiqueToDisplay.get(6)));
-        karineFailedTakelakaFailed.setText(String.valueOf(statistiqueToDisplay.get(8) + statistiqueToDisplay.get(7)));
+        // karineFailedTakelakaFailed.setText(String.valueOf(statistiqueToDisplay.get(8) + statistiqueToDisplay.get(7)));
+        karineFailedTakelakaFailed.setText(String.valueOf(statistiqueToDisplay.get(8)));
+
+        takelakaMiverinaKarineLasa.setText(String.valueOf(statistiqueToDisplay.get(2)));
+        takelakaMiverinaKarineTsyLasa.setText(String.valueOf(statistiqueToDisplay.get(7)));
 
         user = getIntent().getStringExtra("user");
         Gson gson = new Gson();
