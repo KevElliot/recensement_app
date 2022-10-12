@@ -198,6 +198,14 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public Boolean isSamePerson(String nom, String prenom, String dateNaiss, String codebv) {
         boolean result = false;
         SQLiteDatabase MyDB = this.getWritableDatabase();
+        int posNom = nom.indexOf("'");
+        int posPrenom = prenom.indexOf("'");
+        if(posNom >= 0){
+            nom = nom.replace("'","'||''''||'");
+        }
+        if(posPrenom >= 0){
+            prenom = prenom.replace("'","'||''''||'");
+        }
         String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + nom + "') and upper(prenom) = upper('" + prenom + "') and dateNaiss = '" + dateNaiss + "') or (upper(nom)= upper('" + prenom + "') and upper(prenom) = upper('" + nom + "') and dateNaiss = '" + dateNaiss + "')";
         Log.d("isSame", sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});

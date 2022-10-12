@@ -291,8 +291,8 @@ public class ParametreActivity extends AppCompatActivity {
 
     private int getPosition(List<Commune> c,String s){
         for(int i=0;i<c.size();i++){
+            //Log.d("xxx","c.get(i).getLabel_commune()----------------  "+c.get(i).getLabel_commune()+"  ------ s------  "+s);
             if(c.get(i).getLabel_commune().equals(s)){
-                Log.d("LOOG","-------- "+i);
                 return i;
             }
         }
