@@ -1,11 +1,13 @@
 package com.ceni.recensementnumerique;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.ceni.model.Electeur;
 import com.ceni.model.Tablette;
 import com.ceni.model.User;
+import com.ceni.service.Cryptage_service;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
@@ -39,6 +42,19 @@ public class LoginActivity extends AppCompatActivity {
         txtpseudo = findViewById(R.id.editTextPseudo);
         txtmdp = findViewById(R.id.editTextPassword);
         DB = new Db_sqLite(this);
+
+//        connecter.setOnClickListener(new View.OnClickListener() {
+//            @RequiresApi(api = Build.VERSION_CODES.O)
+//            @Override
+//            public void onClick(View view) {
+//                Cryptage_service cryptage = new Cryptage_service();
+//                String crypt = cryptage.setEnCryptOf("a");
+//                Log.d("crypt","crypt "+crypt);
+//                String decrypt = cryptage.setTestDecryptOf(crypt);
+//                Log.d("decrypt","decrypt "+decrypt);
+//            }
+//        });
+
 
         connecter.setOnClickListener(new View.OnClickListener() {
             @Override

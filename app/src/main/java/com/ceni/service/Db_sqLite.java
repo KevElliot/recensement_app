@@ -30,7 +30,8 @@ import java.util.List;
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
     private static final String DB_NAME = "Recensement.db";
-//    /!\ -------- TSY MAHAZO KITIANA ------------- /!\
+    private Cryptage_service cryptage = new Cryptage_service();
+    //    /!\ -------- TSY MAHAZO KITIANA ------------- /!\
     private static final int DB_VERSION = 47;
 //    /!\ -------- TSY MAHAZO KITIANA ------------- /!\
     /*---------------------------------------------------------------------------------------
