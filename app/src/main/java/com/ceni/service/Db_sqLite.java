@@ -393,7 +393,11 @@ public class Db_sqLite extends SQLiteOpenHelper {
         Document res = new Document();
         SQLiteDatabase MyDB = this.getWritableDatabase();
         String cryptNum = cryptage.setEnCryptOf(num);
-        Cursor cursor = MyDB.rawQuery("Select * from documents where numdocreference= '" + cryptNum + "'", null);
+        String partOne = cryptNum.substring(0, 3);
+        String partTwo = cryptNum.substring(11, cryptNum.length());
+        String sql = "Select * from documents where numdocreference like '" + partOne + "%' and numdocreference like '%" + partTwo + "'";
+        Log.d("selectDocumentbyNum","-----------  "+sql);
+        Cursor cursor = MyDB.rawQuery(sql, null);
         List<Document> listdoc = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
@@ -818,8 +822,10 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public List<Electeur> Recherche(String champ, String recherche) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         String cryptRech = cryptage.setEnCryptOf(recherche.trim());
-        String sql = "Select * from Electeur where " + champ.trim() + "='" + cryptRech + "'";
-        Log.d("RECHERCHE", sql);
+        String partOne = cryptRech.substring(0, 3);
+        String partTwo = cryptRech.substring(11, cryptRech.length());
+        String sql = "Select * from Electeur where " + champ.trim() + " like '" + partOne + "%' and " +champ.trim()+ " like '%" + partTwo + "'";
+        Log.d("RECHERCHE","RECHERCHE xxxx  "+ sql);
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<Electeur> listElect = new ArrayList<>();
         try {
