@@ -141,7 +141,7 @@ public class Api_service {
                 .addJSONObjectBody(notebooks)
                 .build()
                 .getAsJSONArray(new JSONArrayRequestListener() {
-                    @RequiresApi(api = Build.VERSION_CODES.N)
+                    @RequiresApi(api = Build.VERSION_CODES.O)
                     @Override
                     public void onResponse(JSONArray response) {
 
@@ -229,10 +229,10 @@ public class Api_service {
                         ///controle connexion oracle
 
                         Log.d("SIze to delete : ", ""+idsToDelete.size());
-                        for (int x = 0; x < idsToDelete.size(); x++){
-                            Log.d("MIDITRA DELETE", "DELETE ID : "+idsToDelete.get(x).toString());
-                            DB.deleteElectId(idsToDelete.get(x).toString());
-                        }
+//                        for (int x = 0; x < idsToDelete.size(); x++){
+//                            Log.d("MIDITRA DELETE", "DELETE ID : "+idsToDelete.get(x).toString());
+//                            DB.deleteElectId(idsToDelete.get(x).toString());
+//                        }
                         tmp.setEnabled(true);
                         tmp.setClickable(true);
 
@@ -339,6 +339,7 @@ public class Api_service {
                     .addJSONObjectBody(jsonObject)
                     .build()
                     .getAsJSONObject(new JSONObjectRequestListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.O)
                         @Override
                         public void onResponse(JSONObject response) {
                             Toast toast = Toast.makeText(context, "Electeur enregistré!", Toast.LENGTH_LONG);

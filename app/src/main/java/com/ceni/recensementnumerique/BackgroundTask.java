@@ -2,9 +2,11 @@ package com.ceni.recensementnumerique;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ceni.adapter.RecyclerAdapter;
@@ -38,6 +40,7 @@ public class BackgroundTask extends AsyncTask<Void,Electeur,Void> {
         progressBar.setVisibility(View.VISIBLE);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected Void doInBackground(Void... voids) {
         DB = new Db_sqLite(context);

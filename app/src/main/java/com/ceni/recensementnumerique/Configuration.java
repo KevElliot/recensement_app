@@ -1,9 +1,11 @@
 package com.ceni.recensementnumerique;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -47,6 +49,7 @@ public class Configuration extends AppCompatActivity{
          this.user = MenuActivity.getCurrent_user();
 
         enregistrer.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
 
@@ -56,7 +59,7 @@ public class Configuration extends AppCompatActivity{
                 String ip = adressIp.getText().toString();
                 String p = port.getText().toString();
                 List<Electeur> listElect = DB.selectElecteur();
-                List<Document> documents = DB.selectAllDocument();
+                List<Document> documents = DB.selectAllDocumentToSendOnServer();
                 Configuration_model params = new Configuration_model(Configuration.this,ip,p,listElect,resultat, documents);
                 new Task_insertElect(Configuration.this,params,enregistrer,user,tab).execute();
             }

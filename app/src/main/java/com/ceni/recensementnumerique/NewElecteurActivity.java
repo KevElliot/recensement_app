@@ -117,6 +117,7 @@ public class NewElecteurActivity extends AppCompatActivity {
 
     private static final int REQUEST_ID_IMAGE_CAPTURE = 100;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,9 +191,11 @@ public class NewElecteurActivity extends AppCompatActivity {
         int fokontany_pref = params_localisation.getInt("position_fokontany", 0);
         spinnerFokontany.setSelection(fokontany_pref);
         spinnerFokontany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 fokontanySelected = (Fokontany) spinnerFokontany.getSelectedItem();
+                Log.d("FOKONTANY", "FOKONTANY:::::::: " + fokontanySelected.getCode_fokontany());
                 document = DB.selectDocument(fokontanySelected.getCode_fokontany());
                 //DOCUMENT
                 // Adapter Document

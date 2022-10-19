@@ -82,6 +82,7 @@ public class Document {
         return "Document{" +
                 "idDoc='" + idDoc + '\'' +
                 ", idfdocreference='" + idfdocreference + '\'' +
+                ", doccode_fokontany='" + doccode_fokontany + '\'' +
                 ", doccode_bv='" + doccode_bv + '\'' +
                 ", numdocreference='" + numdocreference + '\'' +
                 ", datedocreference='" + datedocreference + '\'' +

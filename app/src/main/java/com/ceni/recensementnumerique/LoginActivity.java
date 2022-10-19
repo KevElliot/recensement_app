@@ -48,9 +48,9 @@ public class LoginActivity extends AppCompatActivity {
 //            @Override
 //            public void onClick(View view) {
 //                Cryptage_service cryptage = new Cryptage_service();
-//                String crypt = cryptage.setEnCryptOf("a");
+//                String crypt = cryptage.setEnCryptOf("OLONA");
 //                Log.d("crypt","crypt "+crypt);
-//                String decrypt = cryptage.setTestDecryptOf(crypt);
+//                String decrypt = cryptage.setDecryptOf(crypt);
 //                Log.d("decrypt","decrypt "+decrypt);
 //            }
 //        });

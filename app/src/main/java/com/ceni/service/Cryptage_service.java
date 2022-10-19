@@ -5,18 +5,23 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class Cryptage_service {
     private static final String ALGO_TYPE = "DES";
-    private static final String KEY_VALUE = "6=coelho";
+//    private static final String KEY_VALUE = "6=coelho";
+    private static final String  KEY_VALUE = RandomStringUtils.random(8, true, true);
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String setEnCryptOf(String field) {
         String data = "";
         try {
+
             Log.e("setEnCryptOf", "field :" + field);
+            Log.e("setEnCryptOf", "KEY :" + KEY_VALUE);
             byte[] fieldBytes = field.getBytes(StandardCharsets.UTF_8);
             String encrypt = new String(Base64.getEncoder().encode(fieldBytes), "UTF-8");
             // TODO: ETO NO ASIANA NY KEY
@@ -25,13 +30,13 @@ public class Cryptage_service {
             data = partOne+KEY_VALUE+partTwo;
 
         } catch (Exception exception) {
-            exception.printStackTrace();
+            return field;
         }
         return data;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public String setTestDecryptOf(String data) {
+    public String setDecryptOf(String data) {
         String valueDecripted ="";
         try {
             String partOne = data.substring(0,3);
@@ -41,7 +46,7 @@ public class Cryptage_service {
             valueDecripted = new String(Base64.getDecoder().decode(field.getBytes(StandardCharsets.UTF_8)));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            return data;
         }
         return valueDecripted;
     }

@@ -2,9 +2,11 @@ package com.ceni.recensementnumerique;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +40,7 @@ public class ListeElecteurActivity extends AppCompatActivity {
     private int skip = 0;
     private int limit = 10;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +53,7 @@ public class ListeElecteurActivity extends AppCompatActivity {
         Gson gson = new Gson();
         ListFokontany fokontany = gson.fromJson(getIntent().getStringExtra("fokontany"), ListFokontany.class);
         String code_fokontany = fokontany.getCodeFokontany();
-
+        Log.d("VIEW lIST Elect","ATO EEE");
         listElect = DB.selectElecteurbycodeFokontany(code_fokontany, skip, limit);
         Log.d("a", "" + listElect.size());
         incrList = new ArrayList<Electeur>();
