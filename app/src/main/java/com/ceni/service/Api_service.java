@@ -133,6 +133,7 @@ public class Api_service {
 
     public static void insertNotebooks(Db_sqLite DB, Context context, String ip, String port, Tablette tab, User us, JSONObject notebooks, Button tmp) {
         String base_url = "http://" + ip + ":" + port + "/";
+        Log.d("INSERT --"," --------------- "+notebooks.toString());
         AndroidNetworking.post(base_url + "api/insertVoters")
                 .setTag("test")
                 .addHeaders("Accept", "application/json")

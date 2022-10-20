@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.model.User;
+import com.ceni.service.Cryptage_service;
 import com.ceni.service.Db_sqLite;
 import com.google.gson.Gson;
 
@@ -61,7 +62,8 @@ public class DetailElecteurActivity extends AppCompatActivity {
         Gson gson = new Gson();
         Electeur electeur = gson.fromJson(getIntent().getStringExtra("electeur"), Electeur.class);
         nFeuillet.setText(electeur.getnFiche());
-
+        Cryptage_service cryptage = new Cryptage_service();
+        Log.d("aazeaze","electeur.getDocreference()--------"+electeur.getDocreference());
         Document d = db.selectDocumentbyid(electeur.getDocreference());
         nfiche.setText(d.getNumdocreference());
         dateInscr.setText(electeur.getDateinscription());

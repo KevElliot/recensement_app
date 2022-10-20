@@ -307,12 +307,14 @@ public class Db_sqLite extends SQLiteOpenHelper {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         Cursor cursor = MyDB.rawQuery("Select * from documents order by id desc", null);
         List<Document> listdoc = new ArrayList<>();
-        Log.d("selectAllDocument", "listdoc  " + listdoc.size());
         try {
             while (cursor.moveToNext()) {
                 Document d = new Document();
                 d.setIdDoc("" + cursor.getInt(0));
-                d.setIdfdocreference(cryptage.setDecryptOf(cursor.getString(1)));
+                d.setIdfdocreference(cursor.getString(1));
+
+                Log.d("selectAllDocument", "listdoc  " + cursor.getString(1));
+
                 d.setDoccode_fokontany(cryptage.setDecryptOf(cursor.getString(2)));
                 d.setDoccode_bv(cryptage.setDecryptOf(cursor.getString(3)));
                 d.setNumdocreference(cryptage.setDecryptOf(cursor.getString(4)));
@@ -403,7 +405,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
             while (cursor.moveToNext()) {
                 Document d = new Document();
                 d.setIdDoc(String.valueOf(cursor.getString(0)));
-                d.setIdfdocreference(cryptage.setDecryptOf(cursor.getString(1)));
+                d.setIdfdocreference(cursor.getString(1));
                 d.setDoccode_bv(cryptage.setDecryptOf(cursor.getString(2)));
                 d.setDoccode_fokontany(cryptage.setDecryptOf(cursor.getString(3)));
                 d.setNumdocreference(cryptage.setDecryptOf(cursor.getString(4)));
@@ -423,15 +425,18 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return res;
     }
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Document selectDocumentbyid(String idfdocreference) {
         Cursor cursor = null;
         List<Document> listdoc = new ArrayList<>();
         SQLiteDatabase MyDB = this.getWritableDatabase();
+        Log.d("xxxxccc","------------------------- idfdocreference : "+idfdocreference);
         try {
-            String sql = "Select * from documents where idfdocreference= '" + idfdocreference + "' order by id desc";
+            String sql = "Select * from documents where idfdocreference= '"+ idfdocreference +"'";
+            Log.d("123","-------------- "+sql);
             cursor = MyDB.rawQuery(sql, null);
-
             while (cursor.moveToNext()) {
                 Document d = new Document();
                 d.setIdDoc(String.valueOf(cursor.getInt(0)));
@@ -450,7 +455,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
             cursor.close();
             MyDB.close();
         }
-        return listdoc.size() > 0 ? listdoc.get(0) : null;
+        return listdoc.get(0);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -477,7 +482,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         contentValues.put(COLUMN_CINRECTO, cinRecto);
         contentValues.put(COLUMN_CINVERSO, cinVerso);
         contentValues.put(COLUMN_OBSERVATION, cryptage.setEnCryptOf("observation"));
-        contentValues.put(COLUMN_DOCREFERENCE, cryptage.setEnCryptOf(docreference));
+        contentValues.put(COLUMN_DOCREFERENCE, docreference);
         contentValues.put(COLUMN_NUMUSERINFO, cryptage.setEnCryptOf(num_userinfo));
         contentValues.put(COLUMN_DATEINSCRIPTION, cryptage.setEnCryptOf(dateinscription));
 
@@ -507,7 +512,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         try {
             SQLiteDatabase MyDB = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
-            contentValues.put(idfdocreference, cryptage.setEnCryptOf(doc.getIdfdocreference()));
+            contentValues.put(idfdocreference, doc.getIdfdocreference());
             contentValues.put(doccode_fokontany, cryptage.setEnCryptOf(doc.getDoccode_fokontany()));
             contentValues.put(doccode_bv, cryptage.setEnCryptOf(doc.getDoccode_bv()));
             contentValues.put(numdocreference, cryptage.setEnCryptOf(doc.getNumdocreference()));
@@ -527,13 +532,13 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean updateElect(Electeur elect) {
-        String idelect = "" + elect.getIdElect();
-        String id = cryptage.setEnCryptOf(idelect);
+        String id = "" + elect.getIdElect();
+        Log.d("updateElect","---------updateElect--------"+id);
         boolean result = false;
         try {
             SQLiteDatabase MyDB = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
-            contentValues.put(COLUMN_CODE_BV, cryptage.setEnCryptOf(elect.getCode_bv()));
+            contentValues.put(COLUMN_CODE_BV, elect.getCode_bv());
             contentValues.put(COLUMN_NFICHE, cryptage.setEnCryptOf(elect.getnFiche()));
             contentValues.put(COLUMN_NOM, cryptage.setEnCryptOf(elect.getNom()));
             contentValues.put(COLUMN_PRENOM, cryptage.setEnCryptOf(elect.getPrenom()));
@@ -643,7 +648,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 e.setCinRecto(cursor.getString(18));
                 e.setCinVerso(cursor.getString(19));
                 e.setObservation(cryptage.setDecryptOf(cursor.getString(20)));
-                e.setDocreference(cryptage.setDecryptOf(cursor.getString(21)));
+                e.setDocreference(cursor.getString(21));
                 e.setNum_userinfo(cryptage.setDecryptOf(cursor.getString(22)));
                 e.setDateinscription(cryptage.setDecryptOf(cursor.getString(23)));
                 listElect.add(e);
@@ -852,7 +857,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 e.setCinRecto(cursor.getString(18));
                 e.setCinVerso(cursor.getString(19));
                 e.setObservation(cryptage.setDecryptOf(cursor.getString(20)));
-                e.setDocreference(cryptage.setDecryptOf(cursor.getString(21)));
+                e.setDocreference(cursor.getString(21));
                 e.setNum_userinfo(cryptage.setDecryptOf(cursor.getString(22)));
                 e.setDateinscription(cryptage.setDecryptOf(cursor.getString(23)));
                 listElect.add(e);

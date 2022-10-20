@@ -61,6 +61,7 @@ import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.model.Fokontany;
 import com.ceni.model.User;
+import com.ceni.service.Cryptage_service;
 import com.ceni.service.Db_sqLite;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.CompositeDateValidator;
@@ -434,8 +435,8 @@ public class NewElecteurActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         calendar.clear();
 
-        calendar.set(Calendar.DAY_OF_MONTH,10);
-        calendar.set(Calendar.MONTH,Calendar.JUNE);
+        calendar.set(Calendar.DAY_OF_MONTH, 10);
+        calendar.set(Calendar.MONTH, Calendar.JUNE);
         calendar.set(Calendar.YEAR, 2005);
         Long anneeFin = calendar.getTimeInMillis();
 
@@ -496,8 +497,8 @@ public class NewElecteurActivity extends AppCompatActivity {
         calendar2.clear();
         int fin = anneeNow - 101 + 18;
 
-        calendar2.set(Calendar.DAY_OF_MONTH,31);
-        calendar2.set(Calendar.MONTH,11);
+        calendar2.set(Calendar.DAY_OF_MONTH, 31);
+        calendar2.set(Calendar.MONTH, 11);
         calendar2.set(Calendar.YEAR, 2022);
         Long anneeFinDateCin = calendar2.getTimeInMillis();
         calendar2.set(Calendar.YEAR, fin);
@@ -548,12 +549,12 @@ public class NewElecteurActivity extends AppCompatActivity {
         calendar3.clear();
         int fin3 = Calendar.getInstance().get(Calendar.YEAR) - 1;
 
-        calendar3.set(Calendar.DAY_OF_MONTH,31);
-        calendar3.set(Calendar.MONTH,11);
+        calendar3.set(Calendar.DAY_OF_MONTH, 31);
+        calendar3.set(Calendar.MONTH, 11);
         calendar3.set(Calendar.YEAR, 2022);
         Long anneeFinRecens = calendar3.getTimeInMillis();
-        calendar3.set(Calendar.DAY_OF_MONTH,01);
-        calendar3.set(Calendar.MONTH,9);
+        calendar3.set(Calendar.DAY_OF_MONTH, 01);
+        calendar3.set(Calendar.MONTH, 9);
         calendar3.set(Calendar.YEAR, 2022);
         Long anneeStartRecens = calendar3.getTimeInMillis();
 
@@ -652,7 +653,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                     int y = datycin - datynevers;
 
                     if (editNevers.getText().toString().length() == 4) {
-                        if (datynevers <= anneeMajor+2 && datynevers >= anneeDead) {
+                        if (datynevers <= anneeMajor + 2 && datynevers >= anneeDead) {
                             if (y >= 1) {
                                 countFormValide += 1;
                                 electeur.setNevers(editNevers.getText().toString());
@@ -695,7 +696,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    if(datycin != null && naiss!= null ){
+                    if (datycin != null && naiss != null) {
                         int x = datycin.getYear() - naiss.getYear();
                         if (naiss.getTime() < datycin.getTime() && x >= 1) {
                             electeur.setDateDeliv(dateCinElect);
@@ -704,7 +705,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                             selectedDateCin.setTextColor(Color.RED);
                             selectedDateCin.setText("verifieo ny daty CIN sy daty nahaterahana ");
                         }
-                    }else {
+                    } else {
                         selectedDateCin.setTextColor(Color.RED);
                         selectedDateCin.setText("Mila fenohina ny daty nahaterahana ");
                     }
@@ -747,7 +748,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 if (nserie.getText().toString().length() == 0) {
                     electeur.setNserieCin("illisible");
                     countFormValide += 1;
-                }else{
+                } else {
                     if (nserie.getText().toString().length() == 7) {
                         if (nserie2.getText().toString().length() == 0) {
                             String serial = nserie.getText().toString();
@@ -827,18 +828,42 @@ public class NewElecteurActivity extends AppCompatActivity {
                                 electeur.setCode_bv(bvSelected.getCode_bv());
                                 electeur.setProfession(profession.getText().toString());
 
-                                    boolean result = DB.insertElecteurData(electeur.getCode_bv(), electeur.getnFiche(), electeur.getNom(), electeur.getPrenom(), electeur.getSexe(), electeur.getProfession(), electeur.getAdresse(), electeur.getDateNaiss(), electeur.getNevers(), electeur.getLieuNaiss(), electeur.getNomPere(), electeur.getNomMere(), electeur.getCinElect(), electeur.getNserieCin(), electeur.getDateDeliv(), electeur.getLieuDeliv(), electeur.getFicheElect(), electeur.getCinRecto(), electeur.getCinVerso(), electeur.getObservation(), electeur.getDocreference(), us.getIdUser(), electeur.getDateinscription());
-                                    if (result) {
-                                        Document doc = DB.selectDocumentbyid(electeur.getDocreference());
-                                        DB.counterStat(doc, tmpus, 1);
-                                        Toast toast = Toast.makeText(NewElecteurActivity.this, "Electeur enregistré!", Toast.LENGTH_LONG);
-                                        toast.show();
-                                        Intent i = new Intent(getApplicationContext(), NewElecteurActivity.class);
-                                        i.putExtra("user", user);
-                                        enregistrer.setEnabled(true);
-                                        startActivity(i);
-                                        finish();
-                                    }
+                                if (DB.insertElecteurData(
+                                        electeur.getCode_bv(),
+                                        electeur.getnFiche(),
+                                        electeur.getNom(),
+                                        electeur.getPrenom(),
+                                        electeur.getSexe(),
+                                        electeur.getProfession(),
+                                        electeur.getAdresse(),
+                                        electeur.getDateNaiss(),
+                                        electeur.getNevers(),
+                                        electeur.getLieuNaiss(),
+                                        electeur.getNomPere(),
+                                        electeur.getNomMere(),
+                                        electeur.getCinElect(),
+                                        electeur.getNserieCin(),
+                                        electeur.getDateDeliv(),
+                                        electeur.getLieuDeliv(),
+                                        electeur.getFicheElect(),
+                                        electeur.getCinRecto(),
+                                        electeur.getCinVerso(),
+                                        electeur.getObservation(),
+                                        electeur.getDocreference(),
+                                        us.getIdUser(), electeur.getDateinscription())) {
+                                    Cryptage_service cryptage = new Cryptage_service();
+
+                                    Document doc = DB.selectDocumentbyid(electeur.getDocreference());
+                                    DB.counterStat(doc, tmpus, 1);
+                                    Toast toast = Toast.makeText(NewElecteurActivity.this, "Electeur enregistré!", Toast.LENGTH_LONG);
+                                    toast.show();
+                                    Intent i = new Intent(getApplicationContext(), NewElecteurActivity.class);
+                                    i.putExtra("user", user);
+                                    enregistrer.setEnabled(true);
+                                    startActivity(i);
+                                    finish();
+                                }
+
 
                             } else {
                                 enregistrer.setEnabled(true);
