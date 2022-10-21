@@ -45,7 +45,7 @@ public class BackgroundTask extends AsyncTask<Void,Electeur,Void> {
     protected Void doInBackground(Void... voids) {
         DB = new Db_sqLite(context);
         this.user = MenuActivity.getCurrent_user();
-        AllElecteurs = DB.selectElecteur();
+        AllElecteurs = DB.selectElecteur(100);
         for (int i=0;i<AllElecteurs.size();i++){
             Electeur e = new Electeur();
             e.setCode_bv(AllElecteurs.get(i).getCode_bv());

@@ -51,15 +51,17 @@ public class Task_insertElect extends AsyncTask<Void, Void, String> {
     Gson gson;
     Tablette tab;
     Button enregistrer;
+    ArrayList<Long> tabsToStatistique;
     boolean result;
 
 
-    public Task_insertElect(Context c, Configuration_model params, Button enregistrer, User us, Tablette tab) {
+    public Task_insertElect(Context c, Configuration_model params, Button enregistrer, User us, Tablette tab,ArrayList<Long> tabsToStatistique) {
         this.c = c;
         this.params = params;
         this.enregistrer = enregistrer;
         this.us = us;
         this.tab=tab;
+        this.tabsToStatistique = tabsToStatistique;
     }
 
     @Override
@@ -110,8 +112,7 @@ public class Task_insertElect extends AsyncTask<Void, Void, String> {
 
         Log.i("xxx", "DEBUGGING ...");
         Log.i("xxx", jsonObject.toString());
-
-        API.insertNotebooks(DB, c, ip, port, tab, us, jsonObject, tmp);
+        API.insertNotebooks(DB, c, ip, port, tab, us, jsonObject, tmp,tabsToStatistique);
 
 
 //        for (int i = 0; i < listElect.size(); i++) {

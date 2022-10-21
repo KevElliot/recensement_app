@@ -386,7 +386,6 @@ public class Db_sqLite extends SQLiteOpenHelper {
             cursor.close();
             MyDB.close();
         }
-        Log.d("xxxxxx", "xxxxx " + listdoc.get(0).toString());
         return listdoc;
     }
 
@@ -573,9 +572,10 @@ public class Db_sqLite extends SQLiteOpenHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public List<Electeur> selectElecteur() {
+    public List<Electeur> selectElecteur(int limit) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from Electeur", null);
+        //Cursor cursor = MyDB.rawQuery("Select * from Electeur limit "+limit, null); order by code_bv limit 25
+        Cursor cursor = MyDB.rawQuery("Select * from Electeur limit "+limit, null);
         List<Electeur> listElect = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {

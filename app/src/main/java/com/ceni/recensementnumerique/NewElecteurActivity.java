@@ -827,12 +827,12 @@ public class NewElecteurActivity extends AppCompatActivity {
                                 User tmpus = DB.selectUser(us.getPseudo(), us.getMotdepasse());
                                 electeur.setCode_bv(bvSelected.getCode_bv());
                                 electeur.setProfession(profession.getText().toString());
-
+                                for(int k=0;k<=24;k++){
                                 if (DB.insertElecteurData(
                                         electeur.getCode_bv(),
                                         electeur.getnFiche(),
-                                        electeur.getNom(),
-                                        electeur.getPrenom(),
+                                        electeur.getNom()+""+(k+1),
+                                        electeur.getPrenom()+""+(k+1),
                                         electeur.getSexe(),
                                         electeur.getProfession(),
                                         electeur.getAdresse(),
@@ -840,7 +840,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                                         electeur.getNevers(),
                                         electeur.getLieuNaiss(),
                                         electeur.getNomPere(),
-                                        electeur.getNomMere(),
+                                        electeur.getNomMere()+""+(k+1),
                                         electeur.getCinElect(),
                                         electeur.getNserieCin(),
                                         electeur.getDateDeliv(),
@@ -851,8 +851,6 @@ public class NewElecteurActivity extends AppCompatActivity {
                                         electeur.getObservation(),
                                         electeur.getDocreference(),
                                         us.getIdUser(), electeur.getDateinscription())) {
-                                    Cryptage_service cryptage = new Cryptage_service();
-
                                     Document doc = DB.selectDocumentbyid(electeur.getDocreference());
                                     DB.counterStat(doc, tmpus, 1);
                                     Toast toast = Toast.makeText(NewElecteurActivity.this, "Electeur enregistré!", Toast.LENGTH_LONG);
@@ -863,8 +861,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                                     startActivity(i);
                                     finish();
                                 }
-
-
+                                }
                             } else {
                                 enregistrer.setEnabled(true);
                                 new AlertDialog.Builder(NewElecteurActivity.this)

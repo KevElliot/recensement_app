@@ -42,8 +42,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import okhttp3.OkHttpClient;
 
 public class Api_service {
 
@@ -131,14 +134,20 @@ public class Api_service {
     }
 
 
-    public static void insertNotebooks(Db_sqLite DB, Context context, String ip, String port, Tablette tab, User us, JSONObject notebooks, Button tmp) {
+    public static void insertNotebooks(Db_sqLite DB, Context context, String ip, String port, Tablette tab, User us, JSONObject notebooks, Button tmp,ArrayList<Long> tabsToStatistique) {
         String base_url = "http://" + ip + ":" + port + "/";
         Log.d("INSERT --"," --------------- "+notebooks.toString());
+        OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
+                .connectTimeout(360, TimeUnit.SECONDS)
+                .readTimeout(360, TimeUnit.SECONDS)
+                . writeTimeout(360, TimeUnit.SECONDS)
+                .build();
         AndroidNetworking.post(base_url + "api/insertVoters")
                 .setTag("test")
                 .addHeaders("Accept", "application/json")
                 .addHeaders("Content-Type", "application/json")
                 .setPriority(Priority.HIGH)
+                .setOkHttpClient(okHttpClient)
                 .addJSONObjectBody(notebooks)
                 .build()
                 .getAsJSONArray(new JSONArrayRequestListener() {
@@ -156,7 +165,7 @@ public class Api_service {
                             }
                         }
 
-                        ArrayList<Long> tabsToStatistique = new ArrayList<>();
+//                        ArrayList<Long> tabsToStatistique = new ArrayList<>();
 
                         Stream<Notebook> success = notebooks.stream().filter(notebook -> notebook.getStatus().equals("inserted"));
                         Stream<Notebook> found = notebooks.stream().filter(notebook -> notebook.getStatus().equals("found"));
@@ -226,9 +235,6 @@ public class Api_service {
                         String myJson = gson.toJson(us);
                         i.putExtra("user", myJson);
 
-
-                        ///controle connexion oracle
-
                         Log.d("SIze to delete : ", ""+idsToDelete.size());
 //                        for (int x = 0; x < idsToDelete.size(); x++){
 //                            Log.d("MIDITRA DELETE", "DELETE ID : "+idsToDelete.get(x).toString());
@@ -237,7 +243,7 @@ public class Api_service {
                         tmp.setEnabled(true);
                         tmp.setClickable(true);
 
-                        String statTab = gson.toJson(tabsToStatistique);
+//                        String statTab = gson.toJson(tabsToStatistique);
 
                         Intent intent = new Intent(context, StatistiqueActivity.class);
                         intent.putExtra("response_stat", response.toString());
@@ -245,9 +251,8 @@ public class Api_service {
                         intent.putExtra("user", myJson);
                         intent.putExtra("statistique", tabsToStatistique);
 
-
-                        context.startActivity(intent);
-                        ListeFokontanyActivity.getInstance().finish();
+//                        context.startActivity(intent);
+//                        ListeFokontanyActivity.getInstance().finish();
 
                     }
 
