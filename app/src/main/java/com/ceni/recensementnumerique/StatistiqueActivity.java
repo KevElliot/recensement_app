@@ -1,5 +1,7 @@
 package com.ceni.recensementnumerique;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -51,7 +53,7 @@ public class StatistiqueActivity extends AppCompatActivity {
         takelakaMiverinaKarineLasa = findViewById(R.id.karineLasaTakelakaMiverina);
         takelakaMiverinaKarineTsyLasa = findViewById(R.id.karineTsyLasaTakelakaMiverina);
 
-        ArrayList<Long> statistiqueToDisplay = (ArrayList<Long>) getIntent().getSerializableExtra("statistique");
+        ArrayList<Integer> statistiqueToDisplay = (ArrayList<Integer>) getIntent().getSerializableExtra("statistique");
 
         karineSuccess.setText(String.valueOf(statistiqueToDisplay.get(0)));
         karineFailed.setText(String.valueOf(statistiqueToDisplay.get(4) + statistiqueToDisplay.get(5)));

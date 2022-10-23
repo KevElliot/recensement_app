@@ -827,12 +827,12 @@ public class NewElecteurActivity extends AppCompatActivity {
                                 User tmpus = DB.selectUser(us.getPseudo(), us.getMotdepasse());
                                 electeur.setCode_bv(bvSelected.getCode_bv());
                                 electeur.setProfession(profession.getText().toString());
-                                for(int k=0;k<=24;k++){
+                                //for(int k=0;k<=24;k++){
                                 if (DB.insertElecteurData(
                                         electeur.getCode_bv(),
                                         electeur.getnFiche(),
-                                        electeur.getNom()+""+(k+1),
-                                        electeur.getPrenom()+""+(k+1),
+                                        electeur.getNom(),
+                                        electeur.getPrenom(),
                                         electeur.getSexe(),
                                         electeur.getProfession(),
                                         electeur.getAdresse(),
@@ -840,7 +840,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                                         electeur.getNevers(),
                                         electeur.getLieuNaiss(),
                                         electeur.getNomPere(),
-                                        electeur.getNomMere()+""+(k+1),
+                                        electeur.getNomMere(),
                                         electeur.getCinElect(),
                                         electeur.getNserieCin(),
                                         electeur.getDateDeliv(),
@@ -860,7 +860,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                                     enregistrer.setEnabled(true);
                                     startActivity(i);
                                     finish();
-                                }
+                                //}
                                 }
                             } else {
                                 enregistrer.setEnabled(true);

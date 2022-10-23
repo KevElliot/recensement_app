@@ -130,14 +130,14 @@ public class DetailElecteurActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Db_sqLite DB = new Db_sqLite(DetailElecteurActivity.this);
-                Boolean deleted = DB.deleteElect(electeur.getCinElect());
+                Boolean deleted = DB.deleteElectId(String.valueOf(electeur.getIdElect()));
                 if (deleted) {
                     Document doc = DB.selectDocumentbyid(electeur.getDocreference());
                     User user = MenuActivity.getCurrent_user();
                     User users = DB.selectUser(user.getPseudo(), user.getMotdepasse());
                     String myjson = gson.toJson(users);
                     DB.counterStat(doc, users, -1);
-                    ListeFokontanyActivity.getInstance().finish();
+                    if(ListeFokontanyActivity.getInstance()!=null){ListeFokontanyActivity.getInstance().finish();};
                     RechercheElecteur.getInstance().finish();
                     Intent i = new Intent(getApplicationContext(), ListeFokontanyActivity.class);
                     i.putExtra("user", myjson);

@@ -61,17 +61,13 @@ public class Configuration extends AppCompatActivity{
                 String ip = adressIp.getText().toString();
                 String p = port.getText().toString();
 
-                int nbElect = DB.countElecteur();
-                int limit = (int)Math.ceil(nbElect/200);
-                Log.d("xxxx","CONFIGURATION  "+limit);
-                List<Document> documents = DB.selectAllDocumentToSendOnServer();
+
+//
+
                 ArrayList<Long> tabsToStatistique = new ArrayList<Long>();
-                for(int val = 0; val<limit ; val++) {
-                    Log.d("xxxx","BOUCLKLLEE  "+val);
-                    List<Electeur> listElect = DB.selectElecteur(200);
-                    Configuration_model params = new Configuration_model(Configuration.this, ip, p, listElect, resultat, documents);
-                    new Task_insertElect(Configuration.this, params, enregistrer, user, tab,tabsToStatistique).execute();
-                }
+
+                new Task_insertElect(Configuration.this,ip,p,resultat,enregistrer, user, tab).execute();
+
                 //TODO: Start statistique - create getter-setter any @ Task_Insert + set any aminy API_service + get any aminy activity
             }
         });

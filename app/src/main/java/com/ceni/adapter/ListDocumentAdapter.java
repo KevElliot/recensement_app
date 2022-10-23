@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import com.ceni.model.Document;
 import com.ceni.model.Electeur;
@@ -45,6 +47,7 @@ public class ListDocumentAdapter extends ArrayAdapter<Document> {
         TextView docreference = convertView.findViewById(R.id.docreference);
         TextView nbdoc = convertView.findViewById(R.id.nbDoc);
         TextView datedoc = convertView.findViewById(R.id.dateDoc);
+        TextView codeFokontany = convertView.findViewById(R.id.codeFokontany);
         // TextView idfdoc = convertView.findViewById(R.id.idDoc);
 
         if(document.getNbfeuillet()>0){
@@ -52,6 +55,7 @@ public class ListDocumentAdapter extends ArrayAdapter<Document> {
         }
 
         delete.setOnClickListener(new Button.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
                 String doc = docreference.getText().toString();
@@ -74,6 +78,7 @@ public class ListDocumentAdapter extends ArrayAdapter<Document> {
         docreference.setText(document.getNumdocreference());
         nbdoc.setText(""+document.getNbfeuillet());
         datedoc.setText(document.getDatedocreference());
+        codeFokontany.setText(document.getDoccode_fokontany());
         // idfdoc.setText("id : "+document.getIdfdocreference());
         return convertView;
     }

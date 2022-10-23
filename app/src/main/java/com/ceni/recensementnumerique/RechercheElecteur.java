@@ -188,10 +188,11 @@ public class RechercheElecteur extends AppCompatActivity {
                 if (rech.length() != 0) {
                     if (valeurSearch == "docreference") {
                         Document doc = DB.selectDocumentbyNum(rech);
+                        Log.d("RECHERCHE","-----------  "+doc.toString());
                         if (doc.getIdfdocreference() != null) {
                             elect = DB.Recherche("docreference", doc.getIdfdocreference());
                             if (elect.size() != 0) {
-                                Log.d("Elect", "... " + elect.get(0).toString());
+                                Log.d("Elect", "..elect.get(0).toString(). " + elect.get(0).toString());
                                 listElecteurAdapter = new ListElecteurAdapter(RechercheElecteur.this, elect);
                                 listElecteur.setAdapter(listElecteurAdapter);
                                 listElecteur.setClickable(true);

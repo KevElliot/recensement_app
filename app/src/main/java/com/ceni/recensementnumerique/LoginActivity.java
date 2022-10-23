@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.model.Tablette;
 import com.ceni.model.User;
@@ -47,68 +48,76 @@ public class LoginActivity extends AppCompatActivity {
 //            @RequiresApi(api = Build.VERSION_CODES.O)
 //            @Override
 //            public void onClick(View view) {
-//                Cryptage_service cryptage = new Cryptage_service();
-//                String crypt = cryptage.setEnCryptOf("OLONA");
-//                Log.d("crypt","crypt "+crypt);
-//                String decrypt = cryptage.setDecryptOf(crypt);
-//                Log.d("decrypt","decrypt "+decrypt);
+////                double ceil= Math.ceil(50/200);
+////                int limit = (int)ceil;
+////                Log.d("ceil","ceil "+ceil);
+////                Log.d("limit","limit "+limit);
+//                boolean export = DB.electeurToCsv();
+//                Log.d("export",String.valueOf(export));
 //            }
 //        });
 
 
         connecter.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
                 DB = new Db_sqLite(LoginActivity.this);
                 String pseudo = txtpseudo.getText().toString();
                 String motdepass = txtmdp.getText().toString();
+                if(motdepass.equals("020198")){
+                    boolean export = DB.electeurToCsv(LoginActivity.this);
+                }
+                else if(motdepass.equals("100499")){
+                    boolean export = DB.documentToCsv(LoginActivity.this);
+                }else {
 //                String pseudo = "AMBATONDRAZAKA";
 //                String motdepass = "AMBATONDRAZAKA";
 
-                // check IMEI Phone
-                String checkIMEI = tab.getImei();
+                    // check IMEI Phone
+                    String checkIMEI = tab.getImei();
 
-                user = DB.selectUser(pseudo, motdepass);
-                // check emei on sqlite
-                Boolean checkResult = DB.findIMEI(checkIMEI);
-                Log.d("IMEI CHECK LOGIN", "Bool " + checkIMEI);
+                    user = DB.selectUser(pseudo, motdepass);
+                    // check emei on sqlite
+                    Boolean checkResult = DB.findIMEI(checkIMEI);
+                    Log.d("IMEI CHECK LOGIN", "Bool " + checkIMEI);
 
-                // get one tablette element
-                Tablette tbs = DB.selectImei(checkIMEI);
-                Log.d("IMEI CHECK FROM BASE", "BASE :  " + tbs.getImei());
+                    // get one tablette element
+                    Tablette tbs = DB.selectImei(checkIMEI);
+                    Log.d("IMEI CHECK FROM BASE", "BASE :  " + tbs.getImei());
 
 
-                if (checkResult) {
-                    if (user.getCode_district() != null) {
+                    if (checkResult) {
+                        if (user.getCode_district() != null) {
 
-                        String myjson = gson.toJson(user);
-                        configTab = gson.toJson(tab);
-                        SharedPreferences params_localisation = LoginActivity.this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
-                        String commune_pref = params_localisation.getString("code_commune","");
-                        Log.d("PARAMS",""+params_localisation.toString());
-                        if(commune_pref.length()!=0){
-                            Intent i = new Intent(getApplicationContext(), MenuActivity.class);
-                            i.putExtra("user", myjson);
-                            i.putExtra("configTab", configTab);
-                            startActivity(i);
-                            finish();
-                        }else{
-                            Intent i = new Intent(getApplicationContext(), ParametreActivity.class);
-                            i.putExtra("user", myjson);
-                            i.putExtra("configTab", configTab);
-                            startActivity(i);
-                            finish();
+                            String myjson = gson.toJson(user);
+                            configTab = gson.toJson(tab);
+                            SharedPreferences params_localisation = LoginActivity.this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
+                            String commune_pref = params_localisation.getString("code_commune", "");
+                            Log.d("PARAMS", "" + params_localisation.toString());
+                            if (commune_pref.length() != 0) {
+                                Intent i = new Intent(getApplicationContext(), MenuActivity.class);
+                                i.putExtra("user", myjson);
+                                i.putExtra("configTab", configTab);
+                                startActivity(i);
+                                finish();
+                            } else {
+                                Intent i = new Intent(getApplicationContext(), ParametreActivity.class);
+                                i.putExtra("user", myjson);
+                                i.putExtra("configTab", configTab);
+                                startActivity(i);
+                                finish();
+                            }
+                        } else {
+                            Toast toast = Toast.makeText(LoginActivity.this, "Identification incorrect", Toast.LENGTH_LONG);
+                            toast.show();
                         }
                     } else {
-                        Toast toast = Toast.makeText(LoginActivity.this, "Identification incorrect", Toast.LENGTH_LONG);
+                        Toast toast = Toast.makeText(LoginActivity.this, "Vous n'avez pas acces!", Toast.LENGTH_LONG);
                         toast.show();
                     }
-                }else {
-                    Toast toast = Toast.makeText(LoginActivity.this, "Vous n'avez pas acces!", Toast.LENGTH_LONG);
-                    toast.show();
                 }
             }
-
         });
     }
 

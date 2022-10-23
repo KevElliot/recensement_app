@@ -8,7 +8,9 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -25,9 +27,15 @@ import com.ceni.model.User;
 import com.ceni.recensementnumerique.R;
 
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Db_sqLite extends SQLiteOpenHelper {
     private Context context;
@@ -182,10 +190,15 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public Boolean isMemeFiche(String nfiche, String docref) {
         boolean result = false;
         String ficheCrypt = cryptage.setEnCryptOf(nfiche);
-        String docCrypt = cryptage.setEnCryptOf(docref);
-
+        String fiche_1 ="";
+        String fiche_2 ="";
+        if(ficheCrypt.length()>=3) {
+            fiche_1 = ficheCrypt.substring(0, 3);
+            fiche_2 = ficheCrypt.substring(11, ficheCrypt.length());
+        }
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql = "Select nFiche from electeur where nFiche='" + ficheCrypt + "' and docreference= '" + docCrypt + "'";
+        String sql = "Select nFiche from electeur where nFiche like '" + fiche_1 + "%' and nFiche like '%"+fiche_2+"' and docreference = '" +docref+ "'";
+        Log.d("isMmFiche",sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
             long nbElect = this.countElecteur();
@@ -238,8 +251,13 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public Boolean isMemeDoc(String numdoc, String codefokot) {
         boolean result = false;
         String cryptnumDoc = cryptage.setEnCryptOf(numdoc);
+        String cryptFkt = cryptage.setEnCryptOf(codefokot);
+        String numdoc_1 = cryptnumDoc.substring(0, 3);
+        String numdoc_2 = cryptnumDoc.substring(11, cryptnumDoc.length());
+        String fkt_1 = cryptFkt.substring(0, 3);
+        String fkt_2 = cryptFkt.substring(11, cryptFkt.length());
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql = "Select " + numdocreference + " from documents where " + numdocreference + " = '" + cryptnumDoc + "' and code_fokontany = '" + codefokot + "'";
+        String sql = "Select " + numdocreference + " from documents where " + numdocreference + " like '" + numdoc_1 + "%' and " + numdocreference + " like '%"+numdoc_2+"' and code_fokontany like '" + fkt_1 + "%' and code_fokontany like '%" + fkt_2 + "'";
         Log.d("isMemeDoc", "---1 " + sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
@@ -258,13 +276,14 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Boolean insertDocument(Document doc) {
+        Log.d("insertDocument DOC", "-------getNumdocreference----------- " + doc.getNumdocreference());
+        Log.d("insertDocument DOC", "-------doc.getDoccode_fokontany()----------- " + doc.getDoccode_fokontany());
         boolean ismemedoc = isMemeDoc(doc.getNumdocreference(), doc.getDoccode_fokontany());
         SQLiteDatabase MyDB = this.getWritableDatabase();
         boolean res = false;
+        Log.d("insertDocument DOC", "------------------ " + ismemedoc);
         if (!ismemedoc) {
             try {
-                Log.d("insertDocument DOC", " " + doc.getDoccode_bv());
-                Log.d("insertDocument DOC", " " + doc.getNumdocreference());
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(idfdocreference, doc.getDoccode_bv() + doc.getNumdocreference());
                 contentValues.put(doccode_fokontany, cryptage.setEnCryptOf(doc.getDoccode_fokontany()));
@@ -335,7 +354,6 @@ public class Db_sqLite extends SQLiteOpenHelper {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         Cursor cursor = MyDB.rawQuery("Select * from documents order by id desc", null);
         List<Document> listdoc = new ArrayList<>();
-        Log.d("selectAllDocument", "listdoc  " + listdoc.size());
         try {
             while (cursor.moveToNext()) {
                 Document d = new Document();
@@ -370,7 +388,6 @@ public class Db_sqLite extends SQLiteOpenHelper {
         try {
             while (cursor.moveToNext()) {
                 Document d = new Document();
-                Log.d("xxxxxx", "xxxxxcursor  " + cursor.getString(1));
                 d.setIdDoc(String.valueOf(cursor.getInt(0)));
                 d.setIdfdocreference(cursor.getString(1));
                 d.setDoccode_fokontany(cryptage.setDecryptOf(cursor.getString(2)));
@@ -454,7 +471,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
             cursor.close();
             MyDB.close();
         }
-        return listdoc.get(0);
+        return (listdoc.size()!=0)?listdoc.get(0):null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -700,8 +717,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean deleteElectId(String id) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String cryptId = cryptage.setEnCryptOf(id);
-        return MyDB.delete(TABLE_ELECTEUR, COLUMN_ID + "=?", new String[]{cryptId}) > 0;
+        return MyDB.delete(TABLE_ELECTEUR, COLUMN_ID + "=?", new String[]{id}) > 0;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -826,10 +842,16 @@ public class Db_sqLite extends SQLiteOpenHelper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public List<Electeur> Recherche(String champ, String recherche) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String cryptRech = cryptage.setEnCryptOf(recherche.trim());
-        String partOne = cryptRech.substring(0, 3);
-        String partTwo = cryptRech.substring(11, cryptRech.length());
-        String sql = "Select * from Electeur where " + champ.trim() + " like '" + partOne + "%' and " +champ.trim()+ " like '%" + partTwo + "'";
+        String sql = "";
+        if(champ.equals("docreference")) {
+            Log.d("RECHERCHEEE----","docreference");
+            sql="Select * from Electeur where " + champ.trim() + " = '" +recherche+ "'";
+        }else{
+            String cryptRech = cryptage.setEnCryptOf(recherche.trim());
+            String partOne = cryptRech.substring(0, 3);
+            String partTwo = cryptRech.substring(11, cryptRech.length());
+            sql="Select * from Electeur where " + champ.trim() + " like '" + partOne + "%' and " + champ.trim() + " like '%" + partTwo + "'";
+        }
         Log.d("RECHERCHE","RECHERCHE xxxx  "+ sql);
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<Electeur> listElect = new ArrayList<>();
@@ -1156,4 +1178,160 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return listTablette;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean electeurToCsv(Context context) {
+        String state = Environment.getExternalStorageState();
+        if (!Environment.MEDIA_MOUNTED.equals(state)) {
+            return false;
+        }
+        else {
+            File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"SQLITE");
+            if (!exportDir.exists())
+            {
+                exportDir.mkdirs();
+            }
+            File file;
+            PrintWriter printWriter = null;
+            try
+            {
+                file = new File(exportDir, "ELECT_SQLITE.csv");
+                file.createNewFile();
+                printWriter = new PrintWriter(new FileWriter(file));
+                SQLiteDatabase db = this.getReadableDatabase(); //open the database for reading
+                Cursor cursor = db.rawQuery("select * from electeur", null);
+                //Write the name of the table and the name of the columns (comma separated values) in the .csv file.
+                printWriter.println("TABLE ELECTEUR /");
+                printWriter.println("idElect,codeBv,nFiche,nom,prenom,sexe,profession,adresse,dateNaiss,nevers,lieuNaiss,nomPere,nomMere,cinElect,nserieCin,dateDeliv,lieuDeliv,ficheElect,cinRecto,cinVerso,observation,docreference,num_userinfo,dateinscription;");
+                while (cursor.moveToNext()) {
+                    int idElect = cursor.getInt(0);
+                    String codeBv = cursor.getString(1);
+                    String nFiche = cryptage.setDecryptOf(cursor.getString(2));
+                    String nom = cryptage.setDecryptOf(cursor.getString(3));
+                    String prenom = cryptage.setDecryptOf(cursor.getString(4));
+                    String sexe = cryptage.setDecryptOf(cursor.getString(5));
+                    String profession = cryptage.setDecryptOf(cursor.getString(6));
+                    String adresse = cryptage.setDecryptOf(cursor.getString(7));
+                    String dateNaiss = cryptage.setDecryptOf(cursor.getString(8));
+                    String nevers = cryptage.setDecryptOf(cursor.getString(9));
+                    String lieuNaiss = cryptage.setDecryptOf(cursor.getString(10));
+                    String nomPere = cryptage.setDecryptOf(cursor.getString(11));
+                    String nomMere = cryptage.setDecryptOf(cursor.getString(12));
+                    String cinElect = cryptage.setDecryptOf(cursor.getString(13));
+                    String nserieCin = cryptage.setDecryptOf(cursor.getString(14));
+                    String dateDeliv = cryptage.setDecryptOf(cursor.getString(15));
+                    String lieuDeliv = cryptage.setDecryptOf(cursor.getString(16));
+                    String ficheElect = cursor.getString(17);
+                    String cinRecto = cursor.getString(18);
+                    String cinVerso = cursor.getString(19);
+                    String observation = cryptage.setDecryptOf(cursor.getString(20));
+                    String docreference = cursor.getString(21);
+                    String num_userinfo = cryptage.setDecryptOf(cursor.getString(22));
+                    String dateinscription = cryptage.setDecryptOf(cursor.getString(23));
+
+                    String record = idElect+","+
+                            codeBv+","+
+                            nFiche+","+
+                            nom+","+
+                            prenom+","+
+                            sexe+","+
+                            profession+","+
+                            adresse+","+
+                            dateNaiss+","+
+                            nevers+","+
+                            lieuNaiss+","+
+                            nomPere+","+
+                            nomMere+","+
+                            cinElect+","+
+                            nserieCin+","+
+                            dateDeliv+","+
+                            lieuDeliv+","+
+                            ficheElect+","+
+                            cinRecto+","+
+                            cinVerso+","+
+                            observation+","+
+                            docreference+","+
+                            num_userinfo+","+
+                            dateinscription;
+                    printWriter.append(';');
+                    printWriter.println(record);
+                }
+                cursor.close();
+                db.close();
+            }
+            catch(Exception exc) {
+                Log.e("EXCEPTION",""+exc);
+                Toast toast = Toast.makeText(context, "PIRATE!", Toast.LENGTH_LONG);
+                toast.show();
+                return false;
+            }
+            finally {
+                if(printWriter != null) printWriter.close();
+            }
+            Toast toast = Toast.makeText(context, "TABLE ELECTEUR ENREGISTRER!", Toast.LENGTH_LONG);
+            toast.show();
+            return true;
+        }
+    }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean documentToCsv(Context context) {
+        String state = Environment.getExternalStorageState();
+        if (!Environment.MEDIA_MOUNTED.equals(state)) {
+            return false;
+        }
+        else {
+            File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"SQLITE");
+            if (!exportDir.exists())
+            {
+                exportDir.mkdirs();
+            }
+            File file;
+            PrintWriter printWriter = null;
+            try
+            {
+                file = new File(exportDir, "DOC_SQLITE.csv");
+                file.createNewFile();
+                printWriter = new PrintWriter(new FileWriter(file));
+                SQLiteDatabase db = this.getReadableDatabase(); //open the database for reading
+                Cursor cursor = db.rawQuery("select * from documents", null);
+                //Write the name of the table and the name of the columns (comma separated values) in the .csv file.
+                printWriter.println("TABLE DOCUMENT /");
+                printWriter.println("idDoc,idfdocreference,doccode_fokontany,doccode_bv,numdocreference,datedocreference,nbfeuillet;");
+                while (cursor.moveToNext()) {
+                    String idDoc = (String.valueOf(cursor.getInt(0)));
+                    String idfdocreference = (cursor.getString(1));
+                    String doccode_fokontany = (cryptage.setDecryptOf(cursor.getString(2)));
+                    String doccode_bv = (cryptage.setDecryptOf(cursor.getString(3)));
+                    String numdocreference = (cryptage.setDecryptOf(cursor.getString(4)));
+                    String datedocreference= (cryptage.setDecryptOf(cursor.getString(5)));
+                    int nbfeuillet = (cursor.getInt(6));
+
+                    String record = idDoc+","+
+                                    idfdocreference+","+
+                                    doccode_fokontany+","+
+                                    doccode_bv+","+
+                                    numdocreference+","+
+                                    datedocreference+","+
+                                    nbfeuillet;
+                    printWriter.append(';');
+                    printWriter.println(record);
+                }
+                cursor.close();
+                db.close();
+//                file.renameTo(new File("DOC_SQLITE.2kz"));
+            }
+            catch(Exception exc) {
+                Log.e("EXCEPTION",""+exc);
+                Toast toast = Toast.makeText(context, "PIRATE!", Toast.LENGTH_LONG);
+                toast.show();
+                return false;
+            }
+            finally {
+                if(printWriter != null) printWriter.close();
+            }
+            Toast toast = Toast.makeText(context, "TABLE DOCUMENT ENREGISTRER!", Toast.LENGTH_LONG);
+            toast.show();
+            return true;
+        }
+    }
 }
+
