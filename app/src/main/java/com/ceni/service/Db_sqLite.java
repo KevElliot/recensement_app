@@ -250,41 +250,102 @@ public class Db_sqLite extends SQLiteOpenHelper {
             prenom = prenom.replace("'", "'||''''||'");
         }
         String cryptNom = cryptage.setEnCryptOf(nom);
-        String cryptPrenom = cryptage.setEnCryptOf(prenom);
-        String cryptCin = cryptage.setEnCryptOf(cin);
+        String cryptPrenom = "";
+        String cryptCin = "";
         String cryptDateNaiss = "";
         String dateNever = "";
 
         String cryptNom1 = cryptNom.substring(0, 3);
         String cryptNom2 = cryptNom.substring(11, cryptNom.length());
-        String cryptPrenom1 = cryptPrenom.substring(0, 3);
-        String cryptPrenom2 = cryptPrenom.substring(11, cryptPrenom.length());
+        String cryptPrenom1 = "";
+        String cryptPrenom2 = "";
+        if(prenom.length()!=0) {
+            cryptPrenom = cryptage.setEnCryptOf(prenom);
+            cryptPrenom1 = cryptPrenom.substring(0, 3);
+            cryptPrenom2 = cryptPrenom.substring(11, cryptPrenom.length());
+        }
         String cryptDateNaiss1 ="";
         String cryptDateNaiss2 = "";
-        if(dateNaiss!=null) {
+        if(dateNaiss.length()!=0) {
             cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
             cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
             cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
         }
-        String cryptCin1 = cryptCin.substring(0, 3);
-        String cryptCin2 = cryptCin.substring(11, cryptCin.length());
+        String cryptCin1 = "";
+        String cryptCin2 = "";
+        if(cin.length()!=0) {
+            cryptCin = cryptage.setEnCryptOf(cin);
+            cryptCin1 = cryptCin.substring(0, 3);
+            cryptCin2 = cryptCin.substring(11, cryptCin.length());
+        }
         String dateNever1 = "";
         String dateNever2 = "";
-        if(nevers!=null) {
+        if(nevers.length()!=0) {
             dateNever = cryptage.setEnCryptOf(nevers);
             dateNever1 = dateNever.substring(0, 3);
             dateNever2 = dateNever.substring(11, dateNever.length());
         }
 
 
-        String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (cinElect like '" + cryptCin1 + "%' and cinElect like '%" + cryptCin2 + "' and " +
-                "(dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "' )) or (upper(prenom) like upper('" + cryptPrenom1 + "%') and (upper(prenom) like upper('%" + cryptPrenom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "')) " +
-                "or (upper(nom) like upper('" + cryptNom1 + "%') and (upper(nom) like upper('%" + cryptNom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%')) and nevers like '%" + dateNever2 + "'))  or (upper(nom) like upper('" + cryptNom1 + "%') and (upper(nom) like upper('%" + cryptNom2 + "')" +
-                "and upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))" +
-                " or (upper(nom) like upper('" + cryptPrenom1 + "%') and (upper(nom) like upper('%" + cryptPrenom2 + "') and upper(prenom) like upper('" + cryptNom1 + "%') and upper(prenom) like upper('%" + cryptNom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "'" +
-                "or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))";
+        String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where " +
+                "(cinElect like '" + cryptCin1 + "%' and cinElect like '%" + cryptCin2 + "' and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "' )) " +
+                "or (upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "')) " +
+                "or (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))  " +
+                "or (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))" +
+                " or (upper(nom) like upper('" + cryptPrenom1 + "%') and upper(nom) like upper('%" + cryptPrenom2 + "') and upper(prenom) like upper('" + cryptNom1 + "%') and upper(prenom) like upper('%" + cryptNom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "'" +" or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))";
 
         //String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + cryptNom + "') and upper(prenom) = upper('" + cryptPrenom + "') and dateNaiss = '" + cryptDateNaiss + "') or (upper(nom)= upper('" + cryptPrenom + "') and upper(prenom) = upper('" + cryptNom + "') and dateNaiss = '" + cryptDateNaiss + "')";
+
+        Log.d("isSame", sql);
+        Cursor cursor = MyDB.rawQuery(sql, new String[]{});
+        try {
+            long nbElect = this.countElecteur();
+            if (nbElect != 0 && cursor.getCount() != 0) {
+                result = true;
+            }
+        } catch (Exception e) {
+            Log.e("ERROR isSamePerson", " " + e);
+        } finally {
+            cursor.close();
+            MyDB.close();
+        }
+        return result;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Boolean isSamePersonSoft(String nom, String prenom, String dateNaiss) {
+        boolean result = false;
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        int posNom = nom.indexOf("'");
+        int posPrenom = prenom.indexOf("'");
+        if (posNom >= 0) {
+            nom = nom.replace("'", "'||''''||'");
+        }
+        if (posPrenom >= 0) {
+            prenom = prenom.replace("'", "'||''''||'");
+        }
+        String cryptNom = cryptage.setEnCryptOf(nom);
+        String cryptPrenom = "";
+        String cryptDateNaiss = "";
+
+        String cryptNom1 = cryptNom.substring(0, 3);
+        String cryptNom2 = cryptNom.substring(11, cryptNom.length());
+        String cryptPrenom1 = "";
+        String cryptPrenom2 = "";
+        if(prenom.length()!=0) {
+            cryptPrenom = cryptage.setEnCryptOf(prenom);
+            cryptPrenom1 = cryptPrenom.substring(0, 3);
+            cryptPrenom2 = cryptPrenom.substring(11, cryptPrenom.length());
+        }
+        String cryptDateNaiss1 ="";
+        String cryptDateNaiss2 = "";
+        if(dateNaiss.length()!=0) {
+            cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
+            cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
+            cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
+        }
+        
+        String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + cryptNom + "') and upper(prenom) = upper('" + cryptPrenom + "') and dateNaiss = '" + cryptDateNaiss + "') or (upper(nom)= upper('" + cryptPrenom + "') and upper(prenom) = upper('" + cryptNom + "') and dateNaiss = '" + cryptDateNaiss + "')";
 
         Log.d("isSame", sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
