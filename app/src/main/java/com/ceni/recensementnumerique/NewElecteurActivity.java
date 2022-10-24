@@ -421,8 +421,9 @@ public class NewElecteurActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 String nomElect = nom.getText().toString();
                 String prenomElect = prenom.getText().toString();
-                Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
-                isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss, bvSelected.getCode_bv());
+                String cinElect = cin.getText().toString();
+                String dateNevers = editNevers.getText().toString();
+                isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss,cinElect,dateNevers);
                 if (isSamePers) {
                     isSamePers = true;
                     nom.setError("mpifidy efa voasoratra!");
@@ -818,7 +819,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Log.d("NEW ELECT", electeur.toString());
                     if (!fichefull) {
                         Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
-                        isSamePers = DB.isSamePerson(electeur.getNom(), electeur.getPrenom(), electeur.getDateNaiss(), bvSelected.getCode_bv());
+                        isSamePers = DB.isSamePerson(electeur.getNom(), electeur.getPrenom(), electeur.getDateNaiss(), electeur.getCinElect(), electeur.getNevers());
                         if (!isSamePers) {
                             isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(), idFdocReference[0]);
                             if (!isMemeFiche) {

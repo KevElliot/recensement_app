@@ -268,13 +268,14 @@ public class InscriptionActivity extends AppCompatActivity {
                     }
                 }
                 if (nFiche.getText().toString().length() == 12) {
-                    isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(),idFdocReference[0]);
+                   // isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(),idFdocReference[0]);
                     if (isMemeFiche) {
                         msg = "Takelaka efa voasoratra!";
                     } else {
                         String nomElect = nom.getText().toString();
                         String prenomElect = prenom.getText().toString();
-                        isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss,"12");
+                        String dateNever = editNevers.getText().toString();
+                      //  isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss,"12");
                         if (isSamePers) {
                             msg = "mpifidy efa voasoratra!";
                         } else {

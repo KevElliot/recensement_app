@@ -1,6 +1,7 @@
 package com.ceni.recensementnumerique;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -17,6 +18,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -60,6 +62,7 @@ public class ModifierElecteur extends AppCompatActivity {
     private boolean isNevers;
     private String currentPhotoPath_fiche_recensement, currentPhotoPath_cin_recto_recensement, currentPhotoPath_cin_verso_recensement;
 
+    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +97,7 @@ public class ModifierElecteur extends AppCompatActivity {
         ficheElect = findViewById(R.id.ficheElect);
         cin_recto = findViewById(R.id.cin_recto);
         cin_verso = findViewById(R.id.cin_verso);
-        button_image_fiche = findViewById(R.id.button_image_fiche);
+        button_image_fiche = findViewById(R.id.button_image_fiches);
         mPickDateButton = findViewById(R.id.pick_date_button);
         pick_datecin = findViewById(R.id.pick_datecin);
         button_image_recto = findViewById(R.id.button_image_recto);
@@ -398,6 +401,7 @@ public class ModifierElecteur extends AppCompatActivity {
             }
         });
         enregistrer.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 Electeur e = new Electeur();

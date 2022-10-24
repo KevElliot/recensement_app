@@ -22,6 +22,7 @@ import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.model.Fokontany;
 import com.ceni.model.ListFokontany;
+import com.ceni.model.Statistique;
 import com.ceni.model.Tablette;
 import com.ceni.model.User;
 import com.ceni.recensementnumerique.R;
@@ -141,6 +142,22 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public static final String TABLE_Tablette = "Tablette";
 
+    /*---------------------------------------------------------------------------------------
+                                        TABLE statistique
+----------------------------------------------------------------------------------------*/
+    private static final String id_Statistique = "id_Statistique";
+    private static final String dateStat = "dateStat";
+    private static final String karineSuccess = "karineSuccess";
+    private static final String karineFailed = "karineFailed";
+    private static final String karinesuccesstakelakaSuccess = "karinesuccesstakelakaSuccess";
+    private static final String karinesuccesstakelakaFailed = "karinesuccesstakelakaFailed";
+    private static final String karineFailedTakelakaSuccess = "karineFailedTakelakaSuccess";
+    private static final String karineFailedTakelakaFailed = "karineFailedTakelakaFailed";
+    private static final String takelakaMiverinaKarineLasa = "takelakaMiverinaKarineLasa";
+    private static final String takelakaMiverinaKarineTsyLasa = "takelakaMiverinaKarineTsyLasa";
+
+    public static final String TABLE_Statistique = "statistique";
+
     public Db_sqLite(@Nullable Context context) {
         super(context, DB_NAME, null, DB_VERSION);
         this.context = context;
@@ -168,12 +185,17 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
         String query5 = "CREATE TABLE " + TABLE_Tablette + "(" + COLUMN_idTab + " INTEGER primary key AUTOINCREMENT," + COLUMN_region + " TEXT, " + COLUMN_code_region + " TEXT," + COLUMN_district + " TEXT," + COLUMN_code_district + " TEXT, " + COLUMN_commune + " TEXT," + COLUMN_code_commune + " TEXT," + COLUMN_fokontany + " TEXT," + COLUMN_code_fokontany + " TEXT," + COLUMN_responsable + " TEXT," + COLUMN_imei + " TEXT," + COLUMN_macWifi + " TEXT)";
 
+        String query6 = "CREATE TABLE " + TABLE_Statistique + " ( " + id_Statistique + " INTEGER primary key AUTOINCREMENT," + karineSuccess + " TEXT, " +
+                karineFailed + " TEXT, " + karinesuccesstakelakaSuccess + " TEXT, " + karinesuccesstakelakaFailed + " TEXT, " + karineFailedTakelakaSuccess + " TEXT, " + karineFailedTakelakaFailed + " TEXT, " +
+                takelakaMiverinaKarineLasa + " TEXT, " + takelakaMiverinaKarineTsyLasa + " TEXT)" ;
+
 
         db.execSQL(query1);
         db.execSQL(query2);
         db.execSQL(query3);
         db.execSQL(query4);
         db.execSQL(query5);
+        db.execSQL(query6);
     }
 
     @Override
@@ -183,6 +205,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_User);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_Document);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_Tablette);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Statistique);
         onCreate(db);
     }
 
@@ -215,7 +238,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Boolean isSamePerson(String nom, String prenom, String dateNaiss, String codebv) {
+    public Boolean isSamePerson(String nom, String prenom, String dateNaiss, String cin, String nevers) {
         boolean result = false;
         SQLiteDatabase MyDB = this.getWritableDatabase();
         int posNom = nom.indexOf("'");
@@ -228,9 +251,41 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
         String cryptNom = cryptage.setEnCryptOf(nom);
         String cryptPrenom = cryptage.setEnCryptOf(prenom);
-        String cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
+        String cryptCin = cryptage.setEnCryptOf(cin);
+        String cryptDateNaiss = "";
+        String dateNever = "";
 
-        String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + cryptNom + "') and upper(prenom) = upper('" + cryptPrenom + "') and dateNaiss = '" + cryptDateNaiss + "') or (upper(nom)= upper('" + cryptPrenom + "') and upper(prenom) = upper('" + cryptNom + "') and dateNaiss = '" + cryptDateNaiss + "')";
+        String cryptNom1 = cryptNom.substring(0, 3);
+        String cryptNom2 = cryptNom.substring(11, cryptNom.length());
+        String cryptPrenom1 = cryptPrenom.substring(0, 3);
+        String cryptPrenom2 = cryptPrenom.substring(11, cryptPrenom.length());
+        String cryptDateNaiss1 ="";
+        String cryptDateNaiss2 = "";
+        if(dateNaiss!=null) {
+            cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
+            cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
+            cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
+        }
+        String cryptCin1 = cryptCin.substring(0, 3);
+        String cryptCin2 = cryptCin.substring(11, cryptCin.length());
+        String dateNever1 = "";
+        String dateNever2 = "";
+        if(nevers!=null) {
+            dateNever = cryptage.setEnCryptOf(nevers);
+            dateNever1 = dateNever.substring(0, 3);
+            dateNever2 = dateNever.substring(11, dateNever.length());
+        }
+
+
+        String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (cinElect like '" + cryptCin1 + "%' and cinElect like '%" + cryptCin2 + "' and " +
+                "(dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "' )) or (upper(prenom) like upper('" + cryptPrenom1 + "%') and (upper(prenom) like upper('%" + cryptPrenom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "')) " +
+                "or (upper(nom) like upper('" + cryptNom1 + "%') and (upper(nom) like upper('%" + cryptNom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%')) and nevers like '%" + dateNever2 + "'))  or (upper(nom) like upper('" + cryptNom1 + "%') and (upper(nom) like upper('%" + cryptNom2 + "')" +
+                "and upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))" +
+                " or (upper(nom) like upper('" + cryptPrenom1 + "%') and (upper(nom) like upper('%" + cryptPrenom2 + "') and upper(prenom) like upper('" + cryptNom1 + "%') and upper(prenom) like upper('%" + cryptNom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "'" +
+                "or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))";
+
+        //String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + cryptNom + "') and upper(prenom) = upper('" + cryptPrenom + "') and dateNaiss = '" + cryptDateNaiss + "') or (upper(nom)= upper('" + cryptPrenom + "') and upper(prenom) = upper('" + cryptNom + "') and dateNaiss = '" + cryptDateNaiss + "')";
+
         Log.d("isSame", sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
@@ -276,12 +331,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Boolean insertDocument(Document doc) {
-        Log.d("insertDocument DOC", "-------getNumdocreference----------- " + doc.getNumdocreference());
-        Log.d("insertDocument DOC", "-------doc.getDoccode_fokontany()----------- " + doc.getDoccode_fokontany());
         boolean ismemedoc = isMemeDoc(doc.getNumdocreference(), doc.getDoccode_fokontany());
         SQLiteDatabase MyDB = this.getWritableDatabase();
         boolean res = false;
-        Log.d("insertDocument DOC", "------------------ " + ismemedoc);
         if (!ismemedoc) {
             try {
                 ContentValues contentValues = new ContentValues();
@@ -1332,6 +1384,100 @@ public class Db_sqLite extends SQLiteOpenHelper {
             toast.show();
             return true;
         }
+    }
+
+    public boolean statistiqueToCsv(Context context) {
+        String state = Environment.getExternalStorageState();
+        if (!Environment.MEDIA_MOUNTED.equals(state)) {
+            return false;
+        }
+        else {
+            File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"SQLITE");
+            if (!exportDir.exists())
+            {
+                exportDir.mkdirs();
+            }
+            File file;
+            PrintWriter printWriter = null;
+            try
+            {
+                file = new File(exportDir, "STAT_SQLITE.csv");
+                file.createNewFile();
+                printWriter = new PrintWriter(new FileWriter(file));
+                SQLiteDatabase db = this.getReadableDatabase(); //open the database for reading
+                Cursor cursor = db.rawQuery("select * from statistique", null);
+                //Write the name of the table and the name of the columns (comma separated values) in the .csv file.
+                printWriter.println("TABLE STATISTIQUE /");
+                printWriter.println("idStat," +
+                        "karineSuccess," +
+                        "karineFailed," +
+                        "karinesuccesstakelakaSuccess," +
+                        "karinesuccesstakelakaFailed," +
+                        "karineFailedTakelakaSuccess," +
+                        "karineFailedTakelakaFailed," +
+                        "takelakaMiverinaKarineLasa," +
+                        "takelakaMiverinaKarineTsyLasa;");
+                while (cursor.moveToNext()) {
+                    String idStat = (String.valueOf(cursor.getInt(0)));
+                    String karineSuccess = (cursor.getString(1));
+                    String karineFailed = (cursor.getString(2));
+                    String karinesuccesstakelakaSuccess = (cursor.getString(3));
+                    String karinesuccesstakelakaFailed = (cursor.getString(4));
+                    String karineFailedTakelakaSuccess= (cursor.getString(5));
+                    String karineFailedTakelakaFailed= (cursor.getString(6));
+                    String takelakaMiverinaKarineLasa= (cursor.getString(7));
+                    String takelakaMiverinaKarineTsyLasa= (cursor.getString(8));
+
+                    String record = idStat+","+
+                            karineSuccess+","+
+                            karineFailed+","+
+                            karinesuccesstakelakaSuccess+","+
+                            karinesuccesstakelakaFailed+","+
+                            karineFailedTakelakaSuccess+","+
+                            karineFailedTakelakaFailed+","+
+                            takelakaMiverinaKarineLasa+","+
+                            karineFailedTakelakaFailed+","+
+                            takelakaMiverinaKarineTsyLasa;
+                    printWriter.append(';');
+                    printWriter.println(record);
+                }
+                cursor.close();
+                db.close();
+            }
+            catch(Exception exc) {
+                Log.e("EXCEPTION",""+exc);
+                return false;
+            }
+            finally {
+                if(printWriter != null) printWriter.close();
+            }
+            Toast toast = Toast.makeText(context, "Statistique ENREGISTRER!", Toast.LENGTH_LONG);
+            toast.show();
+            return true;
+        }
+    }
+
+    public Boolean insertStatistique(Statistique stat) {
+        SQLiteDatabase MyDB = this.getWritableDatabase();
+        boolean res = false;
+            try {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(karineSuccess, stat.getKarineSuccess());
+                contentValues.put(karineFailed, stat.getKarineFailed());
+                contentValues.put(karinesuccesstakelakaSuccess, stat.getKarinesuccesstakelakaSuccess());
+                contentValues.put(karinesuccesstakelakaFailed, stat.getKarinesuccesstakelakaFailed());
+                contentValues.put(karineFailedTakelakaSuccess, stat.getKarineFailedTakelakaSuccess());
+                contentValues.put(karineFailedTakelakaFailed, stat.getKarineFailedTakelakaFailed());
+                contentValues.put(takelakaMiverinaKarineLasa, stat.getTakelakaMiverinaKarineLasa());
+                contentValues.put(takelakaMiverinaKarineTsyLasa, stat.getTakelakaMiverinaKarineTsyLasa());
+                long result = MyDB.insert(TABLE_Statistique, null, contentValues);
+                res = (result == -1)? false: true;
+            } catch (Exception e) {
+                Log.e("ERROR insertStatistique", " " + e);
+            } finally {
+                MyDB.close();
+            }
+        return res;
     }
 }
 

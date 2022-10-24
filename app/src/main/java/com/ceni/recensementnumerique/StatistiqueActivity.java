@@ -14,8 +14,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ceni.model.Notebook;
+import com.ceni.model.Statistique;
 import com.ceni.model.Tablette;
 import com.ceni.model.User;
 import com.ceni.model.Voter;
@@ -34,6 +36,7 @@ public class StatistiqueActivity extends AppCompatActivity {
     TextView karineSuccess, karineFailed, takelakaSuccess, takelakaFailed, karineFailedTakelakaSuccess, karineFailedTakelakaFailed, takelakaMiverinaKarineLasa, takelakaMiverinaKarineTsyLasa;
     private static Tablette tab;
     private static String user;
+    private Db_sqLite DB;
     private ImageView previous;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -41,6 +44,7 @@ public class StatistiqueActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_statistique);
+        DB = new Db_sqLite(this);
         karineSuccess = findViewById(R.id.karineLasa);
         karineFailed = findViewById(R.id.karineTsyLasa);
         previous = findViewById(R.id.imageViewPrevious);
@@ -54,7 +58,22 @@ public class StatistiqueActivity extends AppCompatActivity {
         takelakaMiverinaKarineTsyLasa = findViewById(R.id.karineTsyLasaTakelakaMiverina);
 
         ArrayList<Integer> statistiqueToDisplay = (ArrayList<Integer>) getIntent().getSerializableExtra("statistique");
-
+        Statistique stat = new Statistique();
+        stat.setKarineSuccess(statistiqueToDisplay.get(0).toString());
+        stat.setKarineFailed(String.valueOf(statistiqueToDisplay.get(4) + statistiqueToDisplay.get(5)));
+        stat.setKarinesuccesstakelakaSuccess(String.valueOf(statistiqueToDisplay.get(1)));
+        stat.setKarinesuccesstakelakaFailed((String.valueOf(statistiqueToDisplay.get(3))));
+        stat.setKarineFailedTakelakaSuccess(String.valueOf(statistiqueToDisplay.get(6)));
+        stat.setKarineFailedTakelakaFailed(String.valueOf(statistiqueToDisplay.get(8)));
+        stat.setTakelakaMiverinaKarineLasa(String.valueOf(statistiqueToDisplay.get(2)));
+        stat.setTakelakaMiverinaKarineTsyLasa(String.valueOf(statistiqueToDisplay.get(7)));
+        Boolean isStatInserted = DB.insertStatistique(stat);
+        if(isStatInserted){
+            DB.statistiqueToCsv(this);
+        }else{
+            Toast toast = Toast.makeText(this, "Statistique error!", Toast.LENGTH_LONG);
+            toast.show();
+        }
         karineSuccess.setText(String.valueOf(statistiqueToDisplay.get(0)));
         karineFailed.setText(String.valueOf(statistiqueToDisplay.get(4) + statistiqueToDisplay.get(5)));
 

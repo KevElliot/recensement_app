@@ -125,7 +125,7 @@
 
             <Button
                 android:visibility="gone"
-                android:id="@+id/button_image_fiche"
+                android:id="@+id/button_image_fiches"
                 android:layout_width="188dp"
                 android:layout_height="49dp"
                 android:layout_weight="0"

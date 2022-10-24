@@ -187,7 +187,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_weight="1"
                 android:background="@drawable/input_field"
-                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,',qwertzuiopasdfghjklyxcvbnm,-,',_, é,è,ç,ô,î,ù,1,2,3,4,5,6,7,8,9,0,À,É,È,Ç,Â,Û,Ï"
+                android:digits="QWERTZUIOPASDFGHJKLYXCVBNM,',qwertzuiopasdfghjklyxcvbnm,ï,ö,ë,â,-,',_, é,è,ç,ô,î,ù,1,2,3,4,5,6,7,8,9,0,À,É,È,Ç,Â,Û,Ï"
                 android:fontFamily="@font/courgette"
                 android:hint="Fanampin'anarana"
                 android:inputType="textCapWords"
