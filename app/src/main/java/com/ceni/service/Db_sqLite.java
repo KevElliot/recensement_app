@@ -260,28 +260,28 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String cryptNom2 = cryptNom.substring(11, cryptNom.length());
         String cryptPrenom1 = "";
         String cryptPrenom2 = "";
-        if(prenom.length()!=0) {
+        if(prenom!= null && prenom.length()!=0) {
             cryptPrenom = cryptage.setEnCryptOf(prenom);
             cryptPrenom1 = cryptPrenom.substring(0, 3);
             cryptPrenom2 = cryptPrenom.substring(11, cryptPrenom.length());
         }
         String cryptDateNaiss1 ="";
         String cryptDateNaiss2 = "";
-        if(dateNaiss.length()!=0) {
+        if(dateNaiss!= null && dateNaiss.length()!=0) {
             cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
             cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
             cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
         }
         String cryptCin1 = "";
         String cryptCin2 = "";
-        if(cin.length()!=0) {
+        if(cin!= null && cin.length()!=0) {
             cryptCin = cryptage.setEnCryptOf(cin);
             cryptCin1 = cryptCin.substring(0, 3);
             cryptCin2 = cryptCin.substring(11, cryptCin.length());
         }
         String dateNever1 = "";
         String dateNever2 = "";
-        if(nevers.length()!=0) {
+        if(dateNaiss!= null && nevers.length()!=0) {
             dateNever = cryptage.setEnCryptOf(nevers);
             dateNever1 = dateNever.substring(0, 3);
             dateNever2 = dateNever.substring(11, dateNever.length());
@@ -333,14 +333,14 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String cryptNom2 = cryptNom.substring(11, cryptNom.length());
         String cryptPrenom1 = "";
         String cryptPrenom2 = "";
-        if(prenom.length()!=0) {
+        if(prenom!= null && prenom.length()!=0) {
             cryptPrenom = cryptage.setEnCryptOf(prenom);
             cryptPrenom1 = cryptPrenom.substring(0, 3);
             cryptPrenom2 = cryptPrenom.substring(11, cryptPrenom.length());
         }
         String cryptDateNaiss1 ="";
         String cryptDateNaiss2 = "";
-        if(dateNaiss.length()!=0) {
+        if(dateNaiss!= null && dateNaiss.length()!=0) {
             cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
             cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
             cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
@@ -689,7 +689,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
             contentValues.put(COLUMN_CINRECTO, elect.getCinRecto());
             contentValues.put(COLUMN_CINVERSO, elect.getCinVerso());
             contentValues.put(COLUMN_OBSERVATION, cryptage.setEnCryptOf(elect.getObservation()));
-            contentValues.put(COLUMN_DOCREFERENCE, cryptage.setEnCryptOf(elect.getDocreference()));
+            contentValues.put(COLUMN_DOCREFERENCE, elect.getDocreference());
             contentValues.put(COLUMN_DATEINSCRIPTION, cryptage.setEnCryptOf(elect.getDateinscription()));
             long res = MyDB.update(TABLE_ELECTEUR, contentValues, "_id = ?", new String[]{id});
             if (res == -1) {
