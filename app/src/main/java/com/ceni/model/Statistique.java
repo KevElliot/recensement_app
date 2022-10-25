@@ -2,6 +2,7 @@ package com.ceni.model;
 
 public class Statistique {
 
+    private String dateStat;
     private String karineSuccess;
     private String karineFailed;
     private String karinesuccesstakelakaSuccess;
@@ -14,7 +15,8 @@ public class Statistique {
     public Statistique() {
     }
 
-    public Statistique(String karineSuccess, String karineFailed, String karinesuccesstakelakaSuccess, String karinesuccesstakelakaFailed, String karineFailedTakelakaSuccess, String karineFailedTakelakaFailed, String takelakaMiverinaKarineLasa, String takelakaMiverinaKarineTsyLasa) {
+    public Statistique(String dateStat,String karineSuccess, String karineFailed, String karinesuccesstakelakaSuccess, String karinesuccesstakelakaFailed, String karineFailedTakelakaSuccess, String karineFailedTakelakaFailed, String takelakaMiverinaKarineLasa, String takelakaMiverinaKarineTsyLasa) {
+        this.dateStat = dateStat;
         this.karineSuccess = karineSuccess;
         this.karineFailed = karineFailed;
         this.karinesuccesstakelakaSuccess = karinesuccesstakelakaSuccess;
@@ -26,6 +28,13 @@ public class Statistique {
     }
 
 
+    public String getDateStat() {
+        return dateStat;
+    }
+
+    public void setDateStat(String dateStat) {
+        this.dateStat = dateStat;
+    }
 
     public String getKarineSuccess() {
         return karineSuccess;

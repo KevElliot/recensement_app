@@ -33,6 +33,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -185,7 +186,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
         String query5 = "CREATE TABLE " + TABLE_Tablette + "(" + COLUMN_idTab + " INTEGER primary key AUTOINCREMENT," + COLUMN_region + " TEXT, " + COLUMN_code_region + " TEXT," + COLUMN_district + " TEXT," + COLUMN_code_district + " TEXT, " + COLUMN_commune + " TEXT," + COLUMN_code_commune + " TEXT," + COLUMN_fokontany + " TEXT," + COLUMN_code_fokontany + " TEXT," + COLUMN_responsable + " TEXT," + COLUMN_imei + " TEXT," + COLUMN_macWifi + " TEXT)";
 
-        String query6 = "CREATE TABLE " + TABLE_Statistique + " ( " + id_Statistique + " INTEGER primary key AUTOINCREMENT," + karineSuccess + " TEXT, " +
+        String query6 = "CREATE TABLE " + TABLE_Statistique + " ( " + id_Statistique + " INTEGER primary key AUTOINCREMENT," + dateStat + " TEXT, " + karineSuccess + " TEXT, " +
                 karineFailed + " TEXT, " + karinesuccesstakelakaSuccess + " TEXT, " + karinesuccesstakelakaFailed + " TEXT, " + karineFailedTakelakaSuccess + " TEXT, " + karineFailedTakelakaFailed + " TEXT, " +
                 takelakaMiverinaKarineLasa + " TEXT, " + takelakaMiverinaKarineTsyLasa + " TEXT)" ;
 
@@ -1471,6 +1472,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 //Write the name of the table and the name of the columns (comma separated values) in the .csv file.
                 printWriter.println("TABLE STATISTIQUE /");
                 printWriter.println("idStat," +
+                        "Date," +
                         "karineSuccess," +
                         "karineFailed," +
                         "karinesuccesstakelakaSuccess," +
@@ -1481,16 +1483,18 @@ public class Db_sqLite extends SQLiteOpenHelper {
                         "takelakaMiverinaKarineTsyLasa;");
                 while (cursor.moveToNext()) {
                     String idStat = (String.valueOf(cursor.getInt(0)));
-                    String karineSuccess = (cursor.getString(1));
-                    String karineFailed = (cursor.getString(2));
-                    String karinesuccesstakelakaSuccess = (cursor.getString(3));
-                    String karinesuccesstakelakaFailed = (cursor.getString(4));
-                    String karineFailedTakelakaSuccess= (cursor.getString(5));
-                    String karineFailedTakelakaFailed= (cursor.getString(6));
-                    String takelakaMiverinaKarineLasa= (cursor.getString(7));
-                    String takelakaMiverinaKarineTsyLasa= (cursor.getString(8));
+                    String dateStat = (String.valueOf(cursor.getInt(1)));
+                    String karineSuccess = (cursor.getString(2));
+                    String karineFailed = (cursor.getString(3));
+                    String karinesuccesstakelakaSuccess = (cursor.getString(4));
+                    String karinesuccesstakelakaFailed = (cursor.getString(5));
+                    String karineFailedTakelakaSuccess= (cursor.getString(6));
+                    String karineFailedTakelakaFailed= (cursor.getString(7));
+                    String takelakaMiverinaKarineLasa= (cursor.getString(8));
+                    String takelakaMiverinaKarineTsyLasa= (cursor.getString(9));
 
                     String record = idStat+","+
+                            dateStat+","+
                             karineSuccess+","+
                             karineFailed+","+
                             karinesuccesstakelakaSuccess+","+
@@ -1498,7 +1502,6 @@ public class Db_sqLite extends SQLiteOpenHelper {
                             karineFailedTakelakaSuccess+","+
                             karineFailedTakelakaFailed+","+
                             takelakaMiverinaKarineLasa+","+
-                            karineFailedTakelakaFailed+","+
                             takelakaMiverinaKarineTsyLasa;
                     printWriter.append(';');
                     printWriter.println(record);
@@ -1524,6 +1527,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         boolean res = false;
             try {
                 ContentValues contentValues = new ContentValues();
+                contentValues.put(dateStat, stat.getDateStat());
                 contentValues.put(karineSuccess, stat.getKarineSuccess());
                 contentValues.put(karineFailed, stat.getKarineFailed());
                 contentValues.put(karinesuccesstakelakaSuccess, stat.getKarinesuccesstakelakaSuccess());

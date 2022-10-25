@@ -27,8 +27,11 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Stream;
 
 public class StatistiqueActivity extends AppCompatActivity {
@@ -59,6 +62,8 @@ public class StatistiqueActivity extends AppCompatActivity {
 
         ArrayList<Integer> statistiqueToDisplay = (ArrayList<Integer>) getIntent().getSerializableExtra("statistique");
         Statistique stat = new Statistique();
+        String dateNow = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+        stat.setDateStat(dateNow);
         stat.setKarineSuccess(statistiqueToDisplay.get(0).toString());
         stat.setKarineFailed(String.valueOf(statistiqueToDisplay.get(4) + statistiqueToDisplay.get(5)));
         stat.setKarinesuccesstakelakaSuccess(String.valueOf(statistiqueToDisplay.get(1)));
