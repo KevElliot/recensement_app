@@ -344,10 +344,11 @@ public class Db_sqLite extends SQLiteOpenHelper {
             cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
             cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
         }
-        
-        String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + cryptNom + "') and upper(prenom) = upper('" + cryptPrenom + "') and dateNaiss = '" + cryptDateNaiss + "') or (upper(nom)= upper('" + cryptPrenom + "') and upper(prenom) = upper('" + cryptNom + "') and dateNaiss = '" + cryptDateNaiss + "')";
+        //String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + cryptNom + "') and upper(prenom) = upper('" + cryptPrenom + "') and dateNaiss = '" + cryptDateNaiss + "') or (upper(nom)= upper('" + cryptPrenom + "') and upper(prenom) = upper('" + cryptNom + "') and dateNaiss = '" + cryptDateNaiss + "')";
 
-        Log.d("isSame", sql);
+        String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "')  and dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "') or (upper(nom) like upper('" + cryptPrenom1 + "') and upper(nom) like upper('" + cryptPrenom2 + "') and upper(prenom) like upper('" + cryptNom1 + "%') and upper(prenom) like upper('%" + cryptNom2 + "') and dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "')";
+
+        Log.d("ISSAMEPERSOSOFT", sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
             long nbElect = this.countElecteur();

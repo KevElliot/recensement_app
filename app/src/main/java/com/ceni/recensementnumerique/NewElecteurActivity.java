@@ -423,7 +423,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                 String prenomElect = prenom.getText().toString();
                 String cinElect = cin.getText().toString();
                 String dateNevers = editNevers.getText().toString();
-                isSamePers = DB.isSamePerson(nomElect, prenomElect, dateNaiss,cinElect,dateNevers);
+                isSamePers = DB.isSamePersonSoft(nomElect, prenomElect, dateNaiss);
                 if (isSamePers) {
                     isSamePers = true;
                     nom.setError("mpifidy efa voasoratra!");
@@ -877,6 +877,9 @@ public class NewElecteurActivity extends AppCompatActivity {
                                         }).show();
                             }
                         } else {
+                            nom.setError("mpifidy efa voasoratra!");
+                            prenom.setError("mpifidy efa voasoratra!");
+                            cin.setError("mpifidy efa voasoratra!");
                             enregistrer.setEnabled(true);
                             new AlertDialog.Builder(NewElecteurActivity.this)
                                     .setTitle("Fahadisoana")
