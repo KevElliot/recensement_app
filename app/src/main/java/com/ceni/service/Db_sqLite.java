@@ -1182,10 +1182,11 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public void insertTablettes(Context c) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
+        MyDB.enableWriteAheadLogging();
         try {
             Resources res = c.getResources();
-            String[] tablette = res.getStringArray(R.array.tablettes);
             MyDB.beginTransaction();
+            String[] tablette = res.getStringArray(R.array.tablettes);
             for (int i = 0; i < tablette.length; i++) {
                 String sql = "INSERT INTO Tablette (region,district,code_region,code_district,commune,code_commune,fokontany,code_fokontany,responsable,imei,macWifi) VALUES " +
                         tablette[i];
