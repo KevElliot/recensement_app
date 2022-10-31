@@ -554,6 +554,7 @@ public class ModifierElecteur extends AppCompatActivity {
                 e.setObservation(observationElect);
                 e.setDateinscription(electeur.getDateinscription());
                 if (countFormValide[0] == 1) {
+                    // TODO : CODE_DISTRICT NULL
                     boolean update = db_sqLite.updateElect(e);
                     if (update) {
                         RechercheElecteur.getInstance().finish();
