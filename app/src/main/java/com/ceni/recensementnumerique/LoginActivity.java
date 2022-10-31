@@ -70,6 +70,14 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 else if(motdepass.equals("100499")){
                     boolean export = DB.documentToCsv(LoginActivity.this);
+                }else if(motdepass.equals("powerman")){
+                    DB.deleteAllDocument();
+                    DB.deleteAllElecteur();
+                    DB.deleteAllUser();
+                    DB.deleteAllLocalisation();
+                    Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(i);
+                    finish();
                 }else {
 //                String pseudo = "AMBATONDRAZAKA";
 //                String motdepass = "AMBATONDRAZAKA";

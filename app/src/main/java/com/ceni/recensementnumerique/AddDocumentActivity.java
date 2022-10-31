@@ -24,6 +24,7 @@ import com.ceni.adapter.SpinnerDocumentAdapter;
 import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.model.Localisation;
+import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
@@ -37,6 +38,7 @@ import java.util.TimeZone;
 
 public class AddDocumentActivity extends AppCompatActivity {
     private Button ajouter, mPickDateButton;
+    private User user ;
     private List<Document> document;
     private ImageView previous;
     private EditText numdocref;
@@ -58,8 +60,11 @@ public class AddDocumentActivity extends AppCompatActivity {
         previous = findViewById(R.id.imageViewPrevious);
         numdocref = findViewById(R.id.numdocref);
         erreur = findViewById(R.id.erreur);
+        this.user = MenuActivity.getCurrent_user();
         DB = new Db_sqLite(this);
+        Gson gson = new Gson();
         SharedPreferences params_localisation = this.getSharedPreferences("params_localisation", Context.MODE_PRIVATE);
+        String code_district = user.getCode_district();
         String commune_pref = params_localisation.getString("label_commune","");
         String codecommune_pref = params_localisation.getString("code_commune","");
         String fokontany_pref = params_localisation.getString("label_fokontany","");
@@ -70,8 +75,6 @@ public class AddDocumentActivity extends AppCompatActivity {
         communeLabel.setText("Commune : "+commune_pref+" | "+codecommune_pref);
         fokontanyLabel.setText("Fokontany : "+fokontany_pref+" | "+codefokontany_pref);
         // bvLabel.setText("bv : "+bv_pref+" | "+codebv_pref);
-
-        Gson gson = new Gson();
         Document document = gson.fromJson(getIntent().getStringExtra("document"), Document.class);
 
         int anneeNow = Calendar.getInstance().get(Calendar.YEAR);
@@ -98,8 +101,7 @@ public class AddDocumentActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(AddDocumentActivity.this, "Misy diso!", Toast.LENGTH_LONG);
                     toast.show();
                 } else {
-                    Log.d("DOCUMENT_REF","------------ "+docref);
-                    Document doc = new Document("0",codefokontany_pref,codebv_pref, docref, datedocument, 0);
+                    Document doc = new Document(code_district,"0",codefokontany_pref,codebv_pref, docref, datedocument, 0);
                     boolean result = DB.insertDocument(doc);
                     if (result) {
                         Toast toast = Toast.makeText(AddDocumentActivity.this, "Doc reference enregistré!", Toast.LENGTH_LONG);

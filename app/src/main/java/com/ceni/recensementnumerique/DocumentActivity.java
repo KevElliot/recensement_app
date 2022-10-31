@@ -20,6 +20,7 @@ import com.ceni.model.Document;
 import com.ceni.model.Electeur;
 import com.ceni.model.User;
 import com.ceni.service.Db_sqLite;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class DocumentActivity extends AppCompatActivity {
         retour = findViewById(R.id.imageViewPrevious);
         this.DB = new Db_sqLite(DocumentActivity.this);
         this.user = MenuActivity.getCurrent_user();
-        List<Document> listDoc = DB.selectAllDocument();
+        List<Document> listDoc = DB.selectAllDocument(user.getCode_district());
         if (listDoc.size() <= 0) {
             Toast toast = Toast.makeText(DocumentActivity.this, "Tsy misy karine tafiditra!", Toast.LENGTH_LONG);
             toast.show();
@@ -62,6 +63,9 @@ public class DocumentActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(getApplicationContext(), AddDocumentActivity.class);
+                Gson gson = new Gson();
+                String myjson = gson.toJson(user);
+                i.putExtra("user", myjson);
                 startActivity(i);
                 finish();
             }

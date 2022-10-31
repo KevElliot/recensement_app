@@ -24,12 +24,14 @@ public class Cryptage_service {
             Log.e("setEnCryptOf", "KEY :" + KEY_VALUE);
             byte[] fieldBytes = field.getBytes(StandardCharsets.UTF_8);
             String encrypt = new String(Base64.getEncoder().encode(fieldBytes), "UTF-8");
+            Log.e("setEnCryptOf", "ENCRYPT :" + encrypt);
             // TODO: ETO NO ASIANA NY KEY
             String partOne = encrypt.substring(0,3);
             String partTwo = encrypt.substring(3,encrypt.length());
             data = partOne+KEY_VALUE+partTwo;
 
         } catch (Exception exception) {
+            Log.e("ERROR CRYPTAGE", String.valueOf(exception));
             return field;
         }
         return data;

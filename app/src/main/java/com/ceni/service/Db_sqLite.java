@@ -116,6 +116,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
                                             TABLE Documents
     ----------------------------------------------------------------------------------------*/
     private static final String idDoc = "id";
+    private static final String doccode_district = "code_district";
     private static final String idfdocreference = "idfdocreference";
     private static final String doccode_fokontany = "code_fokontany";
     private static final String doccode_bv = "code_bv";
@@ -182,7 +183,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 PRENOMUSER + " TEXT, " + ROLE + " TEXT, " + PSEUDO + " TEXT, " + MOTDEPASSE + " TEXT, " + REGIONUSER + " TEXT, " +
                 USER_CODEREGION + " TEXT, " + DISTRICTUSER + " TEXT, " + USER_CODEDISTRICT + " TEXT, " + COMMUNEUSER + " TEXT, " + USER_CODECOMMUNE + " TEXT, " + NBSAISI + " INT)";
 
-        String query4 = "CREATE TABLE " + TABLE_Document + "(" + idDoc + " INTEGER primary key AUTOINCREMENT," + idfdocreference + " TEXT, " + doccode_fokontany + " TEXT," + doccode_bv + " TEXT," + numdocreference + " TEXT," + datedocreference + " TEXT, " + nbfeuillet + " TEXT)";
+        String query4 = "CREATE TABLE " + TABLE_Document + "(" + idDoc + " INTEGER primary key AUTOINCREMENT," + doccode_district + " TEXT, "+ idfdocreference + " TEXT, " + doccode_fokontany + " TEXT," + doccode_bv + " TEXT," + numdocreference + " TEXT," + datedocreference + " TEXT, " + nbfeuillet + " TEXT)";
 
         String query5 = "CREATE TABLE " + TABLE_Tablette + "(" + COLUMN_idTab + " INTEGER primary key AUTOINCREMENT," + COLUMN_region + " TEXT, " + COLUMN_code_region + " TEXT," + COLUMN_district + " TEXT," + COLUMN_code_district + " TEXT, " + COLUMN_commune + " TEXT," + COLUMN_code_commune + " TEXT," + COLUMN_fokontany + " TEXT," + COLUMN_code_fokontany + " TEXT," + COLUMN_responsable + " TEXT," + COLUMN_imei + " TEXT," + COLUMN_macWifi + " TEXT)";
 
@@ -238,40 +239,97 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return result;
     }
 
+//    @RequiresApi(api = Build.VERSION_CODES.O)
+//    public Boolean isSamePerson(String nom, String prenom, String dateNaiss, String cin, String nevers) {
+//        boolean result = false;
+//        SQLiteDatabase MyDB = this.getWritableDatabase();
+//        int posNom = nom.indexOf("'");
+//        int posPrenom = prenom.indexOf("'");
+//        if (posNom >= 0) {
+//            nom = nom.replace("'", "'||''''||'");
+//        }
+//        if (posPrenom >= 0) {
+//            prenom = prenom.replace("'", "'||''''||'");
+//        }
+//        String cryptNom = cryptage.setEnCryptOf(nom);
+//        String cryptPrenom = "";
+//        String cryptCin = "";
+//        String cryptDateNaiss = "";
+//        String dateNever = "";
+//
+//        String cryptNom1 = cryptNom.substring(0, 3);
+//        String cryptNom2 = cryptNom.substring(11, cryptNom.length());
+//        String cryptPrenom1 = "";
+//        String cryptPrenom2 = "";
+//        if(prenom!= null && prenom.length()!=0) {
+//            cryptPrenom = cryptage.setEnCryptOf(prenom);
+//            cryptPrenom1 = cryptPrenom.substring(0, 3);
+//            cryptPrenom2 = cryptPrenom.substring(11, cryptPrenom.length());
+//        }
+//        String cryptDateNaiss1 ="";
+//        String cryptDateNaiss2 = "";
+//        if(dateNaiss!= null && dateNaiss.length()!=0) {
+//            cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
+//            cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
+//            cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
+//        }
+//        String cryptCin1 = "";
+//        String cryptCin2 = "";
+//        if(cin!= null && cin.length()!=0) {
+//            cryptCin = cryptage.setEnCryptOf(cin);
+//            cryptCin1 = cryptCin.substring(0, 3);
+//            cryptCin2 = cryptCin.substring(11, cryptCin.length());
+//        }
+//        String dateNever1 = "";
+//        String dateNever2 = "";
+//        if(dateNaiss!= null && nevers.length()!=0) {
+//            dateNever = cryptage.setEnCryptOf(nevers);
+//            dateNever1 = dateNever.substring(0, 3);
+//            dateNever2 = dateNever.substring(11, dateNever.length());
+//        }
+//
+//
+//        String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where " +
+//                "(cinElect like '" + cryptCin1 + "%' and cinElect like '%" + cryptCin2 + "' and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "' )) " +
+//                "or (upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "')) " +
+//                "or (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))  " +
+//                "or (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))" +
+//                " or (upper(nom) like upper('" + cryptPrenom1 + "%') and upper(nom) like upper('%" + cryptPrenom2 + "') and upper(prenom) like upper('" + cryptNom1 + "%') and upper(prenom) like upper('%" + cryptNom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "'" +" or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))";
+//
+//        //String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + cryptNom + "') and upper(prenom) = upper('" + cryptPrenom + "') and dateNaiss = '" + cryptDateNaiss + "') or (upper(nom)= upper('" + cryptPrenom + "') and upper(prenom) = upper('" + cryptNom + "') and dateNaiss = '" + cryptDateNaiss + "')";
+//
+//        Log.d("isSame", sql);
+//        Cursor cursor = MyDB.rawQuery(sql, new String[]{});
+//        try {
+//            long nbElect = this.countElecteur();
+//            if (nbElect != 0 && cursor.getCount() != 0) {
+//                result = true;
+//            }
+//        } catch (Exception e) {
+//            Log.e("ERROR isSamePerson", " " + e);
+//        } finally {
+//            cursor.close();
+//            MyDB.close();
+//        }
+//        return result;
+//    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Boolean isSamePerson(String nom, String prenom, String dateNaiss, String cin, String nevers) {
+    public Boolean isNom_DateNaiss_Cin_Nevers_Same(String nom, String dateNaiss,String cin,String nevers) {
         boolean result = false;
+        String sql = "";
         SQLiteDatabase MyDB = this.getWritableDatabase();
         int posNom = nom.indexOf("'");
-        int posPrenom = prenom.indexOf("'");
         if (posNom >= 0) {
             nom = nom.replace("'", "'||''''||'");
         }
-        if (posPrenom >= 0) {
-            prenom = prenom.replace("'", "'||''''||'");
-        }
         String cryptNom = cryptage.setEnCryptOf(nom);
-        String cryptPrenom = "";
-        String cryptCin = "";
         String cryptDateNaiss = "";
-        String dateNever = "";
+        String cryptCin = "";
+        String cryptNevers = "";
 
         String cryptNom1 = cryptNom.substring(0, 3);
         String cryptNom2 = cryptNom.substring(11, cryptNom.length());
-        String cryptPrenom1 = "";
-        String cryptPrenom2 = "";
-        if(prenom!= null && prenom.length()!=0) {
-            cryptPrenom = cryptage.setEnCryptOf(prenom);
-            cryptPrenom1 = cryptPrenom.substring(0, 3);
-            cryptPrenom2 = cryptPrenom.substring(11, cryptPrenom.length());
-        }
-        String cryptDateNaiss1 ="";
-        String cryptDateNaiss2 = "";
-        if(dateNaiss!= null && dateNaiss.length()!=0) {
-            cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
-            cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
-            cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
-        }
         String cryptCin1 = "";
         String cryptCin2 = "";
         if(cin!= null && cin.length()!=0) {
@@ -279,25 +337,25 @@ public class Db_sqLite extends SQLiteOpenHelper {
             cryptCin1 = cryptCin.substring(0, 3);
             cryptCin2 = cryptCin.substring(11, cryptCin.length());
         }
-        String dateNever1 = "";
-        String dateNever2 = "";
-        if(dateNaiss!= null && nevers.length()!=0) {
-            dateNever = cryptage.setEnCryptOf(nevers);
-            dateNever1 = dateNever.substring(0, 3);
-            dateNever2 = dateNever.substring(11, dateNever.length());
+        String cryptDateNaiss1 ="";
+        String cryptDateNaiss2 = "";
+        if(dateNaiss!= null && dateNaiss.length()!=0) {
+            cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
+            cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
+            cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
+            sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and cinElect like '" + cryptCin1 + "%' and cinElect like '%" + cryptCin2 + "'  and dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "')";
+        }
+        String cryptNevers1 = "";
+        String cryptNevers2 = "";
+        if(nevers!= null && nevers.length()!=0) {
+            cryptNevers = cryptage.setEnCryptOf(nevers);
+            cryptNevers1 = cryptNevers.substring(0, 3);
+            cryptNevers2 = cryptNevers.substring(11, cryptNevers.length());
+            sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and cinElect like '" + cryptCin1 + "%' and cinElect like '%" + cryptCin2 + "'  and nevers like '" + cryptNevers1 + "%' and nevers like '%" + cryptNevers2 + "')";
         }
 
-
-        String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where " +
-                "(cinElect like '" + cryptCin1 + "%' and cinElect like '%" + cryptCin2 + "' and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "' )) " +
-                "or (upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "')) " +
-                "or (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))  " +
-                "or (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "' or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))" +
-                " or (upper(nom) like upper('" + cryptPrenom1 + "%') and upper(nom) like upper('%" + cryptPrenom2 + "') and upper(prenom) like upper('" + cryptNom1 + "%') and upper(prenom) like upper('%" + cryptNom2 + "') and (dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "'" +" or nevers like '" + dateNever1 + "%' and nevers like '%" + dateNever2 + "'))";
-
         //String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + cryptNom + "') and upper(prenom) = upper('" + cryptPrenom + "') and dateNaiss = '" + cryptDateNaiss + "') or (upper(nom)= upper('" + cryptPrenom + "') and upper(prenom) = upper('" + cryptNom + "') and dateNaiss = '" + cryptDateNaiss + "')";
-
-        Log.d("isSame", sql);
+        Log.d("ISSAMEPERSOSOFT","isNom_DateNaiss_Cin_Nevers_Same   --  -- "+ sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
             long nbElect = this.countElecteur();
@@ -314,8 +372,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Boolean isSamePersonSoft(String nom, String prenom, String dateNaiss) {
+    public Boolean isNom_prenom_dateNaiss_nevers_Same(String nom, String prenom, String dateNaiss,String nevers) {
         boolean result = false;
+        String sql = "";
         SQLiteDatabase MyDB = this.getWritableDatabase();
         int posNom = nom.indexOf("'");
         int posPrenom = prenom.indexOf("'");
@@ -328,6 +387,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String cryptNom = cryptage.setEnCryptOf(nom);
         String cryptPrenom = "";
         String cryptDateNaiss = "";
+        String cryptNevers = "";
 
         String cryptNom1 = cryptNom.substring(0, 3);
         String cryptNom2 = cryptNom.substring(11, cryptNom.length());
@@ -344,12 +404,19 @@ public class Db_sqLite extends SQLiteOpenHelper {
             cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
             cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
             cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
+            sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "')  and dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "') or (upper(nom) like upper('" + cryptPrenom1 + "%') and upper(nom) like upper('%" + cryptPrenom2 + "') and upper(prenom) like upper('" + cryptNom1 + "%') and upper(prenom) like upper('%" + cryptNom2 + "') and dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "')";
         }
+        String cryptNevers1 = "";
+        String cryptNevers2 = "";
+        if(nevers!= null && nevers.length()!=0) {
+            cryptNevers = cryptage.setEnCryptOf(nevers);
+            cryptNevers1 = cryptNevers.substring(0, 3);
+            cryptNevers2 = cryptNevers.substring(11, cryptNevers.length());
+            sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "')  and nevers like '" + cryptNevers1 + "%' and nevers like '%" + cryptNevers2 + "') or (upper(nom) like upper('" + cryptPrenom1 + "%') and upper(nom) like upper('%" + cryptPrenom2 + "') and upper(prenom) like upper('" + cryptNom1 + "%') and upper(prenom) like upper('%" + cryptNom2 + "') and nevers like '" + cryptNevers1 + "%' and nevers like '%" + cryptNevers2 + "')";
+        }
+
         //String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + cryptNom + "') and upper(prenom) = upper('" + cryptPrenom + "') and dateNaiss = '" + cryptDateNaiss + "') or (upper(nom)= upper('" + cryptPrenom + "') and upper(prenom) = upper('" + cryptNom + "') and dateNaiss = '" + cryptDateNaiss + "')";
-
-        String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "')  and dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "') or (upper(nom) like upper('" + cryptPrenom1 + "') and upper(nom) like upper('" + cryptPrenom2 + "') and upper(prenom) like upper('" + cryptNom1 + "%') and upper(prenom) like upper('%" + cryptNom2 + "') and dateNaiss like '" + cryptDateNaiss1 + "%' and dateNaiss like '%" + cryptDateNaiss2 + "')";
-
-        Log.d("ISSAMEPERSOSOFT", sql);
+        Log.d("ISSAMEPERSOSOFT","isNom_prenom_dateNaiss_nevers_Same  --  --  - "+ sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
             long nbElect = this.countElecteur();
@@ -399,7 +466,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
         boolean res = false;
         if (!ismemedoc) {
             try {
+                Log.d("INSERT DOCUMENT","------- DISTRICT_DOCUMENT "+doc.getDoccode_district());
                 ContentValues contentValues = new ContentValues();
+                contentValues.put(doccode_district, cryptage.setEnCryptOf(doc.getDoccode_district()));
                 contentValues.put(idfdocreference, doc.getDoccode_bv() + doc.getNumdocreference());
                 contentValues.put(doccode_fokontany, cryptage.setEnCryptOf(doc.getDoccode_fokontany()));
                 contentValues.put(doccode_bv, cryptage.setEnCryptOf(doc.getDoccode_bv()));
@@ -437,23 +506,26 @@ public class Db_sqLite extends SQLiteOpenHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public List<Document> selectAllDocument() {
+    public List<Document> selectAllDocument(String code_district) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from documents order by id desc", null);
+        String district = cryptage.setEnCryptOf(code_district);
+        String partOne = district.substring(0,3);
+        String partTwo = district.substring(11);
+        String sql ="Select * from documents where code_district like '"+partOne+"%' and code_district like '%"+partTwo+"' order by id desc";
+        Log.d("Tag",sql);
+        Cursor cursor = MyDB.rawQuery(sql, null);
         List<Document> listdoc = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
                 Document d = new Document();
                 d.setIdDoc("" + cursor.getInt(0));
-                d.setIdfdocreference(cursor.getString(1));
-
-                Log.d("selectAllDocument", "listdoc  " + cursor.getString(1));
-
-                d.setDoccode_fokontany(cryptage.setDecryptOf(cursor.getString(2)));
-                d.setDoccode_bv(cryptage.setDecryptOf(cursor.getString(3)));
-                d.setNumdocreference(cryptage.setDecryptOf(cursor.getString(4)));
-                d.setDatedocreference(cryptage.setDecryptOf(cursor.getString(5)));
-                d.setNbfeuillet(cursor.getInt(6));
+                d.setDoccode_district(cryptage.setDecryptOf(cursor.getString(1)));
+                d.setIdfdocreference(cursor.getString(2));
+                d.setDoccode_fokontany(cryptage.setDecryptOf(cursor.getString(3)));
+                d.setDoccode_bv(cryptage.setDecryptOf(cursor.getString(4)));
+                d.setNumdocreference(cryptage.setDecryptOf(cursor.getString(5)));
+                d.setDatedocreference(cryptage.setDecryptOf(cursor.getString(6)));
+                d.setNbfeuillet(cursor.getInt(7));
                 listdoc.add(d);
             }
         } catch (Exception e) {
@@ -473,12 +545,12 @@ public class Db_sqLite extends SQLiteOpenHelper {
             while (cursor.moveToNext()) {
                 Document d = new Document();
                 d.setIdDoc("" + cursor.getInt(0));
-                d.setIdfdocreference(cursor.getString(1));
-                d.setDoccode_fokontany(cursor.getString(2));
-                d.setDoccode_bv(cursor.getString(3));
-                d.setNumdocreference(cursor.getString(4));
-                d.setDatedocreference(cursor.getString(5));
-                d.setNbfeuillet(cursor.getInt(6));
+                d.setIdfdocreference(cursor.getString(2));
+                d.setDoccode_fokontany(cursor.getString(3));
+                d.setDoccode_bv(cursor.getString(4));
+                d.setNumdocreference(cursor.getString(5));
+                d.setDatedocreference(cursor.getString(6));
+                d.setNbfeuillet(cursor.getInt(7));
                 listdoc.add(d);
             }
         } catch (Exception e) {
@@ -504,12 +576,13 @@ public class Db_sqLite extends SQLiteOpenHelper {
             while (cursor.moveToNext()) {
                 Document d = new Document();
                 d.setIdDoc(String.valueOf(cursor.getInt(0)));
-                d.setIdfdocreference(cursor.getString(1));
-                d.setDoccode_fokontany(cryptage.setDecryptOf(cursor.getString(2)));
-                d.setDoccode_bv(cryptage.setDecryptOf(cursor.getString(3)));
-                d.setNumdocreference(cryptage.setDecryptOf(cursor.getString(4)));
-                d.setDatedocreference(cryptage.setDecryptOf(cursor.getString(5)));
-                d.setNbfeuillet(cursor.getInt(6));
+                d.setDoccode_district(cryptage.setDecryptOf(cursor.getString(1)));
+                d.setIdfdocreference(cursor.getString(2));
+                d.setDoccode_fokontany(cryptage.setDecryptOf(cursor.getString(3)));
+                d.setDoccode_bv(cryptage.setDecryptOf(cursor.getString(4)));
+                d.setNumdocreference(cryptage.setDecryptOf(cursor.getString(5)));
+                d.setDatedocreference(cryptage.setDecryptOf(cursor.getString(6)));
+                d.setNbfeuillet(cursor.getInt(7));
                 listdoc.add(d);
             }
         } catch (Exception e) {
@@ -529,19 +602,19 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String partOne = cryptNum.substring(0, 3);
         String partTwo = cryptNum.substring(11, cryptNum.length());
         String sql = "Select * from documents where numdocreference like '" + partOne + "%' and numdocreference like '%" + partTwo + "'";
-        Log.d("selectDocumentbyNum","-----------  "+sql);
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<Document> listdoc = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
                 Document d = new Document();
                 d.setIdDoc(String.valueOf(cursor.getString(0)));
-                d.setIdfdocreference(cursor.getString(1));
-                d.setDoccode_bv(cryptage.setDecryptOf(cursor.getString(2)));
-                d.setDoccode_fokontany(cryptage.setDecryptOf(cursor.getString(3)));
-                d.setNumdocreference(cryptage.setDecryptOf(cursor.getString(4)));
-                d.setDatedocreference(cryptage.setDecryptOf(cursor.getString(5)));
-                d.setNbfeuillet(cursor.getInt(6));
+                d.setDoccode_district(cryptage.setDecryptOf(cursor.getString(1)));
+                d.setIdfdocreference(cursor.getString(2));
+                d.setDoccode_bv(cryptage.setDecryptOf(cursor.getString(3)));
+                d.setDoccode_fokontany(cryptage.setDecryptOf(cursor.getString(4)));
+                d.setNumdocreference(cryptage.setDecryptOf(cursor.getString(5)));
+                d.setDatedocreference(cryptage.setDecryptOf(cursor.getString(6)));
+                d.setNbfeuillet(cursor.getInt(7));
                 listdoc.add(d);
             }
             if (listdoc.size() > 0) {
@@ -563,7 +636,6 @@ public class Db_sqLite extends SQLiteOpenHelper {
         Cursor cursor = null;
         List<Document> listdoc = new ArrayList<>();
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Log.d("xxxxccc","------------------------- idfdocreference : "+idfdocreference);
         try {
             String sql = "Select * from documents where idfdocreference= '"+ idfdocreference +"'";
             Log.d("123","-------------- "+sql);
@@ -571,12 +643,13 @@ public class Db_sqLite extends SQLiteOpenHelper {
             while (cursor.moveToNext()) {
                 Document d = new Document();
                 d.setIdDoc(String.valueOf(cursor.getInt(0)));
-                d.setIdfdocreference(cursor.getString(1));
-                d.setDoccode_fokontany(cryptage.setDecryptOf(cursor.getString(2)));
-                d.setDoccode_bv(cryptage.setDecryptOf(cursor.getString(3)));
-                d.setNumdocreference(cryptage.setDecryptOf(cursor.getString(4)));
-                d.setDatedocreference(cryptage.setDecryptOf(cursor.getString(5)));
-                d.setNbfeuillet(cursor.getInt(6));
+                d.setDoccode_district(cryptage.setDecryptOf(cursor.getString(1)));
+                d.setIdfdocreference(cursor.getString(2));
+                d.setDoccode_fokontany(cryptage.setDecryptOf(cursor.getString(3)));
+                d.setDoccode_bv(cryptage.setDecryptOf(cursor.getString(4)));
+                d.setNumdocreference(cryptage.setDecryptOf(cursor.getString(5)));
+                d.setDatedocreference(cryptage.setDecryptOf(cursor.getString(6)));
+                d.setNbfeuillet(cursor.getInt(7));
                 listdoc.add(d);
             }
         } catch (Exception e) {
@@ -643,6 +716,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         try {
             SQLiteDatabase MyDB = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
+            contentValues.put(doccode_district, cryptage.setEnCryptOf(doc.getDoccode_district()));
             contentValues.put(idfdocreference, doc.getIdfdocreference());
             contentValues.put(doccode_fokontany, cryptage.setEnCryptOf(doc.getDoccode_fokontany()));
             contentValues.put(doccode_bv, cryptage.setEnCryptOf(doc.getDoccode_bv()));

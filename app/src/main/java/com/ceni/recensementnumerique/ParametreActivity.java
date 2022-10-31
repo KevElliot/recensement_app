@@ -1,10 +1,12 @@
 package com.ceni.recensementnumerique;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +41,7 @@ public class ParametreActivity extends AppCompatActivity {
     private String user;
     private static SharedPreferences params_localisation;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +86,7 @@ public class ParametreActivity extends AppCompatActivity {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     Commune communeSelected = (Commune) spinnerCommune.getSelectedItem();
+                    editor.putString("code_district", codeDistrict);
                     editor.putString("code_commune", communeSelected.getCode_commune());
                     editor.putString("label_commune", communeSelected.getLabel_commune());
                     editor.putInt("position_commune", spinnerCommune.getSelectedItemPosition());

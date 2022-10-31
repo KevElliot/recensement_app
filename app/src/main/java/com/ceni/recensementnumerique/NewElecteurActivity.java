@@ -421,9 +421,8 @@ public class NewElecteurActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 String nomElect = nom.getText().toString();
                 String prenomElect = prenom.getText().toString();
-                String cinElect = cin.getText().toString();
                 String dateNevers = editNevers.getText().toString();
-                isSamePers = DB.isSamePersonSoft(nomElect, prenomElect, dateNaiss);
+                isSamePers = DB.isNom_prenom_dateNaiss_nevers_Same(nomElect, prenomElect, dateNaiss, dateNevers);
                 if (isSamePers) {
                     isSamePers = true;
                     nom.setError("mpifidy efa voasoratra!");
@@ -817,57 +816,76 @@ public class NewElecteurActivity extends AppCompatActivity {
 
                 } else {
                     Log.d("NEW ELECT", electeur.toString());
+                    isSamePers = DB.isNom_prenom_dateNaiss_nevers_Same(electeur.getNom(), electeur.getPrenom(), electeur.getDateNaiss(), electeur.getNevers());
                     if (!fichefull) {
-                        Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
-                        isSamePers = DB.isSamePerson(electeur.getNom(), electeur.getPrenom(), electeur.getDateNaiss(), electeur.getCinElect(), electeur.getNevers());
                         if (!isSamePers) {
-                            isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(), idFdocReference[0]);
-                            if (!isMemeFiche) {
-                                Gson gson = new Gson();
-                                User us = gson.fromJson(user, User.class);
-                                User tmpus = DB.selectUser(us.getPseudo(), us.getMotdepasse());
-                                electeur.setCode_bv(bvSelected.getCode_bv());
-                                electeur.setProfession(profession.getText().toString());
-                                //for(int k=0;k<=24;k++){
-                                if (DB.insertElecteurData(
-                                        electeur.getCode_bv(),
-                                        electeur.getnFiche(),
-                                        electeur.getNom(),
-                                        electeur.getPrenom(),
-                                        electeur.getSexe(),
-                                        electeur.getProfession(),
-                                        electeur.getAdresse(),
-                                        electeur.getDateNaiss(),
-                                        electeur.getNevers(),
-                                        electeur.getLieuNaiss(),
-                                        electeur.getNomPere(),
-                                        electeur.getNomMere(),
-                                        electeur.getCinElect(),
-                                        electeur.getNserieCin(),
-                                        electeur.getDateDeliv(),
-                                        electeur.getLieuDeliv(),
-                                        electeur.getFicheElect(),
-                                        electeur.getCinRecto(),
-                                        electeur.getCinVerso(),
-                                        electeur.getObservation(),
-                                        electeur.getDocreference(),
-                                        us.getIdUser(), electeur.getDateinscription())) {
-                                    Document doc = DB.selectDocumentbyid(electeur.getDocreference());
-                                    DB.counterStat(doc, tmpus, 1);
-                                    Toast toast = Toast.makeText(NewElecteurActivity.this, "Electeur enregistré!", Toast.LENGTH_LONG);
-                                    toast.show();
-                                    Intent i = new Intent(getApplicationContext(), NewElecteurActivity.class);
-                                    i.putExtra("user", user);
+                            Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
+                            boolean isSamePerson = DB.isNom_DateNaiss_Cin_Nevers_Same(electeur.getNom(), electeur.getDateNaiss(), electeur.getCinElect(), electeur.getNevers());
+                            if (!isSamePerson) {
+                                isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(), idFdocReference[0]);
+                                if (!isMemeFiche) {
+                                    Gson gson = new Gson();
+                                    User us = gson.fromJson(user, User.class);
+                                    User tmpus = DB.selectUser(us.getPseudo(), us.getMotdepasse());
+                                    electeur.setCode_bv(bvSelected.getCode_bv());
+                                    electeur.setProfession(profession.getText().toString());
+                                    //for(int k=0;k<=24;k++){
+                                    if (DB.insertElecteurData(
+                                            electeur.getCode_bv(),
+                                            electeur.getnFiche(),
+                                            electeur.getNom(),
+                                            electeur.getPrenom(),
+                                            electeur.getSexe(),
+                                            electeur.getProfession(),
+                                            electeur.getAdresse(),
+                                            electeur.getDateNaiss(),
+                                            electeur.getNevers(),
+                                            electeur.getLieuNaiss(),
+                                            electeur.getNomPere(),
+                                            electeur.getNomMere(),
+                                            electeur.getCinElect(),
+                                            electeur.getNserieCin(),
+                                            electeur.getDateDeliv(),
+                                            electeur.getLieuDeliv(),
+                                            electeur.getFicheElect(),
+                                            electeur.getCinRecto(),
+                                            electeur.getCinVerso(),
+                                            electeur.getObservation(),
+                                            electeur.getDocreference(),
+                                            us.getIdUser(), electeur.getDateinscription())) {
+                                        Document doc = DB.selectDocumentbyid(electeur.getDocreference());
+                                        DB.counterStat(doc, tmpus, 1);
+                                        Toast toast = Toast.makeText(NewElecteurActivity.this, "Electeur enregistré!", Toast.LENGTH_LONG);
+                                        toast.show();
+                                        Intent i = new Intent(getApplicationContext(), NewElecteurActivity.class);
+                                        i.putExtra("user", user);
+                                        enregistrer.setEnabled(true);
+                                        startActivity(i);
+                                        finish();
+                                        //}
+                                    }
+                                } else {
                                     enregistrer.setEnabled(true);
-                                    startActivity(i);
-                                    finish();
-                                //}
+                                    new AlertDialog.Builder(NewElecteurActivity.this)
+                                            .setTitle("Fahadisoana")
+                                            .setMessage("Takelaka efa voasoratra!")
+                                            .setCancelable(false)
+                                            .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    // tsisy
+                                                }
+                                            }).show();
                                 }
                             } else {
+                                nom.setError("mpifidy efa voasoratra!");
+                                cin.setError("mpifidy efa voasoratra!");
+                                mShowSelectedDateText.setTypeface(Typeface.DEFAULT_BOLD);
+                                mShowSelectedDateText.setText("mpifidy efa voasoratra!");
                                 enregistrer.setEnabled(true);
                                 new AlertDialog.Builder(NewElecteurActivity.this)
                                         .setTitle("Fahadisoana")
-                                        .setMessage("Takelaka efa voasoratra!")
+                                        .setMessage("Mpifidy efa voasoratra!")
                                         .setCancelable(false)
                                         .setPositiveButton("ok", new DialogInterface.OnClickListener() {
                                             @Override
@@ -876,10 +894,11 @@ public class NewElecteurActivity extends AppCompatActivity {
                                             }
                                         }).show();
                             }
-                        } else {
+                        }else {
                             nom.setError("mpifidy efa voasoratra!");
                             prenom.setError("mpifidy efa voasoratra!");
-                            cin.setError("mpifidy efa voasoratra!");
+                            mShowSelectedDateText.setTypeface(Typeface.DEFAULT_BOLD);
+                            mShowSelectedDateText.setText("mpifidy efa voasoratra!");
                             enregistrer.setEnabled(true);
                             new AlertDialog.Builder(NewElecteurActivity.this)
                                     .setTitle("Fahadisoana")
