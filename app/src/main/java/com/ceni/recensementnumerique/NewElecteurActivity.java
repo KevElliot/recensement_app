@@ -821,16 +821,20 @@ public class NewElecteurActivity extends AppCompatActivity {
                         if (!isSamePers) {
                             Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
                             boolean isSamePerson = DB.isNom_DateNaiss_Cin_Nevers_Same(electeur.getNom(), electeur.getDateNaiss(), electeur.getCinElect(), electeur.getNevers());
-                            if (!isSamePerson) {
+                            boolean prenom_datenaiss_cin_same = DB.isPrenom_DateNaiss_Cin_Nevers_Same(electeur.getPrenom(),electeur.getDateNaiss(),electeur.getCinElect(),electeur.getNevers());
+                            boolean nom_prenom_mere_same = DB.isNom_prenom_nomMere_Same(electeur.getNom(),electeur.getPrenom(),electeur.getNomMere());
+                            if (!isSamePerson && !prenom_datenaiss_cin_same && !nom_prenom_mere_same) {
                                 isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(), idFdocReference[0]);
                                 if (!isMemeFiche) {
                                     Gson gson = new Gson();
                                     User us = gson.fromJson(user, User.class);
                                     User tmpus = DB.selectUser(us.getPseudo(), us.getMotdepasse());
+                                    electeur.setCode_district(tmpus.getCode_district());
                                     electeur.setCode_bv(bvSelected.getCode_bv());
                                     electeur.setProfession(profession.getText().toString());
                                     //for(int k=0;k<=24;k++){
                                     if (DB.insertElecteurData(
+                                            electeur.getCode_district(),
                                             electeur.getCode_bv(),
                                             electeur.getnFiche(),
                                             electeur.getNom(),
@@ -879,6 +883,8 @@ public class NewElecteurActivity extends AppCompatActivity {
                                 }
                             } else {
                                 nom.setError("mpifidy efa voasoratra!");
+                                prenom.setError("mpifidy efa voasoratra!");
+                                nomMere.setError("mpifidy efa voasoratra!");
                                 cin.setError("mpifidy efa voasoratra!");
                                 mShowSelectedDateText.setTypeface(Typeface.DEFAULT_BOLD);
                                 mShowSelectedDateText.setText("mpifidy efa voasoratra!");

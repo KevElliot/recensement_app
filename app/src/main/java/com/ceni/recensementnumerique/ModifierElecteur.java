@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -415,6 +416,8 @@ public class ModifierElecteur extends AppCompatActivity {
                 e.setIdElect(idElect);
                 e.setDocreference(electeur.getDocreference());
                 e.setCode_bv(electeur.getCode_bv());
+
+                e.setCode_district(electeur.getCode_district());
 
                 e.setnFiche(nFiche.getText().toString());
                 if (nomElect.getText().toString().length() != 0) {

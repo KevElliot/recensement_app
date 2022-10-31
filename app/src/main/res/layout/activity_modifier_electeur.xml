@@ -567,7 +567,7 @@
                     android:minHeight="20dp"
                     android:gravity="left|center"
                     android:text="."
-                    android:inputType="number"
+                    android:digits="1,2,3,4,5,6,7,8,9,0,/"
                     android:textColor="#878787"
                     android:textSize="20sp" />
 

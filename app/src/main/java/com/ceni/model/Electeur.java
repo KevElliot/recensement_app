@@ -2,6 +2,7 @@ package com.ceni.model;
 
 public class Electeur {
     private int idElect;
+    private String code_district;
     private String code_bv;
     private String numelect;
     private String nFiche;
@@ -29,8 +30,9 @@ public class Electeur {
 
     public Electeur(){}
 
-    public Electeur(int idElect, String code_bv, String numelect, String nFiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss, String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String ficheElect, String cinRecto, String cinVerso,String observation,String docreference,String num_userinfo, String dateinscription) {
+    public Electeur(int idElect,String code_district, String code_bv, String numelect, String nFiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss, String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String ficheElect, String cinRecto, String cinVerso,String observation,String docreference,String num_userinfo, String dateinscription) {
         this.idElect = idElect;
+        this.code_district = code_district;
         this.code_bv = code_bv;
         this.numelect = numelect;
         this.nFiche = nFiche;
@@ -57,7 +59,8 @@ public class Electeur {
         this.dateinscription = dateinscription;
     }
 
-    public Electeur(String code_bv,String nFiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss,String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String ficheElect, String cinRecto, String cinVerso,String observation,String docreference,String num_userinfo,String dateinscription) {
+    public Electeur(String code_district, String code_bv,String nFiche, String nom, String prenom, String sexe, String profession, String adresse, String dateNaiss,String nevers, String lieuNaiss, String nomPere, String nomMere, String cinElect, String nserieCin, String dateDeliv, String lieuDeliv, String ficheElect, String cinRecto, String cinVerso,String observation,String docreference,String num_userinfo,String dateinscription) {
+        this.code_district = code_district;
         this.code_bv = code_bv;
         this.nFiche = nFiche;
         this.nom = nom;
@@ -83,7 +86,6 @@ public class Electeur {
         this.dateinscription=dateinscription;
     }
 
-
     public String toString(){
         return new String ( "idElect = " +idElect+" code_bv = " +code_bv+" numelect= " +numelect+
                 " nFiche = "+nFiche+" nom = "+nom+"prenom =" +prenom+" sexe = " +sexe+" profession = " +profession+
@@ -91,6 +93,14 @@ public class Electeur {
                 " lieuNaiss= "  +lieuNaiss+ " nomPere = " +nomPere+ " nomMere = " +nomMere+
                 " cinElect = " +cinElect+ " nserieCin = "+nserieCin+" dateDeliv = " +dateDeliv+ " lieuDeliv = " +lieuDeliv+
                 " observation = "+observation+" dateinscription =" +dateinscription);
+    }
+
+    public String getCode_district() {
+        return code_district;
+    }
+
+    public void setCode_district(String code_district) {
+        this.code_district = code_district;
     }
 
     public String getNum_userinfo() {

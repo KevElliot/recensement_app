@@ -190,7 +190,7 @@ public class RechercheElecteur extends AppCompatActivity {
                         Document doc = DB.selectDocumentbyNum(rech);
                         Log.d("RECHERCHE","-----------  "+doc.toString());
                         if (doc.getIdfdocreference() != null) {
-                            elect = DB.Recherche("docreference", doc.getIdfdocreference());
+                            elect = DB.Recherche("docreference", doc.getIdfdocreference(),user.getCode_district());
                             if (elect.size() != 0) {
                                 Log.d("Elect", "..elect.get(0).toString(). " + elect.get(0).toString());
                                 listElecteurAdapter = new ListElecteurAdapter(RechercheElecteur.this, elect);
@@ -245,7 +245,7 @@ public class RechercheElecteur extends AppCompatActivity {
                             toast.show();
                         }
                     } else {
-                        elect = DB.Recherche(valeurSearch, rech);
+                        elect = DB.Recherche(valeurSearch, rech,user.getCode_district());
                         if (elect.size() != 0) {
                             Log.d("Elect", "... " + elect.get(0).toString());
                             listElecteurAdapter = new ListElecteurAdapter(RechercheElecteur.this, elect);

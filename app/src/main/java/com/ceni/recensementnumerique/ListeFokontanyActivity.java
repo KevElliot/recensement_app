@@ -54,7 +54,7 @@ public class ListeFokontanyActivity extends AppCompatActivity {
             enregistrer.setVisibility(View.GONE);
         }
         this.DB = new Db_sqLite(ListeFokontanyActivity.this);
-        listFokontany = DB.selectElecteurGroupByFokontany();
+        listFokontany = DB.selectElecteurGroupByFokontany(user.getCode_district());
         if (listFokontany.size() <= 0) {
             nbElecteur.setText("isa ny mpifidy: 0");
             Toast toast = Toast.makeText(ListeFokontanyActivity.this, "Tsy misy mpifidy voasoratra!", Toast.LENGTH_LONG);
