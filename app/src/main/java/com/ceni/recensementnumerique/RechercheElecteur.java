@@ -201,6 +201,7 @@ public class RechercheElecteur extends AppCompatActivity {
                                     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                                         Electeur electeur = new Electeur();
                                         electeur.setIdElect(elect.get(position).getIdElect());
+                                        electeur.setCode_district(elect.get(position).getCode_district());
                                         electeur.setCode_bv(elect.get(position).getCode_bv());
                                         electeur.setnFiche(elect.get(position).getnFiche());
                                         electeur.setNom(elect.get(position).getNom());
@@ -256,6 +257,7 @@ public class RechercheElecteur extends AppCompatActivity {
                                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                                     Electeur electeur = new Electeur();
                                     electeur.setIdElect(elect.get(position).getIdElect());
+                                    electeur.setCode_district(elect.get(position).getCode_district());
                                     electeur.setCode_bv(elect.get(position).getCode_bv());
                                     electeur.setnFiche(elect.get(position).getnFiche());
                                     electeur.setNom(elect.get(position).getNom());
