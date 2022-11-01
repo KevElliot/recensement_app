@@ -57,7 +57,7 @@ public class Task_insertElect extends AsyncTask<Void, Void, String> {
     protected String doInBackground(Void... voids) {
         result = false;
         Log.d("doInBackground", "tabsToStatistique : " + tabsToStatistique.size());
-        API.insertNotebooks(DB, context, ip, p, tabsToStatistique, new CallBack_Interface() {
+        API.insertNotebooks(DB, context, ip, p, tabsToStatistique,us, new CallBack_Interface() {
             @Override
             public void statistique(ArrayList<Integer> statistique) {
                 Log.i("TAILLE STATISTIQUE" , "CALLBACK  - "+statistique.size());

@@ -650,9 +650,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return listdoc;
     }
 
-    public List<Document> selectAllDocumentToSendOnServer() {
+    public List<Document> selectAllDocumentToSendOnServer(String codeDistrict) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from documents order by id desc", null);
+        Cursor cursor = MyDB.rawQuery("Select * from documents where code_district ='"+codeDistrict+"' order by id desc", null);
         List<Document> listdoc = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
@@ -893,38 +893,39 @@ public class Db_sqLite extends SQLiteOpenHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public List<Electeur> selectElecteur(int limit) {
+    public List<Electeur> selectElecteur(int limit, String codeDistrict) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         //Cursor cursor = MyDB.rawQuery("Select * from Electeur limit "+limit, null); order by code_bv limit 25
-        Cursor cursor = MyDB.rawQuery("Select * from Electeur limit "+limit, null);
+        Cursor cursor = MyDB.rawQuery("Select * from Electeur where code_district='"+codeDistrict+"' limit "+limit, null);
         List<Electeur> listElect = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
                 Electeur e = new Electeur();
                 e.setIdElect(cursor.getInt(0));
-                e.setCode_bv(cursor.getString(1));
-                e.setnFiche(cursor.getString(2));
-                e.setNom(cursor.getString(3));
-                e.setPrenom(cursor.getString(4));
-                e.setSexe(cursor.getString(5));
-                e.setProfession(cursor.getString(6));
-                e.setAdresse(cursor.getString(7));
-                e.setDateNaiss(cursor.getString(8));
-                e.setNevers(cursor.getString(9));
-                e.setLieuNaiss(cursor.getString(10));
-                e.setNomPere(cursor.getString(11));
-                e.setNomMere(cursor.getString(12));
-                e.setCinElect(cursor.getString(13));
-                e.setNserieCin(cursor.getString(14));
-                e.setDateDeliv(cursor.getString(15));
-                e.setLieuDeliv(cursor.getString(16));
-                e.setFicheElect(cursor.getString(17));
-                e.setCinRecto(cursor.getString(18));
-                e.setCinVerso(cursor.getString(19));
-                e.setObservation(cursor.getString(20));
-                e.setDocreference(cursor.getString(21));
-                e.setNum_userinfo(cursor.getString(22));
-                e.setDateinscription(cursor.getString(23));
+                e.setCode_district(cursor.getString(1));
+                e.setCode_bv(cursor.getString(2));
+                e.setnFiche(cursor.getString(3));
+                e.setNom(cursor.getString(4));
+                e.setPrenom(cursor.getString(5));
+                e.setSexe(cursor.getString(6));
+                e.setProfession(cursor.getString(7));
+                e.setAdresse(cursor.getString(8));
+                e.setDateNaiss(cursor.getString(9));
+                e.setNevers(cursor.getString(10));
+                e.setLieuNaiss(cursor.getString(11));
+                e.setNomPere(cursor.getString(12));
+                e.setNomMere(cursor.getString(13));
+                e.setCinElect(cursor.getString(14));
+                e.setNserieCin(cursor.getString(15));
+                e.setDateDeliv(cursor.getString(16));
+                e.setLieuDeliv(cursor.getString(17));
+                e.setFicheElect(cursor.getString(18));
+                e.setCinRecto(cursor.getString(19));
+                e.setCinVerso(cursor.getString(20));
+                e.setObservation(cursor.getString(21));
+                e.setDocreference(cursor.getString(22));
+                e.setNum_userinfo(cursor.getString(23));
+                e.setDateinscription(cursor.getString(24));
                 listElect.add(e);
             }
         } catch (Exception e) {
@@ -1199,6 +1200,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     public void insertUser(Context c) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
+        MyDB.enableWriteAheadLogging();
         try {
             Resources res = c.getResources();
             String[] users = res.getStringArray(R.array.utilisateurs);
@@ -1506,34 +1508,36 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 Cursor cursor = db.rawQuery("select * from electeur", null);
                 //Write the name of the table and the name of the columns (comma separated values) in the .csv file.
                 printWriter.println("TABLE ELECTEUR /");
-                printWriter.println("idElect,codeBv,nFiche,nom,prenom,sexe,profession,adresse,dateNaiss,nevers,lieuNaiss,nomPere,nomMere,cinElect,nserieCin,dateDeliv,lieuDeliv,ficheElect,cinRecto,cinVerso,observation,docreference,num_userinfo,dateinscription;");
+                printWriter.println("idElect,codeDistrict,codeBv,nFiche,nom,prenom,sexe,profession,adresse,dateNaiss,nevers,lieuNaiss,nomPere,nomMere,cinElect,nserieCin,dateDeliv,lieuDeliv,ficheElect,cinRecto,cinVerso,observation,docreference,num_userinfo,dateinscription;");
                 while (cursor.moveToNext()) {
                     int idElect = cursor.getInt(0);
-                    String codeBv = cursor.getString(1);
-                    String nFiche = cryptage.setDecryptOf(cursor.getString(2));
-                    String nom = cryptage.setDecryptOf(cursor.getString(3));
-                    String prenom = cryptage.setDecryptOf(cursor.getString(4));
-                    String sexe = cryptage.setDecryptOf(cursor.getString(5));
-                    String profession = cryptage.setDecryptOf(cursor.getString(6));
-                    String adresse = cryptage.setDecryptOf(cursor.getString(7));
-                    String dateNaiss = cryptage.setDecryptOf(cursor.getString(8));
-                    String nevers = cryptage.setDecryptOf(cursor.getString(9));
-                    String lieuNaiss = cryptage.setDecryptOf(cursor.getString(10));
-                    String nomPere = cryptage.setDecryptOf(cursor.getString(11));
-                    String nomMere = cryptage.setDecryptOf(cursor.getString(12));
-                    String cinElect = cryptage.setDecryptOf(cursor.getString(13));
-                    String nserieCin = cryptage.setDecryptOf(cursor.getString(14));
-                    String dateDeliv = cryptage.setDecryptOf(cursor.getString(15));
-                    String lieuDeliv = cryptage.setDecryptOf(cursor.getString(16));
-                    String ficheElect = cursor.getString(17);
-                    String cinRecto = cursor.getString(18);
-                    String cinVerso = cursor.getString(19);
-                    String observation = cryptage.setDecryptOf(cursor.getString(20));
-                    String docreference = cursor.getString(21);
-                    String num_userinfo = cryptage.setDecryptOf(cursor.getString(22));
-                    String dateinscription = cryptage.setDecryptOf(cursor.getString(23));
+                    String codeDistrict = cursor.getString(1);
+                    String codeBv = cursor.getString(2);
+                    String nFiche = cryptage.setDecryptOf(cursor.getString(3));
+                    String nom = cryptage.setDecryptOf(cursor.getString(4));
+                    String prenom = cryptage.setDecryptOf(cursor.getString(5));
+                    String sexe = cryptage.setDecryptOf(cursor.getString(6));
+                    String profession = cryptage.setDecryptOf(cursor.getString(7));
+                    String adresse = cryptage.setDecryptOf(cursor.getString(8));
+                    String dateNaiss = cryptage.setDecryptOf(cursor.getString(9));
+                    String nevers = cryptage.setDecryptOf(cursor.getString(10));
+                    String lieuNaiss = cryptage.setDecryptOf(cursor.getString(11));
+                    String nomPere = cryptage.setDecryptOf(cursor.getString(12));
+                    String nomMere = cryptage.setDecryptOf(cursor.getString(13));
+                    String cinElect = cryptage.setDecryptOf(cursor.getString(14));
+                    String nserieCin = cryptage.setDecryptOf(cursor.getString(15));
+                    String dateDeliv = cryptage.setDecryptOf(cursor.getString(16));
+                    String lieuDeliv = cryptage.setDecryptOf(cursor.getString(17));
+                    String ficheElect = cursor.getString(18);
+                    String cinRecto = cursor.getString(19);
+                    String cinVerso = cursor.getString(20);
+                    String observation = cryptage.setDecryptOf(cursor.getString(21));
+                    String docreference = cursor.getString(22);
+                    String num_userinfo = cryptage.setDecryptOf(cursor.getString(23));
+                    String dateinscription = cryptage.setDecryptOf(cursor.getString(24));
 
                     String record = idElect+","+
+                            codeDistrict+","+
                             codeBv+","+
                             nFiche+","+
                             nom+","+
@@ -1600,17 +1604,19 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 Cursor cursor = db.rawQuery("select * from documents", null);
                 //Write the name of the table and the name of the columns (comma separated values) in the .csv file.
                 printWriter.println("TABLE DOCUMENT /");
-                printWriter.println("idDoc,idfdocreference,doccode_fokontany,doccode_bv,numdocreference,datedocreference,nbfeuillet;");
+                printWriter.println("idDoc,code_district,idfdocreference,doccode_fokontany,doccode_bv,numdocreference,datedocreference,nbfeuillet;");
                 while (cursor.moveToNext()) {
                     String idDoc = (String.valueOf(cursor.getInt(0)));
-                    String idfdocreference = (cursor.getString(1));
-                    String doccode_fokontany = (cryptage.setDecryptOf(cursor.getString(2)));
-                    String doccode_bv = (cryptage.setDecryptOf(cursor.getString(3)));
-                    String numdocreference = (cryptage.setDecryptOf(cursor.getString(4)));
-                    String datedocreference= (cryptage.setDecryptOf(cursor.getString(5)));
-                    int nbfeuillet = (cursor.getInt(6));
+                    String codeDistrict = (cursor.getString(1));
+                    String idfdocreference = (cursor.getString(2));
+                    String doccode_fokontany = (cryptage.setDecryptOf(cursor.getString(3)));
+                    String doccode_bv = (cryptage.setDecryptOf(cursor.getString(4)));
+                    String numdocreference = (cryptage.setDecryptOf(cursor.getString(5)));
+                    String datedocreference= (cryptage.setDecryptOf(cursor.getString(6)));
+                    int nbfeuillet = (cursor.getInt(7));
 
                     String record = idDoc+","+
+                                    codeDistrict+","+
                                     idfdocreference+","+
                                     doccode_fokontany+","+
                                     doccode_bv+","+

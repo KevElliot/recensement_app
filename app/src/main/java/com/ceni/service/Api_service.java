@@ -141,7 +141,7 @@ public class Api_service {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static void insertNotebooks(Db_sqLite DB, Context context, String ip, String port,ArrayList<Integer> tabsToStatistique, CallBack_Interface myCallBack) {
+    public static void insertNotebooks(Db_sqLite DB, Context context, String ip, String port,ArrayList<Integer> tabsToStatistique,User user, CallBack_Interface myCallBack) {
         String base_url = "http://" + ip + ":" + port + "/";
         int nbElect = DB.countElecteur();
         int limit;
@@ -152,10 +152,10 @@ public class Api_service {
         }
 //        int limit = (int)Math.ceil(nbElect/200);
         Log.d("API_Service","insertNotebooks limit "+limit);
-        List<Document> documents = DB.selectAllDocumentToSendOnServer();
+        List<Document> documents = DB.selectAllDocumentToSendOnServer(user.getCode_district());
 
         for (int val = 0; val < limit; val++) {
-            List<Electeur> listElect = DB.selectElecteur(200);
+            List<Electeur> listElect = DB.selectElecteur(200,user.getCode_district());
             JSONArray notebooks = new JSONArray();
             documents.stream().forEach(document -> {
                 JSONObject jsonObject = new JSONObject();
