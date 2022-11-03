@@ -153,7 +153,7 @@ public class Api_service {
 //        int limit = (int)Math.ceil(nbElect/200);
         Log.d("API_Service","insertNotebooks limit "+limit);
         List<Document> documents = DB.selectAllDocumentToSendOnServer(user.getCode_district());
-
+        Log.d("API","--------------------- "+documents.size());
         for (int val = 0; val < limit; val++) {
             List<Electeur> listElect = DB.selectElecteur(200,user.getCode_district());
             JSONArray notebooks = new JSONArray();
