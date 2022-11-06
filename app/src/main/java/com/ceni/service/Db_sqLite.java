@@ -650,9 +650,14 @@ public class Db_sqLite extends SQLiteOpenHelper {
         return listdoc;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public List<Document> selectAllDocumentToSendOnServer(String codeDistrict) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        Cursor cursor = MyDB.rawQuery("Select * from documents where code_district ='"+codeDistrict+"' order by id desc", null);
+        String cryptDistrict = cryptage.setEnCryptOf(codeDistrict);
+        String partOne = cryptDistrict.substring(0,3);
+        String partTwo = cryptDistrict.substring(11);
+        String sql = "Select * from documents where code_district like '"+partOne+"%' and code_district like '%"+partTwo+"' order by id desc";
+        Cursor cursor = MyDB.rawQuery(sql, null);
         List<Document> listdoc = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
