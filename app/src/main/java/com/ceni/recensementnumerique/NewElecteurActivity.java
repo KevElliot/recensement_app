@@ -1173,8 +1173,9 @@ public class NewElecteurActivity extends AppCompatActivity {
     caractere.add("'");
     caractere.add("_");
     caractere.add("-");
+    caractere.add(",");
     for(int i=0; i< caractere.size();i++){
-        if(""+text.charAt(0) == caractere.get(i)){
+        if(text.indexOf(caractere.get(i))==0){
             res = true;
         }
     }
