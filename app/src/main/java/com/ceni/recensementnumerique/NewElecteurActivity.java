@@ -605,37 +605,43 @@ public class NewElecteurActivity extends AppCompatActivity {
                 countFormValide = 0;
                 Electeur electeur = new Electeur();
                 enregistrer.setEnabled(false);
-                if (nom.getText().toString().length() != 0) {
+                if (nom.getText().toString().length() > 1 && !checkCaractere(nom.getText().toString())) {
                     electeur.setNom(nom.getText().toString());
                     countFormValide += 1;
                 } else {
-                    nom.setError("Mila fenoina");
+                    nom.setError("Mila fenoina na anarana tsy miteny");
                 }
                 if (prenom.getText().toString().length() != 0) {
-                    electeur.setPrenom(prenom.getText().toString());
+                    if(!checkCaractere(prenom.getText().toString())){
+                        electeur.setPrenom(prenom.getText().toString());
+                        countFormValide += 1;
+                    }else{
+                        prenom.setError("fanampin'anarana tsy miteny");
+                    }
                 } else {
                     electeur.setPrenom("");
+                    countFormValide += 1;
                 }
-                if (lieuNaiss.getText().toString().length() != 0) {
+                if (lieuNaiss.getText().toString().length() > 1 && !checkCaractere(lieuNaiss.getText().toString())) {
                     electeur.setLieuNaiss(lieuNaiss.getText().toString());
                     countFormValide += 1;
                 } else {
-                    lieuNaiss.setError("Mila fenoina");
+                    lieuNaiss.setError("Mila fenoina na tsy miteny");
                 }
 
-                if (adresse.getText().toString().length() != 0) {
+                if (adresse.getText().toString().length() > 1 && !checkCaractere(adresse.getText().toString())) {
                     electeur.setAdresse(adresse.getText().toString());
                     countFormValide += 1;
                 } else {
                     adresse.setError("Mila fenoina");
                 }
-                if (nomPere.getText().toString().length() != 0) {
+                if (nomPere.getText().toString().length() > 1 && !checkCaractere(nomPere.getText().toString())) {
                     electeur.setNomPere(nomPere.getText().toString());
                     countFormValide += 1;
                 } else {
                     nomPere.setError("Mila fenoina");
                 }
-                if (nomMere.getText().toString().length() != 0) {
+                if (nomMere.getText().toString().length() > 1 && !checkCaractere(nomMere.getText().toString())) {
                     electeur.setNomMere(nomMere.getText().toString());
                     countFormValide += 1;
                 } else {
@@ -763,7 +769,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                         nserie.setError("Diso");
                     }
                 }
-                if (lieuCin.getText().toString().length() != 0) {
+                if (lieuCin.getText().toString().length() > 1 && !checkCaractere(lieuCin.getText().toString())) {
                     electeur.setLieuDeliv(lieuCin.getText().toString());
                     countFormValide += 1;
                 } else {
@@ -800,7 +806,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                             }).show();
                 }
 
-                if (countFormValide != 15) {
+                if (countFormValide != 16) {
                     enregistrer.setEnabled(true);
                     Log.d("COUNT", "" + countFormValide);
                     new AlertDialog.Builder(NewElecteurActivity.this)
@@ -1159,5 +1165,19 @@ public class NewElecteurActivity extends AppCompatActivity {
                 startActivityForResult(takePictureIntent, CAMERA_REQUEST_CODE);
             }
         }
+    }
+    private boolean checkCaractere(String text){
+    boolean res = false;
+    ArrayList<String> caractere = new ArrayList<>();
+    caractere.add(" ");
+    caractere.add("'");
+    caractere.add("_");
+    caractere.add("-");
+    for(int i=0; i< caractere.size();i++){
+        if(""+text.charAt(0) == caractere.get(i)){
+            res = true;
+        }
+    }
+    return res;
     }
 }

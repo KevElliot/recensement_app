@@ -121,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                             toast.show();
                         }
                     } else {
+                        DB.gestionLog(LoginActivity.this,"Login ERROR: Vous n'avez pas acces! : pseudo - "+pseudo+" mdp: "+motdepass+" imei: "+checkIMEI);
                         Toast toast = Toast.makeText(LoginActivity.this, "Vous n'avez pas acces!", Toast.LENGTH_LONG);
                         toast.show();
                     }

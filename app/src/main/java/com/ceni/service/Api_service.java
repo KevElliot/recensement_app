@@ -282,7 +282,7 @@ public class Api_service {
 
                             Toast toast = Toast.makeText(context, "Electeur enregistré!", Toast.LENGTH_LONG);
                             toast.show();
-
+                            DB.gestionLog(context,"Transfert: "+tabsToStatistique.size());
 //                        String statTab = gson.toJson(tabsToStatistique);
 
 //                        Intent intent = new Intent(context, StatistiqueActivity.class);
@@ -299,6 +299,7 @@ public class Api_service {
                         @Override
                         public void onError(ANError anError) {
                             Log.d("error", "true " + anError.toString());
+                            DB.gestionLog(context,"ERROR: "+anError);
                             String error = anError.toString();
                             String customMessage = "Misy olana ny fandefasana info";
                             if (error.toLowerCase(Locale.ROOT).contains("failed to connect"))
