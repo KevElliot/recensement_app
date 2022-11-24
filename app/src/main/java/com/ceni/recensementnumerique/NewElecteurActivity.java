@@ -612,10 +612,10 @@ public class NewElecteurActivity extends AppCompatActivity {
                     nom.setError("Mila fenoina na anarana tsy miteny");
                 }
                 if (prenom.getText().toString().length() != 0) {
-                    if(!checkCaractere(prenom.getText().toString())){
+                    if (!checkCaractere(prenom.getText().toString())) {
                         electeur.setPrenom(prenom.getText().toString());
                         countFormValide += 1;
-                    }else{
+                    } else {
                         prenom.setError("fanampin'anarana tsy miteny");
                     }
                 } else {
@@ -745,7 +745,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                     Toast toast = Toast.makeText(NewElecteurActivity.this, "Misafidiana Karine!", Toast.LENGTH_LONG);
                     toast.show();
                 }
-                if (cin.getText().toString().length() == 12) {
+                if (cin.getText().toString().length() == 12 && !checkCin(cin.getText().toString())) {
                     electeur.setCinElect(cin.getText().toString());
                     countFormValide += 1;
                 } else {
@@ -790,23 +790,24 @@ public class NewElecteurActivity extends AppCompatActivity {
                     electeur.setCinVerso(imageVerso);
                 }
                 if (dataFicheElect != null) {
-                    countFormValide += 1;
+                    //countFormValide += 1;
                     electeur.setFicheElect(dataFicheElect);
-                } else {
-                    enregistrer.setEnabled(true);
-                    new AlertDialog.Builder(NewElecteurActivity.this)
-                            .setTitle("Fahadisoana?")
-                            .setMessage("Iangaviana ianao mba haka sarin'ny takelaka!.")
-                            .setCancelable(false)
-                            .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // tsisy
-                                }
-                            }).show();
                 }
+//                else {
+//                    enregistrer.setEnabled(true);
+//                    new AlertDialog.Builder(NewElecteurActivity.this)
+//                            .setTitle("Fahadisoana?")
+//                            .setMessage("Iangaviana ianao mba haka sarin'ny takelaka!.")
+//                            .setCancelable(false)
+//                            .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    // tsisy
+//                                }
+//                            }).show();
+//                }
 
-                if (countFormValide != 16) {
+                if (countFormValide != 15) {
                     enregistrer.setEnabled(true);
                     Log.d("COUNT", "" + countFormValide);
                     new AlertDialog.Builder(NewElecteurActivity.this)
@@ -827,8 +828,8 @@ public class NewElecteurActivity extends AppCompatActivity {
                         if (!isSamePers) {
                             Bv bvSelected = (Bv) spinnerBv.getSelectedItem();
                             boolean isSamePerson = DB.isNom_DateNaiss_Cin_Nevers_Same(electeur.getNom(), electeur.getDateNaiss(), electeur.getCinElect(), electeur.getNevers());
-                            boolean prenom_datenaiss_cin_same = DB.isPrenom_DateNaiss_Cin_Nevers_Same(electeur.getPrenom(),electeur.getDateNaiss(),electeur.getCinElect(),electeur.getNevers());
-                            boolean nom_prenom_mere_same = DB.isNom_prenom_nomMere_Same(electeur.getNom(),electeur.getPrenom(),electeur.getNomMere());
+                            boolean prenom_datenaiss_cin_same = DB.isPrenom_DateNaiss_Cin_Nevers_Same(electeur.getPrenom(), electeur.getDateNaiss(), electeur.getCinElect(), electeur.getNevers());
+                            boolean nom_prenom_mere_same = DB.isNom_prenom_nomMere_Same(electeur.getNom(), electeur.getPrenom(), electeur.getNomMere());
                             if (!isSamePerson && !prenom_datenaiss_cin_same && !nom_prenom_mere_same) {
                                 isMemeFiche = DB.isMemeFiche(nFiche.getText().toString(), idFdocReference[0]);
                                 if (!isMemeFiche) {
@@ -906,7 +907,7 @@ public class NewElecteurActivity extends AppCompatActivity {
                                             }
                                         }).show();
                             }
-                        }else {
+                        } else {
                             nom.setError("mpifidy efa voasoratra!");
                             prenom.setError("mpifidy efa voasoratra!");
                             mShowSelectedDateText.setTypeface(Typeface.DEFAULT_BOLD);
@@ -1166,19 +1167,47 @@ public class NewElecteurActivity extends AppCompatActivity {
             }
         }
     }
-    private boolean checkCaractere(String text){
-    boolean res = false;
-    ArrayList<String> caractere = new ArrayList<>();
-    caractere.add(" ");
-    caractere.add("'");
-    caractere.add("_");
-    caractere.add("-");
-    caractere.add(",");
-    for(int i=0; i< caractere.size();i++){
-        if(text.indexOf(caractere.get(i))==0){
+
+    private boolean checkCaractere(String text) {
+        boolean res = false;
+        ArrayList<String> caractere = new ArrayList<>();
+        caractere.add(" ");
+        caractere.add("*");
+        caractere.add("%");
+        caractere.add("'");
+        caractere.add("_");
+        caractere.add("-");
+        caractere.add(",");
+        caractere.add("0");
+        caractere.add("1");
+        caractere.add("2");
+        caractere.add("3");
+        caractere.add("4");
+        caractere.add("5");
+        caractere.add("6");
+        caractere.add("7");
+        caractere.add("8");
+        caractere.add("9");
+        caractere.add(".");
+        for (int i = 0; i < caractere.size(); i++) {
+            if (text.indexOf(caractere.get(i)) == 0) {
+                res = true;
+            }
+        }
+        return res;
+    }
+    private boolean checkCin(String text){
+        boolean res = false;
+        int count = 0;
+        for(int i = 0; i < text.length()-1; i++){
+            if(text.charAt(i) == text.charAt(i+1)){
+                count +=1;
+            }
+        }
+        if(count > text.length() - 2){
             res = true;
         }
-    }
-    return res;
+        Log.d("LOG CHECK CIN","----------  "+res);
+        return res;
     }
 }

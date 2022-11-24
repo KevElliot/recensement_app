@@ -247,7 +247,7 @@ public class Api_service {
                             Log.d("noteFailedvoterSucces", "noteFailedvoterSucces:  " + noteFoundVoterSuccess);
                             Log.d("noteFailedvoterfailed", "noteFailedvoterfailed:  " + noteFoundVoterFailed);
                             Log.d("Duplicated", "noteFailedvoterduplicated:  " + noteFoundVoterDuplicated);
-                            Log.d("notebooks", "notebooks:  " + notebooks.get(0).toString());
+                           // Log.d("notebooks", "notebooks:  " + notebooks.get(0).toString());
 
 //                        ArrayList<Long> tabsToStatistique = new ArrayList<>();
                             //INSERT NOTEBOOKS SUCCESS

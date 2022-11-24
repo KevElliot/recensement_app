@@ -38,13 +38,13 @@ public class ListElecteurAdapter extends ArrayAdapter<Electeur> {
         TextView cinElect = convertView.findViewById(R.id.cinElect);
         TextView nFiche = convertView.findViewById(R.id.nFiche);
         TextView prenomElect = convertView.findViewById(R.id.prenomElect);
-
-        byte[] img = Base64.decode(electeur.getFicheElect(), Base64.DEFAULT);
-        BitmapFactory.Options opt = new BitmapFactory.Options();
-        opt.inMutable = true;
-        Bitmap bm = BitmapFactory.decodeByteArray(img, 0, img.length, opt);
-
-        imageElect.setImageBitmap(bm);
+        if(electeur.getFicheElect()!=null) {
+            byte[] img = Base64.decode(electeur.getFicheElect(), Base64.DEFAULT);
+            BitmapFactory.Options opt = new BitmapFactory.Options();
+            opt.inMutable = true;
+            Bitmap bm = BitmapFactory.decodeByteArray(img, 0, img.length, opt);
+            imageElect.setImageBitmap(bm);
+        }
         cinElect.setText("CIN: "+electeur.getCinElect());
         nFiche.setText("Takelaka: "+electeur.getnFiche());
         nomElect.setText(electeur.getNom());
