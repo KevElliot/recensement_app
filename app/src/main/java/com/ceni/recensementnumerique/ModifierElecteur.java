@@ -142,9 +142,13 @@ public class ModifierElecteur extends AppCompatActivity {
         dateCinElect.setText(electeur.getDateDeliv());
         dateInscr.setText(electeur.getDateinscription());
         dateCin = electeur.getDateDeliv();
-        Bitmap imgFiche = this.decodeImage(electeur.getFicheElect());
-
-        ficheElect.setImageBitmap(imgFiche);
+        if (electeur.getFicheElect() != null) {
+            ficheElect.setVisibility(View.VISIBLE);
+            Bitmap imgFiche = this.decodeImage(electeur.getFicheElect());
+            ficheElect.setImageBitmap(imgFiche);
+        } else {
+            ficheElect.setVisibility(View.GONE);
+        }
         if (electeur.getCinRecto() != null) {
             cin_recto.setVisibility(View.VISIBLE);
             Bitmap imgCinRecto = this.decodeImage(electeur.getCinRecto());

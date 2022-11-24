@@ -29,6 +29,7 @@ import com.ceni.recensementnumerique.R;
 
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -168,7 +169,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query1 = "CREATE TABLE " + TABLE_ELECTEUR + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_CODE_DISTRICT + " TEXT, "+ COLUMN_CODE_BV + " TEXT, " + COLUMN_NFICHE + " TEXT," +
+        String query1 = "CREATE TABLE " + TABLE_ELECTEUR + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_CODE_DISTRICT + " TEXT, " + COLUMN_CODE_BV + " TEXT, " + COLUMN_NFICHE + " TEXT," +
                 COLUMN_NOM + " TEXT," + COLUMN_PRENOM + " TEXT," + COLUMN_SEXE + " TEXT," + COLUMN_PROFESSION + " TEXT," + COLUMN_ADRESSE + " TEXT," +
                 COLUMN_DATENAISS + " TEXT," + COLUMN_NEVERS + " TEXT," + COLUMN_LIEUNAISS + " TEXT," + COLUMN_NOMPERE + " TEXT," + COLUMN_NOMMERE + " TEXT," +
                 COLUMN_CINELECT + " TEXT," + COLUMN_NSERIECIN + " TEXT," + COLUMN_DATEDELIV + " TEXT," + COLUMN_LIEUDELIV + " TEXT," +
@@ -184,13 +185,13 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 PRENOMUSER + " TEXT, " + ROLE + " TEXT, " + PSEUDO + " TEXT, " + MOTDEPASSE + " TEXT, " + REGIONUSER + " TEXT, " +
                 USER_CODEREGION + " TEXT, " + DISTRICTUSER + " TEXT, " + USER_CODEDISTRICT + " TEXT, " + COMMUNEUSER + " TEXT, " + USER_CODECOMMUNE + " TEXT, " + NBSAISI + " INT)";
 
-        String query4 = "CREATE TABLE " + TABLE_Document + "(" + idDoc + " INTEGER primary key AUTOINCREMENT," + doccode_district + " TEXT, "+ idfdocreference + " TEXT, " + doccode_fokontany + " TEXT," + doccode_bv + " TEXT," + numdocreference + " TEXT," + datedocreference + " TEXT, " + nbfeuillet + " TEXT)";
+        String query4 = "CREATE TABLE " + TABLE_Document + "(" + idDoc + " INTEGER primary key AUTOINCREMENT," + doccode_district + " TEXT, " + idfdocreference + " TEXT, " + doccode_fokontany + " TEXT," + doccode_bv + " TEXT," + numdocreference + " TEXT," + datedocreference + " TEXT, " + nbfeuillet + " TEXT)";
 
         String query5 = "CREATE TABLE " + TABLE_Tablette + "(" + COLUMN_idTab + " INTEGER primary key AUTOINCREMENT," + COLUMN_region + " TEXT, " + COLUMN_code_region + " TEXT," + COLUMN_district + " TEXT," + COLUMN_code_district + " TEXT, " + COLUMN_commune + " TEXT," + COLUMN_code_commune + " TEXT," + COLUMN_fokontany + " TEXT," + COLUMN_code_fokontany + " TEXT," + COLUMN_responsable + " TEXT," + COLUMN_imei + " TEXT," + COLUMN_macWifi + " TEXT)";
 
         String query6 = "CREATE TABLE " + TABLE_Statistique + " ( " + id_Statistique + " INTEGER primary key AUTOINCREMENT," + dateStat + " TEXT, " + karineSuccess + " TEXT, " +
                 karineFailed + " TEXT, " + karinesuccesstakelakaSuccess + " TEXT, " + karinesuccesstakelakaFailed + " TEXT, " + karineFailedTakelakaSuccess + " TEXT, " + karineFailedTakelakaFailed + " TEXT, " +
-                takelakaMiverinaKarineLasa + " TEXT, " + takelakaMiverinaKarineTsyLasa + " TEXT)" ;
+                takelakaMiverinaKarineLasa + " TEXT, " + takelakaMiverinaKarineTsyLasa + " TEXT)";
 
 
         db.execSQL(query1);
@@ -216,15 +217,15 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public Boolean isMemeFiche(String nfiche, String docref) {
         boolean result = false;
         String ficheCrypt = cryptage.setEnCryptOf(nfiche);
-        String fiche_1 ="";
-        String fiche_2 ="";
-        if(ficheCrypt.length()>=3) {
+        String fiche_1 = "";
+        String fiche_2 = "";
+        if (ficheCrypt.length() >= 3) {
             fiche_1 = ficheCrypt.substring(0, 3);
             fiche_2 = ficheCrypt.substring(11, ficheCrypt.length());
         }
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql = "Select nFiche from electeur where nFiche like '" + fiche_1 + "%' and nFiche like '%"+fiche_2+"' and docreference = '" +docref+ "'";
-        Log.d("isMmFiche",sql);
+        String sql = "Select nFiche from electeur where nFiche like '" + fiche_1 + "%' and nFiche like '%" + fiche_2 + "' and docreference = '" + docref + "'";
+        Log.d("isMmFiche", sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
             long nbElect = this.countElecteur();
@@ -334,7 +335,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String cryptNom2 = cryptNom.substring(11, cryptNom.length());
         String cryptPrenom1 = "";
         String cryptPrenom2 = "";
-        if(prenom!= null && prenom.length()!=0) {
+        if (prenom != null && prenom.length() != 0) {
             cryptPrenom = cryptage.setEnCryptOf(prenom);
             cryptPrenom1 = cryptPrenom.substring(0, 3);
             cryptPrenom2 = cryptPrenom.substring(11, cryptPrenom.length());
@@ -342,13 +343,13 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String cryptNomMere = "";
         String cryptNomMere1 = "";
         String cryptNomMere2 = "";
-        if(nomMere!= null && nomMere.length()!=0) {
+        if (nomMere != null && nomMere.length() != 0) {
             cryptNomMere = cryptage.setEnCryptOf(nomMere);
             cryptNomMere1 = cryptNomMere.substring(0, 3);
             cryptNomMere2 = cryptNomMere.substring(11, cryptNomMere.length());
             sql = "Select upper(nom),upper(prenom),nomMere from electeur where (upper(nom) like upper('" + cryptNom1 + "%') and upper(nom) like upper('%" + cryptNom2 + "') and upper(prenom) like upper('" + cryptPrenom1 + "%') and upper(prenom) like upper('%" + cryptPrenom2 + "')  and nomMere like '" + cryptNomMere1 + "%' and nomMere like '%" + cryptNomMere2 + "') or (upper(nom) like upper('" + cryptPrenom1 + "%') and upper(nom) like upper('%" + cryptPrenom2 + "') and upper(prenom) like upper('" + cryptNom1 + "%') and upper(prenom) like upper('%" + cryptNom2 + "') and nomMere like '" + cryptNomMere1 + "%' and nomMere like '%" + cryptNomMere2 + "')";
         }
-        Log.d("CRITERE","isNom_prenom_nomMere_Same  --  --  - "+ sql);
+        Log.d("CRITERE", "isNom_prenom_nomMere_Same  --  --  - " + sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
             long nbElect = this.countElecteur();
@@ -365,7 +366,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Boolean isPrenom_DateNaiss_Cin_Nevers_Same(String prenom, String dateNaiss,String cin,String nevers) {
+    public Boolean isPrenom_DateNaiss_Cin_Nevers_Same(String prenom, String dateNaiss, String cin, String nevers) {
         boolean result = false;
         String sql = "";
         SQLiteDatabase MyDB = this.getWritableDatabase();
@@ -380,21 +381,21 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String cryptPrenom1 = "";
         String cryptPrenom2 = "";
 
-        if(prenom!= null && prenom.length()!=0) {
+        if (prenom != null && prenom.length() != 0) {
             String cryptPrenom = cryptage.setEnCryptOf(prenom);
             cryptPrenom1 = cryptPrenom.substring(0, 3);
             cryptPrenom2 = cryptPrenom.substring(11, cryptPrenom.length());
         }
         String cryptCin1 = "";
         String cryptCin2 = "";
-        if(cin!= null && cin.length()!=0) {
+        if (cin != null && cin.length() != 0) {
             cryptCin = cryptage.setEnCryptOf(cin);
             cryptCin1 = cryptCin.substring(0, 3);
             cryptCin2 = cryptCin.substring(11, cryptCin.length());
         }
-        String cryptDateNaiss1 ="";
+        String cryptDateNaiss1 = "";
         String cryptDateNaiss2 = "";
-        if(dateNaiss!= null && dateNaiss.length()!=0) {
+        if (dateNaiss != null && dateNaiss.length() != 0) {
             cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
             cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
             cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
@@ -402,7 +403,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
         String cryptNevers1 = "";
         String cryptNevers2 = "";
-        if(nevers!= null && nevers.length()!=0) {
+        if (nevers != null && nevers.length() != 0) {
             cryptNevers = cryptage.setEnCryptOf(nevers);
             cryptNevers1 = cryptNevers.substring(0, 3);
             cryptNevers2 = cryptNevers.substring(11, cryptNevers.length());
@@ -410,7 +411,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
 
         //String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + cryptNom + "') and upper(prenom) = upper('" + cryptPrenom + "') and dateNaiss = '" + cryptDateNaiss + "') or (upper(nom)= upper('" + cryptPrenom + "') and upper(prenom) = upper('" + cryptNom + "') and dateNaiss = '" + cryptDateNaiss + "')";
-        Log.d("ISSAMEPERSOSOFT","isNom_DateNaiss_Cin_Nevers_Same   --  -- "+ sql);
+        Log.d("ISSAMEPERSOSOFT", "isNom_DateNaiss_Cin_Nevers_Same   --  -- " + sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
             long nbElect = this.countElecteur();
@@ -428,7 +429,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Boolean isNom_DateNaiss_Cin_Nevers_Same(String nom, String dateNaiss,String cin,String nevers) {
+    public Boolean isNom_DateNaiss_Cin_Nevers_Same(String nom, String dateNaiss, String cin, String nevers) {
         boolean result = false;
         String sql = "";
         SQLiteDatabase MyDB = this.getWritableDatabase();
@@ -445,14 +446,14 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String cryptNom2 = cryptNom.substring(11, cryptNom.length());
         String cryptCin1 = "";
         String cryptCin2 = "";
-        if(cin!= null && cin.length()!=0) {
+        if (cin != null && cin.length() != 0) {
             cryptCin = cryptage.setEnCryptOf(cin);
             cryptCin1 = cryptCin.substring(0, 3);
             cryptCin2 = cryptCin.substring(11, cryptCin.length());
         }
-        String cryptDateNaiss1 ="";
+        String cryptDateNaiss1 = "";
         String cryptDateNaiss2 = "";
-        if(dateNaiss!= null && dateNaiss.length()!=0) {
+        if (dateNaiss != null && dateNaiss.length() != 0) {
             cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
             cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
             cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
@@ -460,7 +461,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
         String cryptNevers1 = "";
         String cryptNevers2 = "";
-        if(nevers!= null && nevers.length()!=0) {
+        if (nevers != null && nevers.length() != 0) {
             cryptNevers = cryptage.setEnCryptOf(nevers);
             cryptNevers1 = cryptNevers.substring(0, 3);
             cryptNevers2 = cryptNevers.substring(11, cryptNevers.length());
@@ -468,7 +469,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
 
         //String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + cryptNom + "') and upper(prenom) = upper('" + cryptPrenom + "') and dateNaiss = '" + cryptDateNaiss + "') or (upper(nom)= upper('" + cryptPrenom + "') and upper(prenom) = upper('" + cryptNom + "') and dateNaiss = '" + cryptDateNaiss + "')";
-        Log.d("ISSAMEPERSOSOFT","isNom_DateNaiss_Cin_Nevers_Same   --  -- "+ sql);
+        Log.d("ISSAMEPERSOSOFT", "isNom_DateNaiss_Cin_Nevers_Same   --  -- " + sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
             long nbElect = this.countElecteur();
@@ -485,7 +486,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public Boolean isNom_prenom_dateNaiss_nevers_Same(String nom, String prenom, String dateNaiss,String nevers) {
+    public Boolean isNom_prenom_dateNaiss_nevers_Same(String nom, String prenom, String dateNaiss, String nevers) {
         boolean result = false;
         String sql = "";
         SQLiteDatabase MyDB = this.getWritableDatabase();
@@ -506,14 +507,14 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String cryptNom2 = cryptNom.substring(11, cryptNom.length());
         String cryptPrenom1 = "";
         String cryptPrenom2 = "";
-        if(prenom!= null && prenom.length()!=0) {
+        if (prenom != null && prenom.length() != 0) {
             cryptPrenom = cryptage.setEnCryptOf(prenom);
             cryptPrenom1 = cryptPrenom.substring(0, 3);
             cryptPrenom2 = cryptPrenom.substring(11, cryptPrenom.length());
         }
-        String cryptDateNaiss1 ="";
+        String cryptDateNaiss1 = "";
         String cryptDateNaiss2 = "";
-        if(dateNaiss!= null && dateNaiss.length()!=0) {
+        if (dateNaiss != null && dateNaiss.length() != 0) {
             cryptDateNaiss = cryptage.setEnCryptOf(dateNaiss);
             cryptDateNaiss1 = cryptDateNaiss.substring(0, 3);
             cryptDateNaiss2 = cryptDateNaiss.substring(11, cryptDateNaiss.length());
@@ -521,7 +522,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
         String cryptNevers1 = "";
         String cryptNevers2 = "";
-        if(nevers!= null && nevers.length()!=0) {
+        if (nevers != null && nevers.length() != 0) {
             cryptNevers = cryptage.setEnCryptOf(nevers);
             cryptNevers1 = cryptNevers.substring(0, 3);
             cryptNevers2 = cryptNevers.substring(11, cryptNevers.length());
@@ -529,7 +530,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         }
 
         //String sql = "Select upper(nom),upper(prenom),dateNaiss,code_bv from electeur where (upper(nom) =upper('" + cryptNom + "') and upper(prenom) = upper('" + cryptPrenom + "') and dateNaiss = '" + cryptDateNaiss + "') or (upper(nom)= upper('" + cryptPrenom + "') and upper(prenom) = upper('" + cryptNom + "') and dateNaiss = '" + cryptDateNaiss + "')";
-        Log.d("ISSAMEPERSOSOFT","isNom_prenom_dateNaiss_nevers_Same  --  --  - "+ sql);
+        Log.d("ISSAMEPERSOSOFT", "isNom_prenom_dateNaiss_nevers_Same  --  --  - " + sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
             long nbElect = this.countElecteur();
@@ -555,7 +556,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String fkt_1 = cryptFkt.substring(0, 3);
         String fkt_2 = cryptFkt.substring(11, cryptFkt.length());
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql = "Select " + numdocreference + " from documents where " + numdocreference + " like '" + numdoc_1 + "%' and " + numdocreference + " like '%"+numdoc_2+"' and code_fokontany like '" + fkt_1 + "%' and code_fokontany like '%" + fkt_2 + "'";
+        String sql = "Select " + numdocreference + " from documents where " + numdocreference + " like '" + numdoc_1 + "%' and " + numdocreference + " like '%" + numdoc_2 + "' and code_fokontany like '" + fkt_1 + "%' and code_fokontany like '%" + fkt_2 + "'";
         Log.d("isMemeDoc", "---1 " + sql);
         Cursor cursor = MyDB.rawQuery(sql, new String[]{});
         try {
@@ -579,7 +580,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         boolean res = false;
         if (!ismemedoc) {
             try {
-                Log.d("INSERT DOCUMENT","------- DISTRICT_DOCUMENT "+doc.getDoccode_district());
+                Log.d("INSERT DOCUMENT", "------- DISTRICT_DOCUMENT " + doc.getDoccode_district());
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(doccode_district, cryptage.setEnCryptOf(doc.getDoccode_district()));
                 contentValues.put(idfdocreference, doc.getDoccode_bv() + doc.getNumdocreference());
@@ -622,10 +623,10 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public List<Document> selectAllDocument(String code_district) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         String district = cryptage.setEnCryptOf(code_district);
-        String partOne = district.substring(0,3);
+        String partOne = district.substring(0, 3);
         String partTwo = district.substring(11);
-        String sql ="Select * from documents where code_district like '"+partOne+"%' and code_district like '%"+partTwo+"' order by id desc";
-        Log.d("Tag",sql);
+        String sql = "Select * from documents where code_district like '" + partOne + "%' and code_district like '%" + partTwo + "' order by id desc";
+        Log.d("Tag", sql);
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<Document> listdoc = new ArrayList<>();
         try {
@@ -654,9 +655,9 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public List<Document> selectAllDocumentToSendOnServer(String codeDistrict) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         String cryptDistrict = cryptage.setEnCryptOf(codeDistrict);
-        String partOne = cryptDistrict.substring(0,3);
+        String partOne = cryptDistrict.substring(0, 3);
         String partTwo = cryptDistrict.substring(11);
-        String sql = "Select * from documents where code_district like '"+partOne+"%' and code_district like '%"+partTwo+"' order by id desc";
+        String sql = "Select * from documents where code_district like '" + partOne + "%' and code_district like '%" + partTwo + "' order by id desc";
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<Document> listdoc = new ArrayList<>();
         try {
@@ -748,15 +749,14 @@ public class Db_sqLite extends SQLiteOpenHelper {
     }
 
 
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     public Document selectDocumentbyid(String idfdocreference) {
         Cursor cursor = null;
         List<Document> listdoc = new ArrayList<>();
         SQLiteDatabase MyDB = this.getWritableDatabase();
         try {
-            String sql = "Select * from documents where idfdocreference= '"+ idfdocreference +"'";
-            Log.d("123","-------------- "+sql);
+            String sql = "Select * from documents where idfdocreference= '" + idfdocreference + "'";
+            Log.d("123", "-------------- " + sql);
             cursor = MyDB.rawQuery(sql, null);
             while (cursor.moveToNext()) {
                 Document d = new Document();
@@ -777,7 +777,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
             cursor.close();
             MyDB.close();
         }
-        return (listdoc.size()!=0)?listdoc.get(0):null;
+        return (listdoc.size() != 0) ? listdoc.get(0) : null;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -857,7 +857,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean updateElect(Electeur elect) {
         String id = "" + elect.getIdElect();
-        Log.d("updateElect","---------updateElect--------"+id);
+        Log.d("updateElect", "---------updateElect--------" + id);
         boolean result = false;
         try {
             SQLiteDatabase MyDB = this.getWritableDatabase();
@@ -901,7 +901,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public List<Electeur> selectElecteur(int limit, String codeDistrict) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         //Cursor cursor = MyDB.rawQuery("Select * from Electeur limit "+limit, null); order by code_bv limit 25
-        Cursor cursor = MyDB.rawQuery("Select * from Electeur where code_district='"+codeDistrict+"' limit "+limit, null);
+        Cursor cursor = MyDB.rawQuery("Select * from Electeur where code_district='" + codeDistrict + "' limit " + limit, null);
         List<Electeur> listElect = new ArrayList<>();
         try {
             while (cursor.moveToNext()) {
@@ -993,7 +993,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public List<ListFokontany> selectElecteurGroupByFokontany(String code_district) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
-        String sql = "select localisation.code_fokontany,localisation.fokontany_label, count(electeur._id) from electeur join localisation on electeur.code_bv = localisation.code_bv where electeur.code_district = '"+code_district+"' group by localisation.code_fokontany";
+        String sql = "select localisation.code_fokontany,localisation.fokontany_label, count(electeur._id) from electeur join localisation on electeur.code_bv = localisation.code_bv where electeur.code_district = '" + code_district + "' group by localisation.code_fokontany";
         Log.d("GroupByFokontany", "CURSOR SIZE " + sql);
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<ListFokontany> listElect = new ArrayList<>();
@@ -1149,19 +1149,19 @@ public class Db_sqLite extends SQLiteOpenHelper {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public List<Electeur> Recherche(String champ, String recherche,String code_district) {
+    public List<Electeur> Recherche(String champ, String recherche, String code_district) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         String sql = "";
-        if(champ.equals("docreference")) {
-            Log.d("RECHERCHEEE----","docreference");
-            sql="Select * from Electeur where " + champ.trim() + " = '" +recherche+ "'";
-        }else{
+        if (champ.equals("docreference")) {
+            Log.d("RECHERCHEEE----", "docreference");
+            sql = "Select * from Electeur where " + champ.trim() + " = '" + recherche + "'";
+        } else {
             String cryptRech = cryptage.setEnCryptOf(recherche.trim());
             String partOne = cryptRech.substring(0, 3);
             String partTwo = cryptRech.substring(11, cryptRech.length());
-            sql="Select * from Electeur where " + champ.trim() + " like '" + partOne + "%' and " + champ.trim() + " like '%" + partTwo + "' and code_district = '"+code_district+"'";
+            sql = "Select * from Electeur where " + champ.trim() + " like '" + partOne + "%' and " + champ.trim() + " like '%" + partTwo + "' and code_district = '" + code_district + "'";
         }
-        Log.d("RECHERCHE","RECHERCHE xxxx  "+ sql);
+        Log.d("RECHERCHE", "RECHERCHE xxxx  " + sql);
         Cursor cursor = MyDB.rawQuery(sql, null);
         List<Electeur> listElect = new ArrayList<>();
         try {
@@ -1495,154 +1495,135 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String state = Environment.getExternalStorageState();
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
             return false;
-        }
-        else {
-            File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"SQLITE");
-            if (!exportDir.exists())
-            {
+        } else {
+            File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "SQLITE");
+            if (!exportDir.exists()) {
                 exportDir.mkdirs();
             }
             File file;
             PrintWriter printWriter = null;
-            try
-            {
+            try {
                 file = new File(exportDir, "ELECT_SQLITE.csv");
                 file.createNewFile();
                 printWriter = new PrintWriter(new FileWriter(file));
                 SQLiteDatabase db = this.getReadableDatabase(); //open the database for reading
                 Cursor cursor = db.rawQuery("select * from electeur", null);
-                //Write the name of the table and the name of the columns (comma separated values) in the .csv file.
-                printWriter.println("TABLE ELECTEUR /");
-                printWriter.println("idElect,codeDistrict,codeBv,nFiche,nom,prenom,sexe,profession,adresse,dateNaiss,nevers,lieuNaiss,nomPere,nomMere,cinElect,nserieCin,dateDeliv,lieuDeliv,ficheElect,cinRecto,cinVerso,observation,docreference,num_userinfo,dateinscription;");
+                printWriter.println("idElect,code_bv,num_feuillet,nomelect,prenomelect,sexe,profession,adresse,dateNaiss,nevers,lieuNaiss,nomPereelect,nomMereelect,cinElect,num_serie_cin,dateDeliv,lieuDeliv,imagefeuillet,cinRecto,cinVerso,observation,idfdocreference,num_userinfo,drecensement");
                 while (cursor.moveToNext()) {
                     int idElect = cursor.getInt(0);
-                    String codeDistrict = cursor.getString(1);
                     String codeBv = cursor.getString(2);
-                    String nFiche = cryptage.setDecryptOf(cursor.getString(3));
-                    String nom = cryptage.setDecryptOf(cursor.getString(4));
-                    String prenom = cryptage.setDecryptOf(cursor.getString(5));
+                    String num_feuillet = cryptage.setDecryptOf(cursor.getString(3));
+                    String nomelect = cryptage.setDecryptOf(cursor.getString(4));
+                    String prenomelect = cryptage.setDecryptOf(cursor.getString(5));
                     String sexe = cryptage.setDecryptOf(cursor.getString(6));
                     String profession = cryptage.setDecryptOf(cursor.getString(7));
                     String adresse = cryptage.setDecryptOf(cursor.getString(8));
                     String dateNaiss = cryptage.setDecryptOf(cursor.getString(9));
                     String nevers = cryptage.setDecryptOf(cursor.getString(10));
                     String lieuNaiss = cryptage.setDecryptOf(cursor.getString(11));
-                    String nomPere = cryptage.setDecryptOf(cursor.getString(12));
-                    String nomMere = cryptage.setDecryptOf(cursor.getString(13));
+                    String nomPereelect = cryptage.setDecryptOf(cursor.getString(12));
+                    String nomMereelect = cryptage.setDecryptOf(cursor.getString(13));
                     String cinElect = cryptage.setDecryptOf(cursor.getString(14));
-                    String nserieCin = cryptage.setDecryptOf(cursor.getString(15));
+                    String num_serie_cin = cryptage.setDecryptOf(cursor.getString(15));
                     String dateDeliv = cryptage.setDecryptOf(cursor.getString(16));
                     String lieuDeliv = cryptage.setDecryptOf(cursor.getString(17));
-                    String ficheElect = cursor.getString(18);
-                    String cinRecto = cursor.getString(19);
-                    String cinVerso = cursor.getString(20);
+                    String imagefeuillet = cursor.getString(18).replaceAll("[\r\n]+", "");
+                    String cinRecto = cursor.getString(19) != null ? cursor.getString(19).replaceAll("[\r\n]+", "") : cursor.getString(19);
+                    String cinVerso = cursor.getString(20) != null ? cursor.getString(20).replaceAll("[\r\n]+", "") : cursor.getString(20);
                     String observation = cryptage.setDecryptOf(cursor.getString(21));
                     String docreference = cursor.getString(22);
                     String num_userinfo = cryptage.setDecryptOf(cursor.getString(23));
-                    String dateinscription = cryptage.setDecryptOf(cursor.getString(24));
+                    String drecensement = cryptage.setDecryptOf(cursor.getString(24));
 
-                    String record = idElect+","+
-                            codeDistrict+","+
-                            codeBv+","+
-                            nFiche+","+
-                            nom+","+
-                            prenom+","+
-                            sexe+","+
-                            profession+","+
-                            adresse+","+
-                            dateNaiss+","+
-                            nevers+","+
-                            lieuNaiss+","+
-                            nomPere+","+
-                            nomMere+","+
-                            cinElect+","+
-                            nserieCin+","+
-                            dateDeliv+","+
-                            lieuDeliv+","+
-                            ficheElect+","+
-                            cinRecto+","+
-                            cinVerso+","+
-                            observation+","+
-                            docreference+","+
-                            num_userinfo+","+
-                            dateinscription;
-                    printWriter.append(';');
+                    String record = idElect + "," +
+                            codeBv + "," +
+                            num_feuillet + "," +
+                            nomelect + "," +
+                            prenomelect + "," +
+                            sexe + "," +
+                            profession + "," +
+                            adresse + "," +
+                            dateNaiss + "," +
+                            nevers + "," +
+                            lieuNaiss + "," +
+                            nomPereelect + "," +
+                            nomMereelect + "," +
+                            cinElect + "," +
+                            num_serie_cin + "," +
+                            dateDeliv + "," +
+                            lieuDeliv + "," +
+                            imagefeuillet + "," +
+                            cinRecto + "," +
+                            cinVerso + "," +
+                            observation + "," +
+                            docreference + "," +
+                            num_userinfo + "," +
+                            drecensement;
                     printWriter.println(record);
                 }
                 cursor.close();
                 db.close();
-            }
-            catch(Exception exc) {
-                Log.e("EXCEPTION",""+exc);
-                Toast toast = Toast.makeText(context, "PIRATE!", Toast.LENGTH_LONG);
+            } catch (Exception exc) {
+                Log.e("EXCEPTION", "" + exc);
+                Toast toast = Toast.makeText(context, "Erreur à l'exportation!", Toast.LENGTH_LONG);
                 toast.show();
                 return false;
-            }
-            finally {
-                if(printWriter != null) printWriter.close();
+            } finally {
+                if (printWriter != null) printWriter.close();
             }
             Toast toast = Toast.makeText(context, "TABLE ELECTEUR ENREGISTRER!", Toast.LENGTH_LONG);
             toast.show();
             return true;
         }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     public boolean documentToCsv(Context context) {
         String state = Environment.getExternalStorageState();
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
+            Log.e("EXCEPTION", "STORAGE INACCESSIBLE : MOUNTED");
+            Toast toast = Toast.makeText(context, "Erreur à l'exportation!", Toast.LENGTH_LONG);
+            toast.show();
             return false;
-        }
-        else {
-            File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"SQLITE");
-            if (!exportDir.exists())
-            {
+        } else {
+            File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "SQLITE");
+            if (!exportDir.exists()) {
                 exportDir.mkdirs();
             }
             File file;
             PrintWriter printWriter = null;
-            try
-            {
+            try {
                 file = new File(exportDir, "DOC_SQLITE.csv");
                 file.createNewFile();
                 printWriter = new PrintWriter(new FileWriter(file));
                 SQLiteDatabase db = this.getReadableDatabase(); //open the database for reading
                 Cursor cursor = db.rawQuery("select * from documents", null);
                 //Write the name of the table and the name of the columns (comma separated values) in the .csv file.
-                printWriter.println("TABLE DOCUMENT /");
-                printWriter.println("idDoc,code_district,idfdocreference,doccode_fokontany,doccode_bv,numdocreference,datedocreference,nbfeuillet;");
+                printWriter.println("idfdocreference,code_bv,numdocreference,datedocreference,compteur");
                 while (cursor.moveToNext()) {
-                    String idDoc = (String.valueOf(cursor.getInt(0)));
-                    String codeDistrict = (cursor.getString(1));
                     String idfdocreference = (cursor.getString(2));
-                    String doccode_fokontany = (cryptage.setDecryptOf(cursor.getString(3)));
                     String doccode_bv = (cryptage.setDecryptOf(cursor.getString(4)));
                     String numdocreference = (cryptage.setDecryptOf(cursor.getString(5)));
-                    String datedocreference= (cryptage.setDecryptOf(cursor.getString(6)));
+                    String datedocreference = (cryptage.setDecryptOf(cursor.getString(6)));
                     int nbfeuillet = (cursor.getInt(7));
 
-                    String record = idDoc+","+
-                                    codeDistrict+","+
-                                    idfdocreference+","+
-                                    doccode_fokontany+","+
-                                    doccode_bv+","+
-                                    numdocreference+","+
-                                    datedocreference+","+
-                                    nbfeuillet;
-                    printWriter.append(';');
+                    String record = idfdocreference + "," +
+                            doccode_bv + "," +
+                            numdocreference + "," +
+                            datedocreference + "," +
+                            nbfeuillet;
                     printWriter.println(record);
                 }
                 cursor.close();
                 db.close();
 //                file.renameTo(new File("DOC_SQLITE.2kz"));
-            }
-            catch(Exception exc) {
-                Log.e("EXCEPTION",""+exc);
-                Toast toast = Toast.makeText(context, "PIRATE!", Toast.LENGTH_LONG);
+            } catch (Exception exc) {
+                Log.e("EXCEPTION", "" + exc);
+                Toast toast = Toast.makeText(context, "Erreur à l'exportation!", Toast.LENGTH_LONG);
                 toast.show();
                 return false;
-            }
-            finally {
-                if(printWriter != null) printWriter.close();
+            } finally {
+                if (printWriter != null) printWriter.close();
             }
             Toast toast = Toast.makeText(context, "TABLE DOCUMENT ENREGISTRER!", Toast.LENGTH_LONG);
             toast.show();
@@ -1653,18 +1634,18 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public boolean statistiqueToCsv(Context context) {
         String state = Environment.getExternalStorageState();
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
+            Log.e("EXCEPTION", "STORAGE INACCESSIBLE : MOUNTED");
+            Toast toast = Toast.makeText(context, "Erreur à l'exportation!", Toast.LENGTH_LONG);
+            toast.show();
             return false;
-        }
-        else {
-            File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"SQLITE");
-            if (!exportDir.exists())
-            {
+        } else {
+            File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "SQLITE");
+            if (!exportDir.exists()) {
                 exportDir.mkdirs();
             }
             File file;
             PrintWriter printWriter = null;
-            try
-            {
+            try {
                 file = new File(exportDir, "STAT_SQLITE.csv");
                 file.createNewFile();
                 printWriter = new PrintWriter(new FileWriter(file));
@@ -1689,33 +1670,31 @@ public class Db_sqLite extends SQLiteOpenHelper {
                     String karineFailed = (cursor.getString(3));
                     String karinesuccesstakelakaSuccess = (cursor.getString(4));
                     String karinesuccesstakelakaFailed = (cursor.getString(5));
-                    String karineFailedTakelakaSuccess= (cursor.getString(6));
-                    String karineFailedTakelakaFailed= (cursor.getString(7));
-                    String takelakaMiverinaKarineLasa= (cursor.getString(8));
-                    String takelakaMiverinaKarineTsyLasa= (cursor.getString(9));
+                    String karineFailedTakelakaSuccess = (cursor.getString(6));
+                    String karineFailedTakelakaFailed = (cursor.getString(7));
+                    String takelakaMiverinaKarineLasa = (cursor.getString(8));
+                    String takelakaMiverinaKarineTsyLasa = (cursor.getString(9));
 
-                    String record = idStat+","+
-                            dateStat+","+
-                            karineSuccess+","+
-                            karineFailed+","+
-                            karinesuccesstakelakaSuccess+","+
-                            karinesuccesstakelakaFailed+","+
-                            karineFailedTakelakaSuccess+","+
-                            karineFailedTakelakaFailed+","+
-                            takelakaMiverinaKarineLasa+","+
+                    String record = idStat + "," +
+                            dateStat + "," +
+                            karineSuccess + "," +
+                            karineFailed + "," +
+                            karinesuccesstakelakaSuccess + "," +
+                            karinesuccesstakelakaFailed + "," +
+                            karineFailedTakelakaSuccess + "," +
+                            karineFailedTakelakaFailed + "," +
+                            takelakaMiverinaKarineLasa + "," +
                             takelakaMiverinaKarineTsyLasa;
                     printWriter.append(';');
                     printWriter.println(record);
                 }
                 cursor.close();
                 db.close();
-            }
-            catch(Exception exc) {
-                Log.e("EXCEPTION",""+exc);
+            } catch (Exception exc) {
+                Log.e("EXCEPTION", "" + exc);
                 return false;
-            }
-            finally {
-                if(printWriter != null) printWriter.close();
+            } finally {
+                if (printWriter != null) printWriter.close();
             }
             Toast toast = Toast.makeText(context, "Statistique ENREGISTRER!", Toast.LENGTH_LONG);
             toast.show();
@@ -1726,25 +1705,55 @@ public class Db_sqLite extends SQLiteOpenHelper {
     public Boolean insertStatistique(Statistique stat) {
         SQLiteDatabase MyDB = this.getWritableDatabase();
         boolean res = false;
-            try {
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(dateStat, stat.getDateStat());
-                contentValues.put(karineSuccess, stat.getKarineSuccess());
-                contentValues.put(karineFailed, stat.getKarineFailed());
-                contentValues.put(karinesuccesstakelakaSuccess, stat.getKarinesuccesstakelakaSuccess());
-                contentValues.put(karinesuccesstakelakaFailed, stat.getKarinesuccesstakelakaFailed());
-                contentValues.put(karineFailedTakelakaSuccess, stat.getKarineFailedTakelakaSuccess());
-                contentValues.put(karineFailedTakelakaFailed, stat.getKarineFailedTakelakaFailed());
-                contentValues.put(takelakaMiverinaKarineLasa, stat.getTakelakaMiverinaKarineLasa());
-                contentValues.put(takelakaMiverinaKarineTsyLasa, stat.getTakelakaMiverinaKarineTsyLasa());
-                long result = MyDB.insert(TABLE_Statistique, null, contentValues);
-                res = (result == -1)? false: true;
-            } catch (Exception e) {
-                Log.e("ERROR insertStatistique", " " + e);
-            } finally {
-                MyDB.close();
-            }
+        try {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(dateStat, stat.getDateStat());
+            contentValues.put(karineSuccess, stat.getKarineSuccess());
+            contentValues.put(karineFailed, stat.getKarineFailed());
+            contentValues.put(karinesuccesstakelakaSuccess, stat.getKarinesuccesstakelakaSuccess());
+            contentValues.put(karinesuccesstakelakaFailed, stat.getKarinesuccesstakelakaFailed());
+            contentValues.put(karineFailedTakelakaSuccess, stat.getKarineFailedTakelakaSuccess());
+            contentValues.put(karineFailedTakelakaFailed, stat.getKarineFailedTakelakaFailed());
+            contentValues.put(takelakaMiverinaKarineLasa, stat.getTakelakaMiverinaKarineLasa());
+            contentValues.put(takelakaMiverinaKarineTsyLasa, stat.getTakelakaMiverinaKarineTsyLasa());
+            long result = MyDB.insert(TABLE_Statistique, null, contentValues);
+            res = (result == -1) ? false : true;
+        } catch (Exception e) {
+            Log.e("ERROR insertStatistique", " " + e);
+        } finally {
+            MyDB.close();
+        }
         return res;
+    }
+
+    public void gestionLog(Context context, String data) {
+        File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "SQLITE");
+        if (!exportDir.exists()) {
+            exportDir.mkdirs();
+        }
+        File file;
+        PrintWriter printWriter = null;
+        try {
+            Date d = new Date();
+            file = new File(exportDir, "APPLOG.txt");
+            if(!file.exists()) {
+                Log.e("gestionLog", "fichier vaovao");
+                file.createNewFile();
+            }
+            printWriter = new PrintWriter(new FileWriter(file,true));
+            printWriter.print("\r\n");
+            printWriter.print("\r\n");
+            printWriter.print(d+":-> ");
+            printWriter.print("" + data);
+            printWriter.print("");
+
+        } catch (Exception exc) {
+            Log.e("EXCEPTION", "" + exc);
+            Toast toast = Toast.makeText(context, "Erreur LOG!", Toast.LENGTH_LONG);
+            toast.show();
+        }finally {
+            if (printWriter != null) printWriter.close();
+        }
     }
 }
 

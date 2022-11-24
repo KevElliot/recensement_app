@@ -141,7 +141,7 @@ public class Api_service {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static void insertNotebooks(Db_sqLite DB, Context context, String ip, String port,ArrayList<Integer> tabsToStatistique,User user, CallBack_Interface myCallBack) {
+    public static void insertNotebooks(Db_sqLite DB, Context context, String ip, String port, ArrayList<Integer> tabsToStatistique, User user, CallBack_Interface myCallBack) {
         String base_url = "http://" + ip + ":" + port + "/";
         int nbElect = DB.countElecteur();
         int limit;
@@ -151,11 +151,11 @@ public class Api_service {
             limit = (nbElect / 200) + 1;
         }
 //        int limit = (int)Math.ceil(nbElect/200);
-        Log.d("API_Service","insertNotebooks limit "+limit);
+        Log.d("API_Service", "insertNotebooks limit " + limit);
         List<Document> documents = DB.selectAllDocumentToSendOnServer(user.getCode_district());
-        Log.d("API","--------------------- "+documents.size());
+        Log.d("API", "--------------------- " + documents.size());
         for (int val = 0; val < limit; val++) {
-            List<Electeur> listElect = DB.selectElecteur(200,user.getCode_district());
+            List<Electeur> listElect = DB.selectElecteur(200, user.getCode_district());
             JSONArray notebooks = new JSONArray();
             documents.stream().forEach(document -> {
                 JSONObject jsonObject = new JSONObject();
@@ -210,7 +210,7 @@ public class Api_service {
                             Stream<Notebook> found = notebooks.stream().filter(notebook -> notebook.getStatus().equals("found"));
                             Stream<Notebook> failed = notebooks.stream().filter(notebook -> notebook.getStatus().equals("failed"));
                             int notebooksSucces = (int) success.count();
-                            int notebooksFailed = (int)failed.count();
+                            int notebooksFailed = (int) failed.count();
                             int notebooksFound = (int) found.count();
 
                             List<Voter> notebooksSuccedVoters = new ArrayList<>();
@@ -227,7 +227,7 @@ public class Api_service {
 
                             int noteFoundVoterSuccess = (int) notebooksDuplicatedVoters.stream().filter(voter -> voter.getStatus().equals("inserted")).count();
                             int noteFoundVoterFailed = (int) notebooksDuplicatedVoters.stream().filter(voter -> voter.getStatus().equals("failed")).count();
-                            int noteFoundVoterDuplicated =(int) notebooksDuplicatedVoters.stream().filter(voter -> voter.getStatus().equals("duplicated")).count();
+                            int noteFoundVoterDuplicated = (int) notebooksDuplicatedVoters.stream().filter(voter -> voter.getStatus().equals("duplicated")).count();
 
                             //ELECT TO DELETE
                             notebooksSuccedVoters.stream().filter(voter -> voter.getStatus().equals("inserted")).forEach(voter -> idsToDelete.add(voter.getId()));
@@ -247,7 +247,7 @@ public class Api_service {
                             Log.d("noteFailedvoterSucces", "noteFailedvoterSucces:  " + noteFoundVoterSuccess);
                             Log.d("noteFailedvoterfailed", "noteFailedvoterfailed:  " + noteFoundVoterFailed);
                             Log.d("Duplicated", "noteFailedvoterduplicated:  " + noteFoundVoterDuplicated);
-                            Log.d("notebooks", "notebooks:  " + notebooks.get(0).toString());
+                           // Log.d("notebooks", "notebooks:  " + notebooks.get(0).toString());
 
 //                        ArrayList<Long> tabsToStatistique = new ArrayList<>();
                             //INSERT NOTEBOOKS SUCCESS
@@ -275,11 +275,14 @@ public class Api_service {
 //                        i.putExtra("user", myJson);
 
                             Log.d("SIze to delete : ", "DELETE_ELECT" + idsToDelete.size());
-                        for (int x = 0; x < idsToDelete.size(); x++){
-                            Log.d("MIDITRA DELETE", "DELETE ID : "+idsToDelete.get(x).toString());
-                            DB.deleteElectId(idsToDelete.get(x).toString());
-                        }
+                            for (int x = 0; x < idsToDelete.size(); x++) {
+                                Log.d("MIDITRA DELETE", "DELETE ID : " + idsToDelete.get(x).toString());
+                                DB.deleteElectId(idsToDelete.get(x).toString());
+                            }
 
+                            Toast toast = Toast.makeText(context, "Electeur enregistré!", Toast.LENGTH_LONG);
+                            toast.show();
+                            DB.gestionLog(context,"Transfert: "+tabsToStatistique.size());
 //                        String statTab = gson.toJson(tabsToStatistique);
 
 //                        Intent intent = new Intent(context, StatistiqueActivity.class);
@@ -296,6 +299,7 @@ public class Api_service {
                         @Override
                         public void onError(ANError anError) {
                             Log.d("error", "true " + anError.toString());
+                            DB.gestionLog(context,"ERROR: "+anError);
                             String error = anError.toString();
                             String customMessage = "Misy olana ny fandefasana info";
                             if (error.toLowerCase(Locale.ROOT).contains("failed to connect"))
@@ -426,6 +430,7 @@ public class Api_service {
             e.printStackTrace();
         }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     private static JSONArray getVotersByDocument(Document document, List<Electeur> voters) {
         Stream<Electeur> electeurStream = voters.stream().filter(voter -> Objects.equals(voter.getDocreference(), document.getIdfdocreference()));

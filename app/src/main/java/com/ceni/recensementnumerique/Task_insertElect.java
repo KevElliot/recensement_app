@@ -6,7 +6,9 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -29,15 +31,17 @@ public class Task_insertElect extends AsyncTask<Void, Void, String> {
     Tablette tab;
     String ip, p;
     SharedPreferences resultat;
+    ProgressBar chargement;
     Button enregistrer;
     public static ArrayList<Integer> tabsToStatistique;
     boolean result;
 
-    public Task_insertElect(Context c, String ip, String p, SharedPreferences resultat, Button enregistrer, User us, Tablette tab) {
+    public Task_insertElect(Context c, String ip, String p, SharedPreferences resultat, ProgressBar chargement, Button enregistrer, User us, Tablette tab) {
         this.context = c;
         this.ip = ip;
         this.p = p;
         this.resultat = resultat;
+        this.chargement = chargement;
         this.enregistrer = enregistrer;
         this.us = us;
         this.tab = tab;
@@ -68,6 +72,7 @@ public class Task_insertElect extends AsyncTask<Void, Void, String> {
                 intent.putExtra("configTab", configTab);
                 intent.putExtra("user", user);
                 intent.putExtra("statistique", statistique);
+                chargement.setVisibility(View.GONE);
                 enregistrer.setEnabled(true);
                 enregistrer.setClickable(true);
                 context.startActivity(intent);
@@ -80,7 +85,5 @@ public class Task_insertElect extends AsyncTask<Void, Void, String> {
     protected void onPostExecute(String aVoid) {
         super.onPostExecute(aVoid);
         Log.d("onPostExecute", "tabsToStatistique : " + tabsToStatistique.size());
-        Toast toast = Toast.makeText(context, "Electeur enregistré!", Toast.LENGTH_LONG);
-        toast.show();
     }
 }

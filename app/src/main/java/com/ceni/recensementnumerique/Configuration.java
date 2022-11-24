@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.ceni.model.Document;
 import com.ceni.model.Electeur;
@@ -28,6 +29,7 @@ import java.util.List;
 public class Configuration extends AppCompatActivity{
     private ImageView previous;
     private EditText adressIp,port;
+    private ProgressBar chargement;
     public Button enregistrer;
     private Api_service API;
     private Db_sqLite DB;
@@ -42,6 +44,7 @@ public class Configuration extends AppCompatActivity{
         this.adressIp = this.findViewById(R.id.adressIp);
         this.port = this.findViewById(R.id.port);
         this.enregistrer = this.findViewById(R.id.enregistrerToutBtn);
+        this.chargement = this.findViewById(R.id.progressBar2);
         enregistrer.setVisibility(View.VISIBLE);
         this.DB = new Db_sqLite(Configuration.this);
         this.API = new Api_service();
@@ -61,14 +64,9 @@ public class Configuration extends AppCompatActivity{
                 String ip = adressIp.getText().toString();
                 String p = port.getText().toString();
 
-
-//
-
                 ArrayList<Long> tabsToStatistique = new ArrayList<Long>();
 
-                new Task_insertElect(Configuration.this,ip,p,resultat,enregistrer, user, tab).execute();
-
-                //TODO: Start statistique - create getter-setter any @ Task_Insert + set any aminy API_service + get any aminy activity
+                new Task_insertElect(Configuration.this,ip,p,resultat,chargement,enregistrer, user, tab).execute();
             }
         });
 
@@ -82,11 +80,13 @@ public class Configuration extends AppCompatActivity{
 
 
     public void enregistrerButtonEnable() {
+        chargement.setVisibility(View.GONE);
         enregistrer.setEnabled(true);
         enregistrer.setClickable(true);
     }
 
     public void enregistrerButtonDisable() {
+        chargement.setVisibility(View.VISIBLE);
         enregistrer.setEnabled(false);
         enregistrer.setClickable(false);
     }
