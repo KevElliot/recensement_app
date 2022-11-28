@@ -86,6 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                     String checkIMEI = tab.getImei();
 
                     user = DB.selectUser(pseudo, motdepass);
+                    Log.d("User", "user " + user.toString());
                     // check emei on sqlite
                     Boolean checkResult = DB.findIMEI(checkIMEI);
                     Log.d("IMEI CHECK LOGIN", "Bool " + checkIMEI);

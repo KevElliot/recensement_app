@@ -25,6 +25,7 @@ import com.ceni.model.ListFokontany;
 import com.ceni.model.Statistique;
 import com.ceni.model.Tablette;
 import com.ceni.model.User;
+import com.ceni.recensementnumerique.LoginActivity;
 import com.ceni.recensementnumerique.R;
 
 
@@ -1497,14 +1498,18 @@ public class Db_sqLite extends SQLiteOpenHelper {
             return false;
         } else {
             File exportDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "SQLITE");
+            Log.d("tataaatattaa",""+exportDir.getAbsolutePath());
             if (!exportDir.exists()) {
+                Log.d("creation du fichier","-- "+exportDir.exists());
                 exportDir.mkdirs();
             }
+            Log.d("exportDir.exists()","-- "+exportDir.exists());
             File file;
             PrintWriter printWriter = null;
             try {
                 file = new File(exportDir, "ELECT_SQLITE.csv");
                 file.createNewFile();
+                Log.d("fiiiiillleee",""+file.getAbsolutePath());
                 printWriter = new PrintWriter(new FileWriter(file));
                 SQLiteDatabase db = this.getReadableDatabase(); //open the database for reading
                 Cursor cursor = db.rawQuery("select * from electeur", null);
@@ -1527,7 +1532,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
                     String num_serie_cin = cryptage.setDecryptOf(cursor.getString(15));
                     String dateDeliv = cryptage.setDecryptOf(cursor.getString(16));
                     String lieuDeliv = cryptage.setDecryptOf(cursor.getString(17));
-                    String imagefeuillet = cursor.getString(18).replaceAll("[\r\n]+", "");
+                    String imagefeuillet = cursor.getString(18)!= null? cursor.getString(18).replaceAll("[\r\n]+", "") : cursor.getString(19);
                     String cinRecto = cursor.getString(19) != null ? cursor.getString(19).replaceAll("[\r\n]+", "") : cursor.getString(19);
                     String cinVerso = cursor.getString(20) != null ? cursor.getString(20).replaceAll("[\r\n]+", "") : cursor.getString(20);
                     String observation = cryptage.setDecryptOf(cursor.getString(21));
@@ -1565,6 +1570,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
                 db.close();
             } catch (Exception exc) {
                 Log.e("EXCEPTION", "" + exc);
+                this.gestionLog(context,"Erreur à l'exportation! : "+ exc);
                 Toast toast = Toast.makeText(context, "Erreur à l'exportation!", Toast.LENGTH_LONG);
                 toast.show();
                 return false;
@@ -1582,6 +1588,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String state = Environment.getExternalStorageState();
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
             Log.e("EXCEPTION", "STORAGE INACCESSIBLE : MOUNTED");
+            this.gestionLog(context,"Erreur à l'exportation! : MOUNTED");
             Toast toast = Toast.makeText(context, "Erreur à l'exportation!", Toast.LENGTH_LONG);
             toast.show();
             return false;
@@ -1619,6 +1626,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
 //                file.renameTo(new File("DOC_SQLITE.2kz"));
             } catch (Exception exc) {
                 Log.e("EXCEPTION", "" + exc);
+                this.gestionLog(context,"Erreur à l'exportation! : "+ exc);
                 Toast toast = Toast.makeText(context, "Erreur à l'exportation!", Toast.LENGTH_LONG);
                 toast.show();
                 return false;
@@ -1635,6 +1643,7 @@ public class Db_sqLite extends SQLiteOpenHelper {
         String state = Environment.getExternalStorageState();
         if (!Environment.MEDIA_MOUNTED.equals(state)) {
             Log.e("EXCEPTION", "STORAGE INACCESSIBLE : MOUNTED");
+            this.gestionLog(context,"Erreur à l'exportation! : MOUNTED");
             Toast toast = Toast.makeText(context, "Erreur à l'exportation!", Toast.LENGTH_LONG);
             toast.show();
             return false;
